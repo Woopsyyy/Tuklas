@@ -1,98 +1,127 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { Pressable, Text, View, useColorScheme } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { SwipeableCard } from "@/components/swipeable-card";
+import { ThemePreference, useSettingsStore } from "@/store/use-settings-store";
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
+const THEME_OPTIONS: { value: ThemePreference; label: string }[] = [
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+  { value: "system", label: "System" },
+];
+
+function useIsDark() {
+  const scheme = useColorScheme();
+  const preference = useSettingsStore((state) => state.theme);
+  if (preference === "system") {
+    return scheme === "dark";
   }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
+  return preference === "dark";
 }
 
 export default function HomeScreen() {
+  const router = useRouter();
+  const isDark = useIsDark();
+  const theme = useSettingsStore((state) => state.theme);
+  const setTheme = useSettingsStore((state) => state.setTheme);
+  const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const toggleSound = useSettingsStore((state) => state.toggleSound);
+
+  const surface = isDark ? "bg-zinc-950" : "bg-white";
+  const surfaceAlt = isDark ? "bg-zinc-900" : "bg-zinc-100";
+  const primaryText = isDark ? "text-zinc-50" : "text-zinc-900";
+  const secondaryText = isDark ? "text-zinc-400" : "text-zinc-500";
+
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <View className={`flex-1 ${surface}`}>
+      <StatusBar style={isDark ? "light" : "dark"} />
+      <SafeAreaView className="flex-1 gap-8 px-6 pt-8">
+        <Animated.View entering={FadeInDown.duration(500)} className="gap-1">
+          <Text className={`text-4xl font-bold ${primaryText}`}>Tuklas</Text>
+          <Text className={`text-base ${secondaryText}`}>
+            discover something new
+          </Text>
+        </Animated.View>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+        <Animated.View
+          entering={FadeInDown.delay(100).duration(500)}
+          className="gap-3"
+        >
+          <Text className={`text-sm font-semibold uppercase ${secondaryText}`}>
+            Theme
+          </Text>
+          <View className={`flex-row rounded-2xl p-1 ${surfaceAlt}`}>
+            {THEME_OPTIONS.map((option) => {
+              const active = theme === option.value;
+              return (
+                <Pressable
+                  key={option.value}
+                  onPress={() => setTheme(option.value)}
+                  className={`flex-1 items-center rounded-xl py-2 ${
+                    active ? "bg-sky-500" : ""
+                  }`}
+                >
+                  <Text
+                    className={`font-medium ${
+                      active ? "text-white" : secondaryText
+                    }`}
+                  >
+                    {option.label}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </Animated.View>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
+        <Animated.View
+          entering={FadeInDown.delay(200).duration(500)}
+          className="gap-3"
+        >
+          <Text className={`text-sm font-semibold uppercase ${secondaryText}`}>
+            Sound
+          </Text>
+          <Pressable
+            onPress={toggleSound}
+            className={`flex-row items-center justify-between rounded-2xl px-4 py-4 ${surfaceAlt}`}
+          >
+            <Text className={`text-base font-medium ${primaryText}`}>
+              Sound effects
+            </Text>
+            <View
+              className={`h-7 w-12 items-center rounded-full px-1 ${
+                soundEnabled
+                  ? "justify-end bg-emerald-500"
+                  : "justify-start bg-zinc-400"
+              }`}
+            >
+              <View className="h-5 w-5 rounded-full bg-white" />
+            </View>
+          </Pressable>
+        </Animated.View>
+
+        <Animated.View entering={FadeInDown.delay(300).duration(500)}>
+          <SwipeableCard
+            label="Swipe me to dismiss"
+            onDismiss={() => router.navigate("/audio")}
           />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+          <Text className={`mt-2 text-center text-xs ${secondaryText}`}>
+            swiping the card opens the audio demo
+          </Text>
+        </Animated.View>
 
-        {Platform.OS === 'web' && <WebBadge />}
+        <Pressable
+          onPress={() => router.navigate("/audio")}
+          className="items-center rounded-2xl bg-sky-500 py-4"
+        >
+          <Text className="text-base font-semibold text-white">
+            Open Audio Demo
+          </Text>
+        </Pressable>
       </SafeAreaView>
-    </ThemedView>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
-});

@@ -24,6 +24,7 @@ Press `a` (Android), `i` (iOS), or `w` (web), or scan the QR code with Expo Go.
 
 | Command             | What it does                    |
 | ------------------- | ------------------------------- |
+| `npm run dev`       | Boot the Android emulator, then start Expo and open the app |
 | `npm start`         | Start the dev server            |
 | `npm test`          | Run jest-expo tests             |
 | `npm run typecheck` | TypeScript strict check         |

@@ -55,5 +55,5 @@ echo "Opening Tuklas once Metro is ready..."
     -d "exp://localhost:$PORT" >/dev/null 2>&1
 ) &
 
-echo "Starting Expo on port $PORT (tunnel mode for physical devices)..."
-npx expo start --port "$PORT" --host tunnel
+echo "Starting Expo on port $PORT..."
+npx expo start --port "$PORT" --host lan

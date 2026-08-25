@@ -7,7 +7,6 @@ ADB="${ADB:-/mnt/c/Users/woopsy/AppData/Local/Android/Sdk/platform-tools/adb.exe
 EMULATOR_EXE='C:\Users\woopsy\AppData\Local\Android\Sdk\emulator\emulator.exe'
 AVD="${AVD:-Pixel_API_35}"
 PORT="${PORT:-8090}"
-LOG="${LOG:-/tmp/opencode/tuklas-expo-dev.log}"
 
 find_device() {
   "$ADB" devices 2>/dev/null | tr -d '\r' | awk '/^emulator-.+device$/{print $1; exit}'
@@ -17,9 +16,9 @@ echo "Looking for a running emulator..."
 serial="$(find_device)"
 
 if [ -z "$serial" ]; then
-  echo "No emulator found. Launching $AVD..."
+  echo "No emulator found. Launching $AVD (window hidden)..."
   /mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -Command \
-    "Start-Process '$EMULATOR_EXE' -ArgumentList '-avd','$AVD'" >/dev/null
+    "Start-Process '$EMULATOR_EXE' -ArgumentList '-avd','$AVD' -WindowStyle Hidden" >/dev/null
   for _ in $(seq 1 60); do
     serial="$(find_device)"
     [ -n "$serial" ] && break
@@ -42,30 +41,19 @@ echo "Mapping emulator port $PORT to this machine..."
 "$ADB" -s "$serial" reverse "tcp:$PORT" "tcp:$PORT"
 
 if pgrep -f "expo start --port $PORT" >/dev/null; then
-  echo "Stopping previous Expo dev server..."
+  echo "Stopping previous Expo server..."
   pkill -f "expo start --port $PORT" || true
   sleep 2
 fi
 
-echo "Starting Expo on port $PORT (log: $LOG)..."
-mkdir -p "$(dirname "$LOG")"
-: > "$LOG"
-setsid nohup npx expo start --port "$PORT" > "$LOG" 2>&1 < /dev/null &
-disown || true
+echo "Opening Tuklas once Metro is ready..."
+(
+  until (echo >/dev/tcp/localhost/"$PORT") 2>/dev/null; do sleep 2; done
+  sleep 3
+  "$ADB" -s "$serial" shell am force-stop host.exp.exponent >/dev/null 2>&1 || true
+  "$ADB" -s "$serial" shell am start -a android.intent.action.VIEW \
+    -d "exp://localhost:$PORT" >/dev/null 2>&1
+) &
 
-for _ in $(seq 1 60); do
-  grep -q "Waiting on http://localhost:$PORT" "$LOG" 2>/dev/null && break
-  sleep 2
-done
-grep -q "Waiting on http://localhost:$PORT" "$LOG" || {
-  echo "Expo did not become ready. Last log lines:" >&2
-  tail -20 "$LOG" >&2
-  exit 1
-}
-echo "Metro is ready."
-
-echo "Opening Tuklas in Expo Go..."
-"$ADB" -s "$serial" shell am force-stop host.exp.exponent >/dev/null 2>&1 || true
-"$ADB" -s "$serial" shell am start -a android.intent.action.VIEW -d "exp://localhost:$PORT" >/dev/null
-
-echo "Done. Tuklas should now be loading on the emulator."
+echo "Starting Expo on port $PORT..."
+npx expo start --port "$PORT"

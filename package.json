@@ -56,7 +56,8 @@
     "lint": "expo lint",
     "test": "jest",
     "typecheck": "tsc --noEmit",
-    "dev": "bash scripts/dev.sh"
+    "dev": "bash scripts/dev.sh",
+    "dev:metro": "bash scripts/dev-metro.sh"
   },
   "jest": {
     "preset": "jest-expo",

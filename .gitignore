@@ -41,6 +41,15 @@ example
 # generated native folders
 /ios
 /android
+/android/app/build
+
+# gradle
+.gradle/
+
+# built artifacts
+*.apk
+*.aab
+*.hprof
 
 # controller scratch space
 .superpowers/

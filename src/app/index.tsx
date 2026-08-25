@@ -4,9 +4,15 @@ import { StatusBar } from "expo-status-bar";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as ScreenOrientation from "expo-screen-orientation";
+import { useEffect } from "react";
 
 export default function HomeScreen() {
   const router = useRouter();
+
+  useEffect(() => {
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+  }, []);
 
   return (
     <View className="flex-1 bg-black">

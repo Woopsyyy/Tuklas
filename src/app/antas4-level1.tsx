@@ -31,11 +31,11 @@ const ALL_WORDS: WordItem[] = [
   {
     id: "word1",
     source: require("../../assets/images/antas4/question1/word1.png"),
-    cropX: 355,
-    cropY: 280,
-    cropW: 1280,
-    cropH: 449,
-    aspect: 1280 / 449,
+    cropX: 356,
+    cropY: 281,
+    cropW: 1278,
+    cropH: 447,
+    aspect: 1278 / 447,
     text: "nagdala",
   },
   {
@@ -63,9 +63,9 @@ const ALL_WORDS: WordItem[] = [
     source: require("../../assets/images/antas4/question1/word4.png"),
     cropX: 553,
     cropY: 246,
-    cropW: 815,
+    cropW: 814,
     cropH: 554,
-    aspect: 815 / 554,
+    aspect: 814 / 554,
     text: "si",
   },
   {
@@ -99,6 +99,9 @@ const ALL_WORDS: WordItem[] = [
     text: "liza",
   },
 ];
+
+// Correct order: Nagdala (word1) si (word4) Liza (word7) ng (word6) payong (word5) dahil (word2) umuulan (word3)
+const CORRECT_ORDER = ["word1", "word4", "word7", "word6", "word5", "word2", "word3"];
 
 /**
  * Reusable component to render an uncropped 1920x1080 PNG layer clipped to its exact content bounding box
@@ -160,6 +163,7 @@ export default function Antas4Level1Screen() {
 
   const [placedWords, setPlacedWords] = useState<string[]>([]);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
+  const [isWrong, setIsWrong] = useState<boolean>(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const screenW = Math.max(width, height);
@@ -189,7 +193,7 @@ export default function Antas4Level1Screen() {
   const text1W = Math.min(screenW * 0.74, 860 * bgScale);
   const text1H = text1W * (TEXT1_CROP_H / TEXT1_CROP_W);
   const text1Left = (screenW - text1W) / 2;
-  const text1Top = Math.max(insets.top + 8, bgOffsetY + 32 * bgScale);
+  const text1Top = Math.max(insets.top + 8, bgOffsetY + 28 * bgScale);
 
   // NPC character (npc.png)
   const NPC_CONTENT_X = 822;
@@ -216,39 +220,38 @@ export default function Antas4Level1Screen() {
   const BOARD_CROP_W = 1870;
   const BOARD_CROP_H = 413;
   const BOARD_ASPECT = BOARD_CROP_W / BOARD_CROP_H;
-  const boardH = Math.min(screenH * 0.32, 175 * bgScale * 1.5);
+  const boardH = Math.min(screenH * 0.31, 165 * bgScale * 1.4);
   const boardW = boardH * BOARD_ASPECT;
-  // Center the board between the NPC and the right signpost area
   const availableLeft = npcLeft + npcClipW + 12 * bgScale;
   const availableRight = screenW - (screenW * 0.12);
   const boardLeft = availableLeft + (availableRight - availableLeft - boardW) / 2;
-  const boardTop = screenH - boardH - Math.max(insets.bottom + 4, 14 * bgScale);
+  const boardTop = screenH - boardH - Math.max(insets.bottom + 2, 10 * bgScale);
 
   // Words inside the board
-  const wordH = boardH * 0.36;
+  const wordH = boardH * 0.38;
   const gap = 12 * bgScale;
 
   // Row 1: word1 (nagdala), word2 (dahil), word3 (umuulan)
   const row1Words = [ALL_WORDS[0], ALL_WORDS[1], ALL_WORDS[2]];
   const row1TotalW = row1Words.reduce((acc, w) => acc + wordH * w.aspect, 0) + (row1Words.length - 1) * gap;
   const row1StartLeft = boardLeft + (boardW - row1TotalW) / 2;
-  const row1Top = boardTop + boardH * 0.10;
+  const row1Top = boardTop + boardH * 0.08;
 
   // Row 2: word4 (si), word5 (payong), word6 (ng), word7 (liza)
   const row2Words = [ALL_WORDS[3], ALL_WORDS[4], ALL_WORDS[5], ALL_WORDS[6]];
   const row2TotalW = row2Words.reduce((acc, w) => acc + wordH * w.aspect, 0) + (row2Words.length - 1) * gap;
   const row2StartLeft = boardLeft + (boardW - row2TotalW) / 2;
-  const row2Top = boardTop + boardH * 0.53;
+  const row2Top = boardTop + boardH * 0.52;
 
-  // Sentence Line (line.png)
+  // Sentence Line (line.png) - moved down closer to board with dots clearly visible
   const LINE_CROP_X = 306;
   const LINE_CROP_Y = 578;
   const LINE_CROP_W = 1308;
   const LINE_CROP_H = 17;
-  const lineW = boardW * 0.98;
-  const lineH = 14 * bgScale;
+  const lineW = Math.min(boardW * 0.96, 680 * bgScale);
+  const lineH = Math.max(10 * bgScale, lineW * (LINE_CROP_H / LINE_CROP_W));
   const lineLeft = boardLeft + (boardW - lineW) / 2;
-  const lineTop = boardTop - 52 * bgScale;
+  const lineTop = boardTop - 24 * bgScale;
 
   // Pulsing animation
   const pulseScale = useSharedValue(1);
@@ -261,29 +264,32 @@ export default function Antas4Level1Screen() {
   }, []);
 
   const checkSentence = (newPlaced: string[]) => {
-    const validOrders = [
-      ["word1", "word4", "word7", "word6", "word5", "word2", "word3"], // Nagdala si Liza ng payong dahil umuulan
-      ["word1", "word6", "word5", "word4", "word7", "word2", "word3"], // Nagdala ng payong si Liza dahil umuulan
-      ["word2", "word3", "word1", "word4", "word7", "word6", "word5"], // Dahil umuulan nagdala si Liza ng payong
-      ["word2", "word3", "word1", "word6", "word5", "word4", "word7"], // Dahil umuulan nagdala ng payong si Liza
-      ["word2", "word3", "word4", "word7", "word1", "word6", "word5"], // Dahil umuulan si Liza nagdala ng payong
-      ["word4", "word7", "word1", "word6", "word5", "word2", "word3"], // Si Liza nagdala ng payong dahil umuulan
-    ];
-
     if (newPlaced.length === ALL_WORDS.length) {
-      const isMatched = validOrders.some(
-        (order) => order.every((id, idx) => id === newPlaced[idx])
-      );
+      const isMatched = newPlaced.every((id, idx) => id === CORRECT_ORDER[idx]);
       if (isMatched) {
         setIsCorrect(true);
+        setIsWrong(false);
         pulseScale.value = withRepeat(
-          withSequence(withTiming(1.04, { duration: 300 }), withTiming(1, { duration: 300 })),
+          withSequence(withTiming(1.05, { duration: 300 }), withTiming(1, { duration: 300 })),
           3,
+          true
+        );
+        timerRef.current = setTimeout(() => {
+          router.navigate("/antas4" as any);
+        }, 2200);
+      } else {
+        setIsCorrect(false);
+        setIsWrong(true);
+        pulseScale.value = withRepeat(
+          withSequence(withTiming(1.03, { duration: 200 }), withTiming(1, { duration: 200 })),
+          2,
           true
         );
       }
     } else {
       setIsCorrect(false);
+      setIsWrong(false);
+      if (timerRef.current) clearTimeout(timerRef.current);
     }
   };
 
@@ -313,15 +319,16 @@ export default function Antas4Level1Screen() {
     transform: [{ scale: pulseScale.value }],
   }));
 
-  // Calculate placed words layout along the sentence line
-  const placedWordH = wordH * 0.82;
-  const placedGap = 8 * bgScale;
+  // Placed words layout strictly ABOVE the line (fits within lineW with bullets visible on both ends)
+  const placedWordH = Math.min(34 * bgScale, (lineW * 0.88) / 17.5);
+  const placedGap = 4 * bgScale;
   const placedTotalW =
     placedWords.reduce((acc, id) => {
       const item = ALL_WORDS.find((w) => w.id === id);
       return acc + (item ? placedWordH * item.aspect : 0);
     }, 0) + Math.max(0, placedWords.length - 1) * placedGap;
   const placedStartLeft = lineLeft + (lineW - placedTotalW) / 2;
+  const placedTop = lineTop - placedWordH - 4 * bgScale;
 
   // Helper to compute position for row 1 words on the board
   let currentR1Left = row1StartLeft;
@@ -442,7 +449,7 @@ export default function Antas4Level1Screen() {
           />
         </Animated.View>
 
-        {/* Sentence Target Line */}
+        {/* Sentence Target Line with left & right bullet points */}
         <Animated.View
           entering={FadeIn.duration(600).delay(150)}
           style={{
@@ -466,20 +473,30 @@ export default function Antas4Level1Screen() {
           />
         </Animated.View>
 
-        {/* Words placed on the line */}
+        {/* Words placed ABOVE the line with Green / Red feedback borders */}
         {placedWords.length > 0 && (
           <Animated.View
             style={[
               {
                 position: "absolute",
-                top: lineTop - placedWordH * 0.72,
+                top: placedTop,
                 left: placedStartLeft,
                 flexDirection: "row",
                 alignItems: "center",
                 gap: placedGap,
                 zIndex: 35,
+                paddingHorizontal: 4 * bgScale,
+                paddingVertical: 2 * bgScale,
+                borderRadius: 8 * bgScale,
+                borderWidth: isCorrect || isWrong ? 3 : 0,
+                borderColor: isCorrect ? "#22c55e" : isWrong ? "#ef4444" : "transparent",
+                backgroundColor: isCorrect
+                  ? "rgba(34, 197, 94, 0.22)"
+                  : isWrong
+                  ? "rgba(239, 68, 68, 0.22)"
+                  : "transparent",
               },
-              isCorrect && animatedPulseStyle,
+              (isCorrect || isWrong) && animatedPulseStyle,
             ]}
           >
             {placedWords.map((id) => {
@@ -493,6 +510,8 @@ export default function Antas4Level1Screen() {
                   style={{
                     width,
                     height: placedWordH,
+                    borderRadius: 6 * bgScale,
+                    overflow: "hidden",
                   }}
                   className="active:scale-95 active:opacity-80"
                 >
@@ -551,7 +570,7 @@ export default function Antas4Level1Screen() {
                 zIndex: 30,
               }}
             >
-              <View style={{ flex: 1, opacity: isPlaced ? 0.25 : 1 }}>
+              <View style={{ flex: 1, opacity: isPlaced ? 0.22 : 1 }}>
                 <Pressable
                   onPress={() => handleWordClick(item.id)}
                   disabled={isPlaced}

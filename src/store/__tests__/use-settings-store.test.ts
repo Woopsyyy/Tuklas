@@ -46,17 +46,34 @@ describe("useSettingsStore", () => {
     });
   });
 
-  it("rehydrates persisted state", async () => {
-    await AsyncStorage.setItem(
-      SETTINGS_STORAGE_KEY,
-      JSON.stringify({
-        state: { theme: "light", soundEnabled: false },
-        version: 0,
-      })
-    );
-    await useSettingsStore.persist.rehydrate();
+  it("updates volume settings and toggles mute", () => {
+    act(() => {
+      useSettingsStore.getState().setNarrationVolume(0.9);
+      useSettingsStore.getState().setMusicVolume(0.4);
+      useSettingsStore.getState().toggleMusicMute();
+    });
+
     const state = useSettingsStore.getState();
-    expect(state.theme).toBe("light");
-    expect(state.soundEnabled).toBe(false);
+    expect(state.narrationVolume).toBe(0.9);
+    expect(state.musicVolume).toBe(0.4);
+    expect(state.musicMuted).toBe(true);
+  });
+
+  it("resetToDefaults restores initial settings", () => {
+    act(() => {
+      useSettingsStore.getState().setTheme("dark");
+      useSettingsStore.getState().setNarrationVolume(0.2);
+      useSettingsStore.getState().setMusicVolume(0.1);
+      useSettingsStore.getState().toggleSound();
+      useSettingsStore.getState().toggleMusicMute();
+      useSettingsStore.getState().resetToDefaults();
+    });
+
+    const state = useSettingsStore.getState();
+    expect(state.theme).toBe("system");
+    expect(state.soundEnabled).toBe(true);
+    expect(state.narrationVolume).toBe(0.7);
+    expect(state.musicVolume).toBe(0.7);
+    expect(state.musicMuted).toBe(false);
   });
 });

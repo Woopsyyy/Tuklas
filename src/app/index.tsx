@@ -1,15 +1,25 @@
-import { ImageBackground } from "react-native";
 import { useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { Pressable, Text, View } from "react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
 import * as ScreenOrientation from "expo-screen-orientation";
+import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Image, Pressable, useWindowDimensions, View } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { width, height } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+
+  const screenW = Math.max(width, height);
+  const screenH = Math.min(width, height);
+
+  // Settings icon size (top-right)
+  const settingsSize = Math.max(34, Math.min(44, screenH * 0.095));
+
+  // START button sizing (matches reference image: ~8.8% height, 2.53 aspect ratio)
+  const startBtnH = Math.max(34, Math.min(48, screenH * 0.088));
+  const startBtnW = startBtnH * (1709 / 675);
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
@@ -17,29 +27,64 @@ export default function HomeScreen() {
 
   return (
     <View className="flex-1 bg-black">
-      <StatusBar style="light" />
-      <ImageBackground
-        source={require("../../assets/images/title/1.jpg")}
+      <StatusBar style="light" hidden={false} />
+
+      {/* Full-screen Background */}
+      <Image
+        source={require("../../assets/images/slide1/slide1.png")}
         resizeMode="cover"
-        className="flex-1"
-      >
-        <View className="flex-1 bg-black/50">
-          <SafeAreaView className="flex-1 items-center justify-center px-6">
-            <Animated.View
-              entering={FadeInDown.delay(200).duration(500)}
-              className="gap-4"
-            >
-              <Pressable
-                onPress={() => router.navigate("/audio")}
-                className="flex-row items-center justify-center gap-2 rounded-2xl bg-sky-500 px-8 py-4"
-              >
-                <MaterialIcons name="play-arrow" size={24} color="white" />
-                <Text className="text-lg font-semibold text-white">Start</Text>
-              </Pressable>
-            </Animated.View>
-          </SafeAreaView>
+        className="absolute inset-0 h-full w-full"
+      />
+
+      <SafeAreaView className="flex-1" edges={["top", "bottom", "left", "right"]}>
+        {/* Settings button — top right only */}
+        <View
+          style={{
+            position: "absolute",
+            top: Math.max(insets.top, 10),
+            right: Math.max(insets.right, 14),
+            zIndex: 30,
+          }}
+        >
+          <Pressable
+            onPress={() => router.navigate("/settings")}
+            hitSlop={12}
+            className="active:opacity-70"
+          >
+            <Image
+              source={require("../../assets/images/ui/settings.png")}
+              style={{ width: settingsSize, height: settingsSize }}
+              resizeMode="contain"
+            />
+          </Pressable>
         </View>
-      </ImageBackground>
+
+        {/* START button — positioned directly below title in the dark bush area */}
+        <View
+          style={{
+            position: "absolute",
+            top: screenH * 0.74 + screenH * 0.05 + screenH * 0.1,
+            left: 0,
+            right: 0,
+            alignItems: "center",
+            zIndex: 20,
+          }}
+        >
+          <Animated.View entering={FadeInDown.delay(150).duration(500)}>
+            <Pressable
+              onPress={() => router.navigate("/slide2")}
+              hitSlop={12}
+              className="active:scale-95"
+            >
+              <Image
+                source={require("../../assets/images/ui/start.png")}
+                style={{ width: startBtnW, height: startBtnH }}
+                resizeMode="contain"
+              />
+            </Pressable>
+          </Animated.View>
+        </View>
+      </SafeAreaView>
     </View>
   );
 }

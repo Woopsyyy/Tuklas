@@ -84,6 +84,7 @@ export default function RootLayout() {
           <Stack.Screen name="antas3-level3" options={{ headerShown: false }} />
           <Stack.Screen name="antas4" options={{ headerShown: false }} />
           <Stack.Screen name="antas4-level1" options={{ headerShown: false }} />
+          <Stack.Screen name="antas4-level2" options={{ headerShown: false }} />
           <Stack.Screen name="antas5" options={{ headerShown: false }} />
           <Stack.Screen name="audio" options={{ title: "Audio" }} />
           <Stack.Screen name="settings" options={{ title: "Settings" }} />

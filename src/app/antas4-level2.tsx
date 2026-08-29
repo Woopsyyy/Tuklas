@@ -30,78 +30,99 @@ interface WordItem {
 const ALL_WORDS: WordItem[] = [
   {
     id: "word1",
-    source: require("../../assets/images/antas4/question1/word1.png"),
-    cropX: 356,
-    cropY: 281,
-    cropW: 1278,
-    cropH: 447,
-    aspect: 1278 / 447,
-    text: "nagdala",
+    source: require("../../assets/images/antas4/question2/word1.png"),
+    cropX: 602,
+    cropY: 183,
+    cropW: 661,
+    cropH: 624,
+    aspect: 661 / 624,
+    text: "sa",
   },
   {
     id: "word2",
-    source: require("../../assets/images/antas4/question1/word2.png"),
-    cropX: 329,
-    cropY: 254,
-    cropW: 1262,
-    cropH: 572,
-    aspect: 1262 / 572,
-    text: "dahil",
-  },
-  {
-    id: "word3",
-    source: require("../../assets/images/antas4/question1/word3.png"),
-    cropX: 241,
-    cropY: 297,
-    cropW: 1438,
-    cropH: 418,
-    aspect: 1438 / 418,
-    text: "umuulan",
-  },
-  {
-    id: "word4",
-    source: require("../../assets/images/antas4/question1/word4.png"),
-    cropX: 553,
-    cropY: 246,
-    cropW: 814,
-    cropH: 554,
-    aspect: 814 / 554,
+    source: require("../../assets/images/antas4/question2/word2.png"),
+    cropX: 588,
+    cropY: 190,
+    cropW: 736,
+    cropH: 700,
+    aspect: 736 / 700,
     text: "si",
   },
   {
+    id: "word3",
+    source: require("../../assets/images/antas4/question2/word3.png"),
+    cropX: 311,
+    cropY: 302,
+    cropW: 1361,
+    cropH: 476,
+    aspect: 1361 / 476,
+    text: "dahil",
+  },
+  {
+    id: "word4",
+    source: require("../../assets/images/antas4/question2/word4.png"),
+    cropX: 159,
+    cropY: 193,
+    cropW: 1602,
+    cropH: 727,
+    aspect: 1602 / 727,
+    text: "maagang",
+  },
+  {
     id: "word5",
-    source: require("../../assets/images/antas4/question1/word5.png"),
-    cropX: 180,
-    cropY: 251,
-    cropW: 1536,
-    cropH: 538,
-    aspect: 1536 / 538,
-    text: "payong",
+    source: require("../../assets/images/antas4/question2/word5.png"),
+    cropX: 108,
+    cropY: 256,
+    cropW: 1670,
+    cropH: 569,
+    aspect: 1670 / 569,
+    text: "pagsusulit",
   },
   {
     id: "word6",
-    source: require("../../assets/images/antas4/question1/word6.png"),
-    cropX: 251,
-    cropY: 149,
-    cropW: 1418,
-    cropH: 751,
-    aspect: 1418 / 751,
-    text: "ng",
+    source: require("../../assets/images/antas4/question2/word6.png"),
+    cropX: 126,
+    cropY: 285,
+    cropW: 1668,
+    cropH: 510,
+    aspect: 1668 / 510,
+    text: "pumasok",
   },
   {
     id: "word7",
-    source: require("../../assets/images/antas4/question1/word7.png"),
-    cropX: 255,
-    cropY: 152,
-    cropW: 1466,
-    cropH: 776,
-    aspect: 1466 / 776,
-    text: "liza",
+    source: require("../../assets/images/antas4/question2/word7.png"),
+    cropX: 161,
+    cropY: 243,
+    cropW: 1598,
+    cropH: 560,
+    aspect: 1598 / 560,
+    text: "paaralan",
+  },
+  {
+    id: "word8",
+    source: require("../../assets/images/antas4/question2/word8.png"),
+    cropX: 247,
+    cropY: 150,
+    cropW: 1433,
+    cropH: 759,
+    aspect: 1433 / 759,
+    text: "ana",
+  },
+  {
+    id: "word9",
+    source: require("../../assets/images/antas4/question2/word9.png"),
+    cropX: 346,
+    cropY: 90,
+    cropW: 1273,
+    cropH: 870,
+    aspect: 1273 / 870,
+    text: "may",
   },
 ];
 
-// Correct order: Nagdala (word1) si (word4) Liza (word7) ng (word6) payong (word5) dahil (word2) umuulan (word3)
-const CORRECT_ORDER = ["word1", "word4", "word7", "word6", "word5", "word2", "word3"];
+// Correct order: "maagang pumasok si ana sa paaralan dahil may pagsusulit"
+// word4 (maagang) -> word6 (pumasok) -> word2 (si) -> word8 (ana) -> word1 (sa) -> word7 (paaralan) -> word3 (dahil) -> word9 (may) -> word5 (pagsusulit)
+const CORRECT_ORDER = ["word4", "word6", "word2", "word8", "word1", "word7", "word3", "word9", "word5"];
 
 /**
  * Reusable component to render an uncropped 1920x1080 PNG layer precisely fitted to target dimensions
@@ -155,7 +176,7 @@ function CroppedImage({
   );
 }
 
-export default function Antas4Level1Screen() {
+export default function Antas4Level2Screen() {
   const router = useRouter();
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
   const toggleSound = useSettingsStore((state) => state.toggleSound);
@@ -210,9 +231,9 @@ export default function Antas4Level1Screen() {
   // Signpost (right side)
   const signLeft = bgOffsetX + 1680 * bgScale;
   const signW = 210 * bgScale;
-  const nextTop = bgOffsetY + 700 * bgScale + 0.03 * screenH + 0.02 * screenH;
+  const nextTop = bgOffsetY + 700 * bgScale;
   const nextH = 92 * bgScale;
-  const backTop = bgOffsetY + 800 * bgScale + 0.05 * screenH + 0.01 * screenH;
+  const backTop = bgOffsetY + 800 * bgScale;
   const backSignH = 92 * bgScale;
 
   // Wooden Board (board.png)
@@ -230,16 +251,16 @@ export default function Antas4Level1Screen() {
 
   // Words inside the board
   const wordH = boardH * 0.38;
-  const gap = 12 * bgScale;
+  const gap = 8 * bgScale;
 
-  // Row 1: word1 (nagdala), word2 (dahil), word3 (umuulan)
-  const row1Words = [ALL_WORDS[0], ALL_WORDS[1], ALL_WORDS[2]];
+  // Row 1: word1 (sa), word2 (si), word3 (dahil), word4 (maagang), word5 (pagsusulit)
+  const row1Words = [ALL_WORDS[0], ALL_WORDS[1], ALL_WORDS[2], ALL_WORDS[3], ALL_WORDS[4]];
   const row1TotalW = row1Words.reduce((acc, w) => acc + wordH * w.aspect, 0) + (row1Words.length - 1) * gap;
   const row1StartLeft = boardLeft + (boardW - row1TotalW) / 2;
   const row1Top = boardTop + boardH * 0.08;
 
-  // Row 2: word4 (si), word5 (payong), word6 (ng), word7 (liza)
-  const row2Words = [ALL_WORDS[3], ALL_WORDS[4], ALL_WORDS[5], ALL_WORDS[6]];
+  // Row 2: word6 (pumasok), word7 (paaralan), word8 (ana), word9 (may)
+  const row2Words = [ALL_WORDS[5], ALL_WORDS[6], ALL_WORDS[7], ALL_WORDS[8]];
   const row2TotalW = row2Words.reduce((acc, w) => acc + wordH * w.aspect, 0) + (row2Words.length - 1) * gap;
   const row2StartLeft = boardLeft + (boardW - row2TotalW) / 2;
   const row2Top = boardTop + boardH * 0.52;
@@ -276,7 +297,7 @@ export default function Antas4Level1Screen() {
           true
         );
         timerRef.current = setTimeout(() => {
-          router.navigate("/antas4-level2" as any);
+          router.navigate("/antas4" as any);
         }, 2200);
       } else {
         setIsCorrect(false);
@@ -308,7 +329,7 @@ export default function Antas4Level1Screen() {
 
   const handleNext = () => {
     if (timerRef.current) clearTimeout(timerRef.current);
-    router.navigate("/antas4-level2" as any);
+    router.navigate("/antas4" as any);
   };
 
   const handleBack = () => {
@@ -320,9 +341,9 @@ export default function Antas4Level1Screen() {
     transform: [{ scale: pulseScale.value }],
   }));
 
-  // Increased size for answer words placed above the line
-  const placedWordH = Math.min(46 * bgScale, (lineW * 0.90) / 16.6);
-  const placedGap = 4 * bgScale;
+  // Placed words layout strictly ABOVE the line (fits within lineW with bullets visible on both ends)
+  const placedWordH = Math.min(38 * bgScale, (lineW * 0.90) / 19.6);
+  const placedGap = 3 * bgScale;
   const placedTotalW =
     placedWords.reduce((acc, id) => {
       const item = ALL_WORDS.find((w) => w.id === id);
@@ -450,7 +471,7 @@ export default function Antas4Level1Screen() {
           />
         </Animated.View>
 
-        {/* Sentence Target Line with left & right bullet points clearly rendered */}
+        {/* Sentence Target Line with left & right bullet points */}
         <Animated.View
           entering={FadeIn.duration(600).delay(150)}
           style={{
@@ -474,7 +495,7 @@ export default function Antas4Level1Screen() {
           />
         </Animated.View>
 
-        {/* Words placed ABOVE the line (larger answer size) with Green / Red feedback borders */}
+        {/* Words placed ABOVE the line with Green / Red feedback borders */}
         {placedWords.length > 0 && (
           <Animated.View
             style={[
@@ -599,7 +620,7 @@ export default function Antas4Level1Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft - 0.05 * screenW + 0.02 * screenW,
+            left: signLeft,
             top: nextTop,
             width: signW,
             height: nextH,
@@ -624,7 +645,7 @@ export default function Antas4Level1Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft - 0.03 * screenW + 0.01 * screenW,
+            left: signLeft,
             top: backTop,
             width: signW * 0.95,
             height: backSignH * 0.95,

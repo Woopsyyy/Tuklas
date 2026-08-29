@@ -104,7 +104,7 @@ const ALL_WORDS: WordItem[] = [
 const CORRECT_ORDER = ["word1", "word4", "word7", "word6", "word5", "word2", "word3"];
 
 /**
- * Reusable component to render an uncropped 1920x1080 PNG layer clipped to its exact content bounding box
+ * Reusable component to render an uncropped 1920x1080 PNG layer precisely fitted to target dimensions
  */
 function CroppedImage({
   source,
@@ -123,11 +123,12 @@ function CroppedImage({
   targetWidth: number;
   targetHeight: number;
 }) {
-  const scale = targetHeight / cropH;
-  const renderedImgW = 1920 * scale;
-  const renderedImgH = 1080 * scale;
-  const offsetX = -cropX * scale;
-  const offsetY = -cropY * scale;
+  const scaleX = targetWidth / cropW;
+  const scaleY = targetHeight / cropH;
+  const renderedImgW = 1920 * scaleX;
+  const renderedImgH = 1080 * scaleY;
+  const offsetX = -cropX * scaleX;
+  const offsetY = -cropY * scaleY;
 
   return (
     <View
@@ -243,15 +244,15 @@ export default function Antas4Level1Screen() {
   const row2StartLeft = boardLeft + (boardW - row2TotalW) / 2;
   const row2Top = boardTop + boardH * 0.52;
 
-  // Sentence Line (line.png) - moved down closer to board with dots clearly visible
+  // Sentence Line (line.png) - ensure entire line with both left & right bullets is completely visible
   const LINE_CROP_X = 306;
   const LINE_CROP_Y = 578;
   const LINE_CROP_W = 1308;
   const LINE_CROP_H = 17;
-  const lineW = Math.min(boardW * 0.96, 680 * bgScale);
-  const lineH = Math.max(10 * bgScale, lineW * (LINE_CROP_H / LINE_CROP_W));
+  const lineW = Math.min(screenW * 0.75, 820 * bgScale);
+  const lineH = 14 * bgScale;
   const lineLeft = boardLeft + (boardW - lineW) / 2;
-  const lineTop = boardTop - 24 * bgScale;
+  const lineTop = boardTop - 20 * bgScale;
 
   // Pulsing animation
   const pulseScale = useSharedValue(1);
@@ -319,8 +320,8 @@ export default function Antas4Level1Screen() {
     transform: [{ scale: pulseScale.value }],
   }));
 
-  // Placed words layout strictly ABOVE the line (fits within lineW with bullets visible on both ends)
-  const placedWordH = Math.min(34 * bgScale, (lineW * 0.88) / 17.5);
+  // Increased size for answer words placed above the line
+  const placedWordH = Math.min(46 * bgScale, (lineW * 0.90) / 16.6);
   const placedGap = 4 * bgScale;
   const placedTotalW =
     placedWords.reduce((acc, id) => {
@@ -449,7 +450,7 @@ export default function Antas4Level1Screen() {
           />
         </Animated.View>
 
-        {/* Sentence Target Line with left & right bullet points */}
+        {/* Sentence Target Line with left & right bullet points clearly rendered */}
         <Animated.View
           entering={FadeIn.duration(600).delay(150)}
           style={{
@@ -473,7 +474,7 @@ export default function Antas4Level1Screen() {
           />
         </Animated.View>
 
-        {/* Words placed ABOVE the line with Green / Red feedback borders */}
+        {/* Words placed ABOVE the line (larger answer size) with Green / Red feedback borders */}
         {placedWords.length > 0 && (
           <Animated.View
             style={[
@@ -487,7 +488,7 @@ export default function Antas4Level1Screen() {
                 zIndex: 35,
                 paddingHorizontal: 4 * bgScale,
                 paddingVertical: 2 * bgScale,
-                borderRadius: 8 * bgScale,
+                borderRadius: 10 * bgScale,
                 borderWidth: isCorrect || isWrong ? 3 : 0,
                 borderColor: isCorrect ? "#22c55e" : isWrong ? "#ef4444" : "transparent",
                 backgroundColor: isCorrect
@@ -510,7 +511,7 @@ export default function Antas4Level1Screen() {
                   style={{
                     width,
                     height: placedWordH,
-                    borderRadius: 6 * bgScale,
+                    borderRadius: 8 * bgScale,
                     overflow: "hidden",
                   }}
                   className="active:scale-95 active:opacity-80"

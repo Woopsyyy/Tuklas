@@ -101,16 +101,16 @@ export default function Antas4Level1Screen() {
   const npcTop = screenH - npcClipH + 10 * bgScale + 0.1 * screenH + 0.05 * screenH;
 
   // Line (line.png)
-  const lineW = 1320 * bgScale;
+  const lineW = 1320 * bgScale * 54;
   const lineH = lineW * (17 / 1308);
-  const lineLeft = bgOffsetX + 300 * bgScale;
-  const lineTop = bgOffsetY + 580 * bgScale;
+  const lineLeft = (screenW - lineW) / 2;
+  const lineTop = bgOffsetY + 580 * bgScale - 0.1 * screenH - 0.5 * screenH;
 
   // Wooden Board (board.png)
   const boardW = 1320 * bgScale * 2.268;
   const boardH = boardW * (413 / 1870);
   const boardLeft = (screenW - boardW) / 2;
-  const boardTop = bgOffsetY + 730 * bgScale - 0.05 * screenH - 0.05 * screenH - 0.05 * screenH;
+  const boardTop = bgOffsetY + 730 * bgScale - 0.05 * screenH - 0.05 * screenH - 0.05 * screenH - 0.1 * screenH;
 
   // Words inside board
   const wordH = 92 * bgScale;
@@ -131,9 +131,9 @@ export default function Antas4Level1Screen() {
   // Signpost (right side)
   const signLeft = bgOffsetX + 1680 * bgScale;
   const signW = 210 * bgScale;
-  const nextTop = bgOffsetY + 700 * bgScale;
+  const nextTop = bgOffsetY + 700 * bgScale + 0.03 * screenH + 0.01 * screenH + 0.02 * screenH;
   const nextH = 92 * bgScale;
-  const backTop = bgOffsetY + 800 * bgScale;
+  const backTop = bgOffsetY + 800 * bgScale + 0.1 * screenH - 0.04 * screenH;
   const backSignH = 92 * bgScale;
 
   // Pulsing animation
@@ -461,7 +461,7 @@ export default function Antas4Level1Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft,
+            left: signLeft - 0.03 * screenW + 0.02 * screenW,
             top: nextTop,
             width: signW,
             height: nextH,
@@ -486,7 +486,7 @@ export default function Antas4Level1Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft,
+            left: signLeft - 0.01 * screenW,
             top: backTop,
             width: signW * 0.95,
             height: backSignH * 0.95,

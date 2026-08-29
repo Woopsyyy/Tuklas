@@ -286,8 +286,19 @@ export default function Antas4Level2Screen() {
   }, []);
 
   const checkSentence = (newPlaced: string[]) => {
+    const validOrders = [
+      ["word4", "word6", "word2", "word8", "word1", "word7", "word3", "word9", "word5"], // maaga pumasok si anna sa paaralan dahil may pagsusulit
+      ["word4", "word6", "word1", "word7", "word2", "word8", "word3", "word9", "word5"], // maaga pumasok sa paaralan si anna dahil may pagsusulit
+      ["word2", "word8", "word4", "word6", "word1", "word7", "word3", "word9", "word5"], // si anna maaga pumasok sa paaralan dahil may pagsusulit
+      ["word2", "word8", "word1", "word7", "word4", "word6", "word3", "word9", "word5"], // si anna sa paaralan maaga pumasok dahil may pagsusulit
+      ["word3", "word9", "word5", "word4", "word6", "word2", "word8", "word1", "word7"], // dahil may pagsusulit maaga pumasok si anna sa paaralan
+      ["word3", "word9", "word5", "word2", "word8", "word4", "word6", "word1", "word7"], // dahil may pagsusulit si anna maaga pumasok sa paaralan
+    ];
+
     if (newPlaced.length === ALL_WORDS.length) {
-      const isMatched = newPlaced.every((id, idx) => id === CORRECT_ORDER[idx]);
+      const isMatched = validOrders.some(
+        (order) => order.every((id, idx) => id === newPlaced[idx])
+      );
       if (isMatched) {
         setIsCorrect(true);
         setIsWrong(false);

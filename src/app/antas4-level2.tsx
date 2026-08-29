@@ -66,7 +66,7 @@ const ALL_WORDS: WordItem[] = [
     cropW: 1602,
     cropH: 727,
     aspect: 1602 / 727,
-    text: "maagang",
+    text: "maaga",
   },
   {
     id: "word5",
@@ -76,7 +76,7 @@ const ALL_WORDS: WordItem[] = [
     cropW: 1670,
     cropH: 569,
     aspect: 1670 / 569,
-    text: "pagsusulit",
+    text: "pumasok",
   },
   {
     id: "word6",
@@ -86,7 +86,7 @@ const ALL_WORDS: WordItem[] = [
     cropW: 1668,
     cropH: 510,
     aspect: 1668 / 510,
-    text: "pumasok",
+    text: "pagsusulit",
   },
   {
     id: "word7",
@@ -106,7 +106,7 @@ const ALL_WORDS: WordItem[] = [
     cropW: 1433,
     cropH: 759,
     aspect: 1433 / 759,
-    text: "ana",
+    text: "anna",
   },
   {
     id: "word9",
@@ -120,9 +120,8 @@ const ALL_WORDS: WordItem[] = [
   },
 ];
 
-// Correct order: "maagang pumasok si ana sa paaralan dahil may pagsusulit"
-// word4 (maagang) -> word6 (pumasok) -> word2 (si) -> word8 (ana) -> word1 (sa) -> word7 (paaralan) -> word3 (dahil) -> word9 (may) -> word5 (pagsusulit)
-const CORRECT_ORDER = ["word4", "word6", "word2", "word8", "word1", "word7", "word3", "word9", "word5"];
+// Correct order: word4 maaga > word5 pumasok > word2 si > word8 anna > word1 sa > word7 paaralan > word3 dahil > word9 may > word6 pagsusulit
+const CORRECT_ORDER = ["word4", "word5", "word2", "word8", "word1", "word7", "word3", "word9", "word6"];
 
 /**
  * Reusable component to render an uncropped 1920x1080 PNG layer precisely fitted to target dimensions
@@ -287,12 +286,12 @@ export default function Antas4Level2Screen() {
 
   const checkSentence = (newPlaced: string[]) => {
     const validOrders = [
-      ["word4", "word6", "word2", "word8", "word1", "word7", "word3", "word9", "word5"], // maaga pumasok si anna sa paaralan dahil may pagsusulit
-      ["word4", "word6", "word1", "word7", "word2", "word8", "word3", "word9", "word5"], // maaga pumasok sa paaralan si anna dahil may pagsusulit
-      ["word2", "word8", "word4", "word6", "word1", "word7", "word3", "word9", "word5"], // si anna maaga pumasok sa paaralan dahil may pagsusulit
-      ["word2", "word8", "word1", "word7", "word4", "word6", "word3", "word9", "word5"], // si anna sa paaralan maaga pumasok dahil may pagsusulit
-      ["word3", "word9", "word5", "word4", "word6", "word2", "word8", "word1", "word7"], // dahil may pagsusulit maaga pumasok si anna sa paaralan
-      ["word3", "word9", "word5", "word2", "word8", "word4", "word6", "word1", "word7"], // dahil may pagsusulit si anna maaga pumasok sa paaralan
+      ["word4", "word5", "word2", "word8", "word1", "word7", "word3", "word9", "word6"], // word4 maaga > word5 pumasok > word2 si > word8 anna > word1 sa > word7 paaralan > word3 dahil > word9 may > word6 pagsusulit
+      ["word4", "word5", "word1", "word7", "word2", "word8", "word3", "word9", "word6"], // maaga pumasok sa paaralan si anna dahil may pagsusulit
+      ["word2", "word8", "word4", "word5", "word1", "word7", "word3", "word9", "word6"], // si anna maaga pumasok sa paaralan dahil may pagsusulit
+      ["word2", "word8", "word1", "word7", "word4", "word5", "word3", "word9", "word6"], // si anna sa paaralan maaga pumasok dahil may pagsusulit
+      ["word3", "word9", "word6", "word4", "word5", "word2", "word8", "word1", "word7"], // dahil may pagsusulit maaga pumasok si anna sa paaralan
+      ["word3", "word9", "word6", "word2", "word8", "word4", "word5", "word1", "word7"], // dahil may pagsusulit si anna maaga pumasok sa paaralan
     ];
 
     if (newPlaced.length === ALL_WORDS.length) {

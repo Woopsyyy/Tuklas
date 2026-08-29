@@ -19,19 +19,137 @@ import { useSettingsStore } from "@/store/use-settings-store";
 interface WordItem {
   id: string;
   source: any;
+  cropX: number;
+  cropY: number;
+  cropW: number;
+  cropH: number;
   aspect: number;
   text: string;
 }
 
 const ALL_WORDS: WordItem[] = [
-  { id: "word1", source: require("../../assets/images/antas4/question1/word1.png"), aspect: 2.86, text: "nagdala" },
-  { id: "word2", source: require("../../assets/images/antas4/question1/word2.png"), aspect: 2.21, text: "dahil" },
-  { id: "word3", source: require("../../assets/images/antas4/question1/word3.png"), aspect: 3.44, text: "umuulan" },
-  { id: "word4", source: require("../../assets/images/antas4/question1/word4.png"), aspect: 1.47, text: "si" },
-  { id: "word5", source: require("../../assets/images/antas4/question1/word5.png"), aspect: 2.86, text: "payong" },
-  { id: "word6", source: require("../../assets/images/antas4/question1/word6.png"), aspect: 1.89, text: "ng" },
-  { id: "word7", source: require("../../assets/images/antas4/question1/word7.png"), aspect: 1.89, text: "liza" },
+  {
+    id: "word1",
+    source: require("../../assets/images/antas4/question1/word1.png"),
+    cropX: 355,
+    cropY: 280,
+    cropW: 1280,
+    cropH: 449,
+    aspect: 1280 / 449,
+    text: "nagdala",
+  },
+  {
+    id: "word2",
+    source: require("../../assets/images/antas4/question1/word2.png"),
+    cropX: 329,
+    cropY: 254,
+    cropW: 1262,
+    cropH: 572,
+    aspect: 1262 / 572,
+    text: "dahil",
+  },
+  {
+    id: "word3",
+    source: require("../../assets/images/antas4/question1/word3.png"),
+    cropX: 241,
+    cropY: 297,
+    cropW: 1438,
+    cropH: 418,
+    aspect: 1438 / 418,
+    text: "umuulan",
+  },
+  {
+    id: "word4",
+    source: require("../../assets/images/antas4/question1/word4.png"),
+    cropX: 553,
+    cropY: 246,
+    cropW: 815,
+    cropH: 554,
+    aspect: 815 / 554,
+    text: "si",
+  },
+  {
+    id: "word5",
+    source: require("../../assets/images/antas4/question1/word5.png"),
+    cropX: 180,
+    cropY: 251,
+    cropW: 1536,
+    cropH: 538,
+    aspect: 1536 / 538,
+    text: "payong",
+  },
+  {
+    id: "word6",
+    source: require("../../assets/images/antas4/question1/word6.png"),
+    cropX: 251,
+    cropY: 149,
+    cropW: 1418,
+    cropH: 751,
+    aspect: 1418 / 751,
+    text: "ng",
+  },
+  {
+    id: "word7",
+    source: require("../../assets/images/antas4/question1/word7.png"),
+    cropX: 255,
+    cropY: 152,
+    cropW: 1466,
+    cropH: 776,
+    aspect: 1466 / 776,
+    text: "liza",
+  },
 ];
+
+/**
+ * Reusable component to render an uncropped 1920x1080 PNG layer clipped to its exact content bounding box
+ */
+function CroppedImage({
+  source,
+  cropX,
+  cropY,
+  cropW,
+  cropH,
+  targetWidth,
+  targetHeight,
+}: {
+  source: any;
+  cropX: number;
+  cropY: number;
+  cropW: number;
+  cropH: number;
+  targetWidth: number;
+  targetHeight: number;
+}) {
+  const scale = targetHeight / cropH;
+  const renderedImgW = 1920 * scale;
+  const renderedImgH = 1080 * scale;
+  const offsetX = -cropX * scale;
+  const offsetY = -cropY * scale;
+
+  return (
+    <View
+      style={{
+        width: targetWidth,
+        height: targetHeight,
+        overflow: "hidden",
+      }}
+      pointerEvents="none"
+    >
+      <Image
+        source={source}
+        style={{
+          position: "absolute",
+          left: offsetX,
+          top: offsetY,
+          width: renderedImgW,
+          height: renderedImgH,
+        }}
+        contentFit="fill"
+        transition={0}
+      />
+    </View>
+  );
+}
 
 export default function Antas4Level1Screen() {
   const router = useRouter();
@@ -64,77 +182,73 @@ export default function Antas4Level1Screen() {
   const settingsH = iconBase;
 
   // Title / Instruction banner (text1.png)
-  const text1W = 1450 * bgScale * 7.2;
-  const text1H = text1W * (129 / 1790);
+  const TEXT1_CROP_X = 64;
+  const TEXT1_CROP_Y = 369;
+  const TEXT1_CROP_W = 1791;
+  const TEXT1_CROP_H = 129;
+  const text1W = Math.min(screenW * 0.74, 860 * bgScale);
+  const text1H = text1W * (TEXT1_CROP_H / TEXT1_CROP_W);
   const text1Left = (screenW - text1W) / 2;
-  const text1Top = bgOffsetY + 240 * bgScale - 0.1 * screenH - 0.05 * screenH;
+  const text1Top = Math.max(insets.top + 8, bgOffsetY + 32 * bgScale);
 
-  // NPC character (npc.png) — image is full 1920×1080 canvas; character content is at
-  // x: 822–1117 (w=296), y: 49–1041 (h=993) in design pixels.
-  // We crop it using overflow:hidden + negative image offset so no padding is visible.
-  const NPC_CONTENT_X = 822; // leftmost opaque pixel in design px
-  const NPC_CONTENT_Y = 49;  // topmost opaque pixel in design px
-  const NPC_CONTENT_W = 296; // content width in design px
-  const NPC_CONTENT_H = 993; // content height in design px
-  const NPC_IMG_W = 1920;    // full image width in design px
-  const NPC_IMG_H = 1080;    // full image height in design px
-
-  // Desired on-screen height of the character
-  const npcDesiredH = screenH * 0.864;
-  // Scale factor: how much we stretch the full image so NPC_CONTENT_H maps to npcDesiredH
-  const npcImgScale = npcDesiredH / (NPC_CONTENT_H * bgScale);
-
-  // Rendered (clipped) container size — just the character content area
-  const npcClipW = NPC_CONTENT_W * bgScale * npcImgScale;
+  // NPC character (npc.png)
+  const NPC_CONTENT_X = 822;
+  const NPC_CONTENT_Y = 49;
+  const NPC_CONTENT_W = 296;
+  const NPC_CONTENT_H = 993;
+  const npcDesiredH = screenH * 0.72;
+  const npcClipW = npcDesiredH * (NPC_CONTENT_W / NPC_CONTENT_H);
   const npcClipH = npcDesiredH;
+  const npcLeft = Math.max(insets.left + 4, bgOffsetX + 16 * bgScale);
+  const npcTop = screenH - npcClipH + 8 * bgScale;
 
-  // Full image rendered size inside the container
-  const npcImgRenderedW = NPC_IMG_W * bgScale * npcImgScale;
-  const npcImgRenderedH = NPC_IMG_H * bgScale * npcImgScale;
-
-  // Negative offset to push the image so the character content starts at (0,0) in the container
-  const npcImgOffsetX = -(NPC_CONTENT_X * bgScale * npcImgScale);
-  const npcImgOffsetY = -(NPC_CONTENT_Y * bgScale * npcImgScale);
-
-  // Position the container on the left side, grounded at the bottom
-  const npcLeft = bgOffsetX - 10 * bgScale + 0.05 * screenW; // flush left with small margin
-  const npcTop = screenH - npcClipH + 10 * bgScale + 0.1 * screenH + 0.05 * screenH;
-
-  // Line (line.png)
-  const lineW = 1320 * bgScale * 54;
-  const lineH = lineW * (17 / 1308);
-  const lineLeft = (screenW - lineW) / 2;
-  const lineTop = bgOffsetY + 580 * bgScale - 0.1 * screenH - 0.5 * screenH;
+  // Signpost (right side)
+  const signLeft = bgOffsetX + 1680 * bgScale;
+  const signW = 210 * bgScale;
+  const nextTop = bgOffsetY + 700 * bgScale;
+  const nextH = 92 * bgScale;
+  const backTop = bgOffsetY + 800 * bgScale;
+  const backSignH = 92 * bgScale;
 
   // Wooden Board (board.png)
-  const boardW = 1320 * bgScale * 2.268;
-  const boardH = boardW * (413 / 1870);
-  const boardLeft = (screenW - boardW) / 2;
-  const boardTop = bgOffsetY + 730 * bgScale - 0.05 * screenH - 0.05 * screenH - 0.05 * screenH - 0.1 * screenH;
+  const BOARD_CROP_X = 25;
+  const BOARD_CROP_Y = 294;
+  const BOARD_CROP_W = 1870;
+  const BOARD_CROP_H = 413;
+  const BOARD_ASPECT = BOARD_CROP_W / BOARD_CROP_H;
+  const boardH = Math.min(screenH * 0.32, 175 * bgScale * 1.5);
+  const boardW = boardH * BOARD_ASPECT;
+  // Center the board between the NPC and the right signpost area
+  const availableLeft = npcLeft + npcClipW + 12 * bgScale;
+  const availableRight = screenW - (screenW * 0.12);
+  const boardLeft = availableLeft + (availableRight - availableLeft - boardW) / 2;
+  const boardTop = screenH - boardH - Math.max(insets.bottom + 4, 14 * bgScale);
 
-  // Words inside board
-  const wordH = 92 * bgScale;
-  const gap = 20 * bgScale;
+  // Words inside the board
+  const wordH = boardH * 0.36;
+  const gap = 12 * bgScale;
 
   // Row 1: word1 (nagdala), word2 (dahil), word3 (umuulan)
   const row1Words = [ALL_WORDS[0], ALL_WORDS[1], ALL_WORDS[2]];
   const row1TotalW = row1Words.reduce((acc, w) => acc + wordH * w.aspect, 0) + (row1Words.length - 1) * gap;
   const row1StartLeft = boardLeft + (boardW - row1TotalW) / 2;
-  const row1Top = boardTop + 35 * bgScale;
+  const row1Top = boardTop + boardH * 0.10;
 
   // Row 2: word4 (si), word5 (payong), word6 (ng), word7 (liza)
   const row2Words = [ALL_WORDS[3], ALL_WORDS[4], ALL_WORDS[5], ALL_WORDS[6]];
   const row2TotalW = row2Words.reduce((acc, w) => acc + wordH * w.aspect, 0) + (row2Words.length - 1) * gap;
   const row2StartLeft = boardLeft + (boardW - row2TotalW) / 2;
-  const row2Top = boardTop + 155 * bgScale;
+  const row2Top = boardTop + boardH * 0.53;
 
-  // Signpost (right side)
-  const signLeft = bgOffsetX + 1680 * bgScale;
-  const signW = 210 * bgScale;
-  const nextTop = bgOffsetY + 700 * bgScale + 0.03 * screenH + 0.01 * screenH + 0.02 * screenH;
-  const nextH = 92 * bgScale;
-  const backTop = bgOffsetY + 800 * bgScale + 0.1 * screenH - 0.04 * screenH;
-  const backSignH = 92 * bgScale;
+  // Sentence Line (line.png)
+  const LINE_CROP_X = 306;
+  const LINE_CROP_Y = 578;
+  const LINE_CROP_W = 1308;
+  const LINE_CROP_H = 17;
+  const lineW = boardW * 0.98;
+  const lineH = 14 * bgScale;
+  const lineLeft = boardLeft + (boardW - lineW) / 2;
+  const lineTop = boardTop - 52 * bgScale;
 
   // Pulsing animation
   const pulseScale = useSharedValue(1);
@@ -147,11 +261,6 @@ export default function Antas4Level1Screen() {
   }, []);
 
   const checkSentence = (newPlaced: string[]) => {
-    // Correct sentence sequences:
-    // "nagdala si liza ng payong dahil umuulan"
-    // "dahil umuulan nagdala si liza ng payong"
-    // "nagdala ng payong si liza dahil umuulan"
-    // "dahil umuulan si liza ay nagdala ng payong" (without ay: dahil umuulan si liza nagdala ng payong)
     const validOrders = [
       ["word1", "word4", "word7", "word6", "word5", "word2", "word3"], // Nagdala si Liza ng payong dahil umuulan
       ["word1", "word6", "word5", "word4", "word7", "word2", "word3"], // Nagdala ng payong si Liza dahil umuulan
@@ -180,12 +289,10 @@ export default function Antas4Level1Screen() {
 
   const handleWordClick = (id: string) => {
     if (placedWords.includes(id)) {
-      // Remove from line back to board
       const newPlaced = placedWords.filter((wId) => wId !== id);
       setPlacedWords(newPlaced);
       checkSentence(newPlaced);
     } else {
-      // Place on line
       const newPlaced = [...placedWords, id];
       setPlacedWords(newPlaced);
       checkSentence(newPlaced);
@@ -207,12 +314,13 @@ export default function Antas4Level1Screen() {
   }));
 
   // Calculate placed words layout along the sentence line
-  const placedWordH = 75 * bgScale;
-  const placedGap = 12 * bgScale;
-  const placedTotalW = placedWords.reduce((acc, id) => {
-    const item = ALL_WORDS.find((w) => w.id === id);
-    return acc + (item ? placedWordH * item.aspect : 0);
-  }, 0) + Math.max(0, placedWords.length - 1) * placedGap;
+  const placedWordH = wordH * 0.82;
+  const placedGap = 8 * bgScale;
+  const placedTotalW =
+    placedWords.reduce((acc, id) => {
+      const item = ALL_WORDS.find((w) => w.id === id);
+      return acc + (item ? placedWordH * item.aspect : 0);
+    }, 0) + Math.max(0, placedWords.length - 1) * placedGap;
   const placedStartLeft = lineLeft + (lineW - placedTotalW) / 2;
 
   // Helper to compute position for row 1 words on the board
@@ -299,15 +407,18 @@ export default function Antas4Level1Screen() {
           }}
           pointerEvents="none"
         >
-          <Image
+          <CroppedImage
             source={require("../../assets/images/antas4/question1/text1.png")}
-            style={{ width: "100%", height: "100%" }}
-            contentFit="contain"
-            transition={0}
+            cropX={TEXT1_CROP_X}
+            cropY={TEXT1_CROP_Y}
+            cropW={TEXT1_CROP_W}
+            cropH={TEXT1_CROP_H}
+            targetWidth={text1W}
+            targetHeight={text1H}
           />
         </Animated.View>
 
-        {/* NPC Character (Left) — overflow:hidden crops the uncropped canvas padding */}
+        {/* NPC Character (Left) */}
         <Animated.View
           entering={FadeIn.duration(600).delay(100)}
           style={{
@@ -316,22 +427,18 @@ export default function Antas4Level1Screen() {
             left: npcLeft,
             width: npcClipW,
             height: npcClipH,
-            overflow: "hidden",
             zIndex: 20,
           }}
           pointerEvents="none"
         >
-          <Image
+          <CroppedImage
             source={require("../../assets/images/antas4/question1/npc.png")}
-            style={{
-              position: "absolute",
-              left: npcImgOffsetX,
-              top: npcImgOffsetY,
-              width: npcImgRenderedW,
-              height: npcImgRenderedH,
-            }}
-            contentFit="fill"
-            transition={0}
+            cropX={NPC_CONTENT_X}
+            cropY={NPC_CONTENT_Y}
+            cropW={NPC_CONTENT_W}
+            cropH={NPC_CONTENT_H}
+            targetWidth={npcClipW}
+            targetHeight={npcClipH}
           />
         </Animated.View>
 
@@ -348,11 +455,14 @@ export default function Antas4Level1Screen() {
           }}
           pointerEvents="none"
         >
-          <Image
+          <CroppedImage
             source={require("../../assets/images/antas4/question1/line.png")}
-            style={{ width: "100%", height: "100%" }}
-            contentFit="contain"
-            transition={0}
+            cropX={LINE_CROP_X}
+            cropY={LINE_CROP_Y}
+            cropW={LINE_CROP_W}
+            cropH={LINE_CROP_H}
+            targetWidth={lineW}
+            targetHeight={lineH}
           />
         </Animated.View>
 
@@ -362,7 +472,7 @@ export default function Antas4Level1Screen() {
             style={[
               {
                 position: "absolute",
-                top: lineTop - placedWordH * 0.85,
+                top: lineTop - placedWordH * 0.72,
                 left: placedStartLeft,
                 flexDirection: "row",
                 alignItems: "center",
@@ -386,11 +496,14 @@ export default function Antas4Level1Screen() {
                   }}
                   className="active:scale-95 active:opacity-80"
                 >
-                  <Image
+                  <CroppedImage
                     source={item.source}
-                    style={{ width: "100%", height: "100%" }}
-                    contentFit="contain"
-                    transition={0}
+                    cropX={item.cropX}
+                    cropY={item.cropY}
+                    cropW={item.cropW}
+                    cropH={item.cropH}
+                    targetWidth={width}
+                    targetHeight={placedWordH}
                   />
                 </Pressable>
               );
@@ -411,11 +524,14 @@ export default function Antas4Level1Screen() {
           }}
           pointerEvents="none"
         >
-          <Image
+          <CroppedImage
             source={require("../../assets/images/antas4/question1/board.png")}
-            style={{ width: "100%", height: "100%" }}
-            contentFit="contain"
-            transition={0}
+            cropX={BOARD_CROP_X}
+            cropY={BOARD_CROP_Y}
+            cropW={BOARD_CROP_W}
+            cropH={BOARD_CROP_H}
+            targetWidth={boardW}
+            targetHeight={boardH}
           />
         </Animated.View>
 
@@ -435,7 +551,6 @@ export default function Antas4Level1Screen() {
                 zIndex: 30,
               }}
             >
-              {/* opacity separated from entering to avoid Reanimated layout-animation conflict */}
               <View style={{ flex: 1, opacity: isPlaced ? 0.25 : 1 }}>
                 <Pressable
                   onPress={() => handleWordClick(item.id)}
@@ -444,11 +559,14 @@ export default function Antas4Level1Screen() {
                   style={{ width: "100%", height: "100%" }}
                   className="active:scale-95 active:opacity-80"
                 >
-                  <Image
+                  <CroppedImage
                     source={item.source}
-                    style={{ width: "100%", height: "100%" }}
-                    contentFit="contain"
-                    transition={0}
+                    cropX={item.cropX}
+                    cropY={item.cropY}
+                    cropW={item.cropW}
+                    cropH={item.cropH}
+                    targetWidth={item.width}
+                    targetHeight={wordH}
                   />
                 </Pressable>
               </View>
@@ -461,7 +579,7 @@ export default function Antas4Level1Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft - 0.03 * screenW + 0.02 * screenW,
+            left: signLeft,
             top: nextTop,
             width: signW,
             height: nextH,
@@ -486,7 +604,7 @@ export default function Antas4Level1Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft - 0.01 * screenW,
+            left: signLeft,
             top: backTop,
             width: signW * 0.95,
             height: backSignH * 0.95,

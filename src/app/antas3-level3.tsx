@@ -14,14 +14,15 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
 export default function Antas3Level3Screen() {
   const router = useRouter();
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
-  const toggleSound = useSettingsStore((state) => state.toggleSound);
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const narration = useAudioPlayer(require("../../assets/audio/antas3 level3.mp3"));
   const timerRef = useRef<any>(null);
 
   const [selectedChoice, setSelectedChoice] = useState<"A" | "B" | null>(null);
@@ -93,8 +94,33 @@ export default function Antas3Level3Screen() {
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, []);
+    try {
+      setAudioModeAsync({ playsInSilentMode: true });
+      narration.loop = false;
+      narration.volume = 1;
+    } catch (e) {
+      console.warn("Antas3Level3 narration setup error:", e);
+    }
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      try {
+        narration.pause();
+        narration.seekTo(0);
+      } catch (e) {
+        console.warn("Antas3Level3 narration pause error:", e);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [narration]);
+
+  const handlePlayNarration = () => {
+    try {
+      narration.seekTo(0);
+      narration.play();
+    } catch (e) {
+      console.warn("Antas3Level3 narration play error:", e);
+    }
+  };
 
   const handleSelectChoice = (choice: "A" | "B") => {
     if (selectedChoice !== null) return;
@@ -142,7 +168,7 @@ export default function Antas3Level3Screen() {
             <RNImage source={require("../../assets/images/ui/back.png")} style={{ width: backW, height: backH }} resizeMode="contain" />
           </Pressable>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 0.03 * screenW }}>
-            <Pressable onPress={toggleSound} hitSlop={12} className="active:opacity-70">
+            <Pressable onPress={handlePlayNarration} hitSlop={12} className="active:opacity-70">
               <RNImage
                 source={require("../../assets/images/ui/sound.png")}
                 style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}

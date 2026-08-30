@@ -6,11 +6,14 @@ import { Pressable, useWindowDimensions, View } from "react-native";
 import { Image } from "expo-image";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSettingsStore } from "@/store/use-settings-store";
 
 export default function Antas5Slide1Screen() {
   const router = useRouter();
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const toggleSound = useSettingsStore((state) => state.toggleSound);
 
   const screenW = Math.max(width, height);
   const screenH = Math.min(width, height);
@@ -24,6 +27,8 @@ export default function Antas5Slide1Screen() {
   const iconBase = Math.max(36, Math.min(48, 56 * bgScale));
   const backW = iconBase * (700 / 576);
   const backH = iconBase;
+  const soundW = iconBase;
+  const soundH = iconBase;
   const settingsW = iconBase;
   const settingsH = iconBase;
 
@@ -79,7 +84,15 @@ export default function Antas5Slide1Screen() {
               transition={0}
             />
           </Pressable>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 0.03 * screenW }}>
+            <Pressable onPress={toggleSound} hitSlop={12} className="active:opacity-70">
+              <Image
+                source={require("../../assets/images/ui/sound.png")}
+                style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}
+                contentFit="contain"
+                transition={0}
+              />
+            </Pressable>
             <Pressable onPress={() => router.navigate("/settings")} hitSlop={12} className="active:opacity-70">
               <Image
                 source={require("../../assets/images/ui/settings.png")}

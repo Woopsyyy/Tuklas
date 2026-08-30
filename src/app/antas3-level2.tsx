@@ -106,14 +106,7 @@ export default function Antas3Level2Screen() {
     }
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
-      try {
-        narration.pause();
-        narration.seekTo(0);
-      } catch (e) {
-        console.warn("Antas3Level2 narration cleanup error:", e);
-      }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [narration]);
 
   useEffect(() => {

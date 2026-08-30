@@ -65,15 +65,6 @@ export default function Antas5Slide4Screen() {
     } catch (e) {
       console.warn("Antas5Slide4 narration setup error:", e);
     }
-    return () => {
-      try {
-        narration.pause();
-        narration.seekTo(0);
-      } catch (e) {
-        console.warn("Antas5Slide4 narration cleanup error:", e);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [narration]);
 
   useEffect(() => {

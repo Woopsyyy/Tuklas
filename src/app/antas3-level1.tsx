@@ -99,24 +99,26 @@ export default function Antas3Level1Screen() {
       setAudioModeAsync({ playsInSilentMode: true });
       narration.loop = false;
       narration.volume = 1;
+      narration.muted = !soundEnabled;
+      narration.play();
     } catch (e) {
       console.warn("Antas3Level1 narration setup error:", e);
     }
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
-      try {
-        narration.pause();
-        narration.seekTo(0);
-      } catch (e) {
-        console.warn("Antas3Level1 narration pause error:", e);
-      }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [narration]);
+
+  useEffect(() => {
+    try {
+      narration.muted = !soundEnabled;
+    } catch (e) {
+      console.warn("Antas3Level1 narration mute error:", e);
+    }
+  }, [soundEnabled, narration]);
 
   const handlePlayNarration = () => {
     try {
-      narration.seekTo(0);
       narration.play();
     } catch (e) {
       console.warn("Antas3Level1 narration play error:", e);

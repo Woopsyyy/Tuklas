@@ -120,7 +120,7 @@ export default function Antas5Slide6Screen() {
             left: npcLeft,
             width: npcW,
             height: npcH,
-            zIndex: 20,
+            zIndex: 21,
           }}
           pointerEvents="none"
         >

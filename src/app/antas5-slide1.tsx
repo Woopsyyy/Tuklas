@@ -7,7 +7,7 @@ import { Image } from "expo-image";
 import Animated, { FadeIn, FadeInUp, FadeInLeft } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
-export default function Antas5Screen() {
+export default function Antas5Slide1Screen() {
   const router = useRouter();
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
@@ -64,13 +64,16 @@ export default function Antas5Screen() {
   const bookLeft = screenW - bookW * 0.75 - 0.05 * screenW;
   const bookTop = screenH - bookH - 5 * bgScale + 0.10 * screenH + 0.05 * screenH;
 
+  // Sign (sign.png) — centered in the middle
+  // Source 128x56
+  const signW = 700 * bgScale;
+  const signH = signW * (56 / 128);
+  const signLeft = (screenW - signW) / 2;
+  const signTop = (screenH - signH) / 2;
+
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
   }, []);
-
-  const handleStart = () => {
-    router.navigate("/antas5-slide1");
-  };
 
   return (
     <View className="flex-1 bg-black">
@@ -215,7 +218,7 @@ export default function Antas5Screen() {
           }}
         >
           <Pressable
-            onPress={handleStart}
+            onPress={() => router.navigate("/antas5-slide1")}
             hitSlop={8}
             className="w-full h-full active:scale-95 active:opacity-90"
           >
@@ -226,6 +229,27 @@ export default function Antas5Screen() {
               transition={0}
             />
           </Pressable>
+        </Animated.View>
+
+        {/* Sign — centered in the middle */}
+        <Animated.View
+          entering={FadeIn.duration(700).delay(300)}
+          style={{
+            position: "absolute",
+            top: signTop,
+            left: signLeft,
+            width: signW,
+            height: signH,
+            zIndex: 25,
+          }}
+          pointerEvents="none"
+        >
+          <Image
+            source={require("../../assets/images/antas5/slide1/sign.png")}
+            style={{ width: "100%", height: "100%" }}
+            contentFit="contain"
+            transition={0}
+          />
         </Animated.View>
       </SafeAreaView>
     </View>

@@ -51,7 +51,7 @@ export default function Antas5Level1Screen() {
   const signW = Math.min(screenW * 0.38, 680 * bgScale) * 0.6 * 1.4;
   const signH = signW * (521 / 624);
   const signLeft = (screenW - signW) / 2;
-  const signTop = Math.min(0, bgOffsetY) + 0.10 * screenH + 0.40 * screenH - 0.10 * screenH;
+  const signTop = Math.min(0, bgOffsetY) + 0.10 * screenH + 0.40 * screenH - 0.10 * screenH - 0.20 * screenH;
 
   // Choice cards (A: 757x133, B/C/D: 757x142)
   const choiceW = Math.min(screenW * 0.41, 760 * bgScale);

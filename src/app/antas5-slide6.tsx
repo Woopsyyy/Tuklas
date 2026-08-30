@@ -48,7 +48,7 @@ export default function Antas5Slide6Screen() {
 
   // NPC (npc.png) — girl on the left side at 50% size
   // Source 330x1033
-  const npcH = screenH * 0.80 * 1.5 * 0.5 * 1.5 * 1.4;
+  const npcH = screenH * 0.80 * 1.5 * 0.5 * 1.5 * 1.4 * 0.9;
   const npcW = npcH * (330 / 1033);
   const npcLeft = bgOffsetX - npcW * 0.30 + 0.10 * screenW;
   const npcTop = (screenH - npcH) / 2 + 0.05 * screenH;

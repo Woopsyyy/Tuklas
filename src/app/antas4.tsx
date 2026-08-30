@@ -2,7 +2,8 @@ import { useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { Image, Pressable, useWindowDimensions, View } from "react-native";
+import { Pressable, useWindowDimensions, View } from "react-native";
+import { Image } from "expo-image";
 import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSettingsStore } from "@/store/use-settings-store";
@@ -70,8 +71,9 @@ export default function Antas4Screen() {
       {/* Background */}
       <Image
         source={require("../../assets/images/antas4/background.png")}
-        resizeMode="cover"
-        className="absolute inset-0 h-full w-full"
+        style={{ position: "absolute", width: "100%", height: "100%" }}
+        contentFit="cover"
+        transition={0}
       />
 
       <SafeAreaView className="flex-1" edges={["top", "bottom", "left", "right"]}>
@@ -92,7 +94,8 @@ export default function Antas4Screen() {
             <Image
               source={require("../../assets/images/ui/back.png")}
               style={{ width: backW, height: backH }}
-              resizeMode="contain"
+              contentFit="contain"
+              transition={0}
             />
           </Pressable>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
@@ -100,7 +103,8 @@ export default function Antas4Screen() {
               <Image
                 source={require("../../assets/images/ui/settings.png")}
                 style={{ width: settingsW, height: settingsH }}
-                resizeMode="contain"
+                contentFit="contain"
+                transition={0}
               />
             </Pressable>
           </View>
@@ -122,7 +126,8 @@ export default function Antas4Screen() {
           <Image
             source={require("../../assets/images/antas4/text1.png")}
             style={{ width: "100%", height: "100%" }}
-            resizeMode="contain"
+            contentFit="contain"
+            transition={0}
           />
         </Animated.View>
 
@@ -142,7 +147,8 @@ export default function Antas4Screen() {
           <Image
             source={require("../../assets/images/antas4/text2.png")}
             style={{ width: "100%", height: "100%" }}
-            resizeMode="contain"
+            contentFit="contain"
+            transition={0}
           />
         </Animated.View>
 
@@ -166,7 +172,8 @@ export default function Antas4Screen() {
             <Image
               source={require("../../assets/images/antas4/button.png")}
               style={{ width: "100%", height: "100%" }}
-              resizeMode="contain"
+              contentFit="contain"
+              transition={0}
             />
           </Pressable>
         </Animated.View>

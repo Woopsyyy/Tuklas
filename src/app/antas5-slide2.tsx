@@ -43,7 +43,7 @@ export default function Antas5Slide2Screen() {
   const sign2W = 500 * bgScale * 1.5 * 1.5;
   const sign2H = sign2W * (56 / 128);
   const sign2Left = (screenW - sign2W) / 2;
-  const sign2Top = (screenH - sign2H) / 2 - 60 * bgScale + 0.05 * screenH;
+  const sign2Top = (screenH - sign2H) / 2 - 60 * bgScale + 0.05 * screenH - 0.05 * screenH;
 
   // Text1 (text1.png) — below sign, centered
   // Source 128x56

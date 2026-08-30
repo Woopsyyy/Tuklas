@@ -1,15 +1,19 @@
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Image, Pressable, useWindowDimensions, View } from "react-native";
 import Animated, { FadeIn, FadeInLeft } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
+import { useSettingsStore } from "@/store/use-settings-store";
 
 export default function Slide3Screen() {
   const router = useRouter();
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const narration = useAudioPlayer(require("../../assets/audio/pumili ng antas.mp3"));
 
   const screenW = Math.max(width, height);
   const screenH = Math.min(width, height);
@@ -83,6 +87,55 @@ export default function Slide3Screen() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      try {
+        setAudioModeAsync({ playsInSilentMode: true });
+        narration.loop = false;
+        narration.volume = 1;
+        narration.muted = !soundEnabled;
+        narration.seekTo(0);
+        narration.play();
+      } catch (e) {
+        console.warn("Slide3 narration setup error:", e);
+      }
+
+      return () => {
+        try {
+          narration.pause();
+          narration.seekTo(0);
+        } catch (e) {
+          // ignore if already released
+        }
+      };
+    }, [narration, soundEnabled])
+  );
+
+  const handleBack = () => {
+    try {
+      narration.pause();
+      narration.seekTo(0);
+    } catch (e) {}
+    router.back();
+  };
+
+  const handleNavigate = (route: string) => {
+    try {
+      narration.pause();
+      narration.seekTo(0);
+    } catch (e) {}
+    router.navigate(route as any);
+  };
+
+  const handleReplayNarration = () => {
+    try {
+      narration.seekTo(0);
+      narration.play();
+    } catch (e) {
+      console.warn("Slide3 narration replay error:", e);
+    }
+  };
+
   return (
     <View className="flex-1 bg-black">
       <StatusBar style="light" hidden={false} />
@@ -105,10 +158,13 @@ export default function Slide3Screen() {
             zIndex: 30,
           }}
         >
-          <Pressable onPress={() => router.back()} hitSlop={12} className="active:opacity-70">
+          <Pressable onPress={handleBack} hitSlop={12} className="active:opacity-70">
             <Image source={require("../../assets/images/ui/back.png")} style={{ width: backW, height: backH }} resizeMode="contain" />
           </Pressable>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
+            <Pressable onPress={handleReplayNarration} hitSlop={12} className="active:opacity-70">
+              <Image source={require("../../assets/images/ui/sound.png")} style={{ width: soundW, height: soundH }} resizeMode="contain" />
+            </Pressable>
             <Pressable onPress={() => router.navigate("/settings")} hitSlop={12} className="active:opacity-70">
               <Image source={require("../../assets/images/ui/settings.png")} style={{ width: settingsW, height: settingsH }} resizeMode="contain" />
             </Pressable>
@@ -166,7 +222,7 @@ export default function Slide3Screen() {
           {antas.map((item, index) => (
             <Pressable
               key={index}
-              onPress={() => router.navigate(item.route as any)}
+              onPress={() => handleNavigate(item.route)}
               hitSlop={8}
               style={{ width: btnH * item.aspect, height: btnH, zIndex: 2 }}
               className="active:scale-95 active:opacity-80"

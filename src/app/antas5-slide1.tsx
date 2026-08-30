@@ -39,7 +39,7 @@ export default function Antas5Slide1Screen() {
   const nextW = 420 * bgScale * 0.8;
   const nextH = nextW * (56 / 128);
   const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW;
-  const nextTop = signTop + signH + 60 * bgScale;
+  const nextTop = signTop + signH + 60 * bgScale + 0.20 * screenH;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);

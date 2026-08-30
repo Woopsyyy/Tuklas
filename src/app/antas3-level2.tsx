@@ -76,7 +76,7 @@ export default function Antas3Level2Screen() {
   const text2W = screenW * 0.80 * 2 * 1.70;
   const text2H = screenH * 0.20 * 2 * 1.70;
   const text2Left = bgOffsetX + (DESIGN_W - (text2W / bgScale)) / 2 * bgScale;
-  const text2Top = bgOffsetY + 860 * bgScale - 0.10 * screenH - 0.10 * screenH;
+  const text2Top = bgOffsetY + 860 * bgScale - 0.10 * screenH - 0.10 * screenH + 0.20 * screenH;
 
   // Signpost (right side)
   const signLeft = bgOffsetX + 1660 * bgScale + 0.05 * screenW - 0.05 * screenW + 0.03 * screenW;

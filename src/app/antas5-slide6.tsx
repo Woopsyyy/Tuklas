@@ -51,7 +51,7 @@ export default function Antas5Slide6Screen() {
   const npcH = screenH * 0.80 * 1.5 * 0.5 * 1.5 * 1.4;
   const npcW = npcH * (330 / 1033);
   const npcLeft = bgOffsetX - npcW * 0.30 + 0.10 * screenW;
-  const npcTop = (screenH - npcH) / 2;
+  const npcTop = (screenH - npcH) / 2 + 0.05 * screenH;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);

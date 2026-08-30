@@ -48,7 +48,7 @@ export default function Antas5Level1Screen() {
   const settingsH = iconBase;
 
   // Signboard (sign.png: 624 x 521) — hangs from ceiling at top center
-  const signW = Math.min(screenW * 0.38, 680 * bgScale);
+  const signW = Math.min(screenW * 0.38, 680 * bgScale) * 0.6;
   const signH = signW * (521 / 624);
   const signLeft = (screenW - signW) / 2;
   const signTop = Math.min(0, bgOffsetY);

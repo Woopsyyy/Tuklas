@@ -230,9 +230,9 @@ export default function Antas4Level2Screen() {
   // Signpost (right side)
   const signLeft = bgOffsetX + 1680 * bgScale;
   const signW = 210 * bgScale;
-  const nextTop = bgOffsetY + 700 * bgScale;
+  const nextTop = bgOffsetY + 700 * bgScale + 0.05 * screenH;
   const nextH = 92 * bgScale;
-  const backTop = bgOffsetY + 800 * bgScale;
+  const backTop = bgOffsetY + 800 * bgScale + 0.03 * screenH + 0.03 * screenH;
   const backSignH = 92 * bgScale;
 
   // Wooden Board (board.png)
@@ -630,7 +630,7 @@ export default function Antas4Level2Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft,
+            left: signLeft - 0.02 * screenW,
             top: nextTop,
             width: signW,
             height: nextH,
@@ -655,7 +655,7 @@ export default function Antas4Level2Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft,
+            left: signLeft - 0.03 * screenW + 0.01 * screenW,
             top: backTop,
             width: signW * 0.95,
             height: backSignH * 0.95,

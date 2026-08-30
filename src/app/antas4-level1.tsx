@@ -100,8 +100,8 @@ const ALL_WORDS: WordItem[] = [
   },
 ];
 
-// Correct order: Nagdala (word1) si (word4) Liza (word7) ng (word6) payong (word5) dahil (word2) umuulan (word3)
-const CORRECT_ORDER = ["word1", "word4", "word7", "word6", "word5", "word2", "word3"];
+// Correct order: Nagdala (word1) ng (word6) payong (word5) si (word4) Liza (word7) dahil (word2) umuulan (word3)
+const CORRECT_ORDER = ["word1", "word6", "word5", "word4", "word7", "word2", "word3"];
 
 /**
  * Reusable component to render an uncropped 1920x1080 PNG layer precisely fitted to target dimensions

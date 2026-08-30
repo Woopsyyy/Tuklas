@@ -125,10 +125,12 @@ export default function Antas3Level2Screen() {
   return (
     <View className="flex-1 bg-black">
       <StatusBar style="light" hidden={false} />
-      <RNImage
+      {/* Full-screen Background */}
+      <Image
         source={require("../../assets/images/antas3/background.png")}
-        resizeMode="cover"
-        className="absolute inset-0 h-full w-full"
+        style={{ position: "absolute", width: "100%", height: "100%" }}
+        contentFit="cover"
+        transition={0}
       />
       <SafeAreaView className="flex-1" edges={["top", "bottom", "left", "right"]}>
         {/* Top Header Bar */}

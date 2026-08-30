@@ -14,6 +14,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
 export default function Antas3Level2Screen() {
@@ -23,6 +24,7 @@ export default function Antas3Level2Screen() {
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const timerRef = useRef<any>(null);
+  const narration = useAudioPlayer(require("../../assets/audio/antas3 level2.mp3"));
 
   const [selectedChoice, setSelectedChoice] = useState<"A" | "B" | null>(null);
 
@@ -93,8 +95,34 @@ export default function Antas3Level2Screen() {
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, []);
+    try {
+      setAudioModeAsync({ playsInSilentMode: true });
+      narration.loop = false;
+      narration.volume = 1;
+      narration.muted = !soundEnabled;
+      narration.play();
+    } catch (e) {
+      console.warn("Antas3Level2 narration setup error:", e);
+    }
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      try {
+        narration.pause();
+        narration.seekTo(0);
+      } catch (e) {
+        console.warn("Antas3Level2 narration cleanup error:", e);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [narration]);
+
+  useEffect(() => {
+    try {
+      narration.muted = !soundEnabled;
+    } catch (e) {
+      console.warn("Antas3Level2 narration mute error:", e);
+    }
+  }, [soundEnabled, narration]);
 
   const handleSelectChoice = (choice: "A" | "B") => {
     if (selectedChoice !== null) return;

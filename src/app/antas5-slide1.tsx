@@ -34,7 +34,7 @@ export default function Antas5Slide1Screen() {
 
   // Sign (sign.png) — centered in the middle
   // Source 128x56
-  const signW = 700 * bgScale * 1.5;
+  const signW = 700 * bgScale * 1.5 * 1.2;
   const signH = signW * (56 / 128);
   const signLeft = (screenW - signW) / 2;
   const signTop = (screenH - signH) / 2;

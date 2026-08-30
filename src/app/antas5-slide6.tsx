@@ -7,7 +7,7 @@ import { Image } from "expo-image";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
-export default function Antas5Slide1Screen() {
+export default function Antas5Slide6Screen() {
   const router = useRouter();
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
@@ -27,19 +27,11 @@ export default function Antas5Slide1Screen() {
   const settingsW = iconBase;
   const settingsH = iconBase;
 
-  // Sign (sign.png) — centered in the middle
-  // Source 128x56
-  const signW = 700 * bgScale;
-  const signH = signW * (56 / 128);
-  const signLeft = (screenW - signW) / 2;
-  const signTop = (screenH - signH) / 2;
-
-  // Next button (antas5-next.png) — below the sign
-  // Source 128x56
+  // Next button (antas5-next.png) — centered at bottom
   const nextW = 420 * bgScale;
   const nextH = nextW * (56 / 128);
   const nextLeft = (screenW - nextW) / 2;
-  const nextTop = signTop + signH + 60 * bgScale;
+  const nextTop = screenH - nextH - 40 * bgScale;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
@@ -91,30 +83,9 @@ export default function Antas5Slide1Screen() {
           </View>
         </View>
 
-        {/* Sign — centered in the middle */}
+        {/* Next button — final slide, returns to antas5 */}
         <Animated.View
           entering={FadeIn.duration(700)}
-          style={{
-            position: "absolute",
-            top: signTop,
-            left: signLeft,
-            width: signW,
-            height: signH,
-            zIndex: 20,
-          }}
-          pointerEvents="none"
-        >
-          <Image
-            source={require("../../assets/images/antas5/slide1/sign.png")}
-            style={{ width: "100%", height: "100%" }}
-            contentFit="contain"
-            transition={0}
-          />
-        </Animated.View>
-
-        {/* Next button — navigates to slide2 */}
-        <Animated.View
-          entering={FadeIn.duration(700).delay(150)}
           style={{
             position: "absolute",
             top: nextTop,
@@ -125,7 +96,7 @@ export default function Antas5Slide1Screen() {
           }}
         >
           <Pressable
-            onPress={() => router.navigate("/antas5-slide2")}
+            onPress={() => router.navigate("/antas5")}
             hitSlop={8}
             className="w-full h-full active:scale-95 active:opacity-90"
           >

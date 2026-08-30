@@ -40,14 +40,14 @@ export default function Antas5Slide2Screen() {
 
   // Sign (sign.png) — centered in the middle, above text1
   // Source 128x56
-  const sign2W = 500 * bgScale * 1.5;
+  const sign2W = 500 * bgScale * 1.5 * 1.5;
   const sign2H = sign2W * (56 / 128);
   const sign2Left = (screenW - sign2W) / 2;
   const sign2Top = (screenH - sign2H) / 2 - 60 * bgScale;
 
   // Text1 (text1.png) — below sign, centered
   // Source 128x56
-  const text1W = 700 * bgScale * 1.3;
+  const text1W = 700 * bgScale * 1.3 * 1.5;
   const text1H = text1W * (56 / 128);
   const text1Left = (screenW - text1W) / 2;
   const text1Top = sign2Top + sign2H + 60 * bgScale;

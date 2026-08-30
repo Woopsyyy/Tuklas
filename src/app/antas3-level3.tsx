@@ -118,6 +118,7 @@ export default function Antas3Level3Screen() {
 
   const handlePlayNarration = () => {
     try {
+      narration.seekTo(0);
       narration.play();
     } catch (e) {
       console.warn("Antas3Level3 narration play error:", e);
@@ -173,7 +174,7 @@ export default function Antas3Level3Screen() {
             <Pressable onPress={handlePlayNarration} hitSlop={12} className="active:opacity-70">
               <RNImage
                 source={require("../../assets/images/ui/sound.png")}
-                style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}
+                style={{ width: soundW, height: soundH }}
                 resizeMode="contain"
               />
             </Pressable>

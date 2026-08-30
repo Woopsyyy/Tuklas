@@ -117,6 +117,15 @@ export default function Antas3Level2Screen() {
     }
   }, [soundEnabled, narration]);
 
+  const handlePlayNarration = () => {
+    try {
+      narration.seekTo(0);
+      narration.play();
+    } catch (e) {
+      console.warn("Antas3Level2 narration play error:", e);
+    }
+  };
+
   const handleSelectChoice = (choice: "A" | "B") => {
     if (selectedChoice !== null) return;
     setSelectedChoice(choice);
@@ -163,10 +172,10 @@ export default function Antas3Level2Screen() {
             <RNImage source={require("../../assets/images/ui/back.png")} style={{ width: backW, height: backH }} resizeMode="contain" />
           </Pressable>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 0.03 * screenW }}>
-            <Pressable onPress={toggleSound} hitSlop={12} className="active:opacity-70">
+            <Pressable onPress={handlePlayNarration} hitSlop={12} className="active:opacity-70">
               <RNImage
                 source={require("../../assets/images/ui/sound.png")}
-                style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}
+                style={{ width: soundW, height: soundH }}
                 resizeMode="contain"
               />
             </Pressable>

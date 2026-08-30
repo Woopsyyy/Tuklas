@@ -75,6 +75,15 @@ export default function Antas5Slide5Screen() {
     }
   }, [soundEnabled, narration]);
 
+  const handleReplayNarration = () => {
+    try {
+      narration.seekTo(0);
+      narration.play();
+    } catch (e) {
+      console.warn("Antas5Slide5 narration replay error:", e);
+    }
+  };
+
   return (
     <View className="flex-1 bg-black">
       <StatusBar style="light" hidden={false} />
@@ -110,10 +119,10 @@ export default function Antas5Slide5Screen() {
             />
           </Pressable>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 0.03 * screenW }}>
-            <Pressable onPress={toggleSound} hitSlop={12} className="active:opacity-70">
+            <Pressable onPress={handleReplayNarration} hitSlop={12} className="active:opacity-70">
               <Image
                 source={require("../../assets/images/ui/sound.png")}
-                style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}
+                style={{ width: soundW, height: soundH }}
                 contentFit="contain"
                 transition={0}
               />

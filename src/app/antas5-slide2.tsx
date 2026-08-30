@@ -50,7 +50,7 @@ export default function Antas5Slide2Screen() {
   const text1W = 700 * bgScale * 1.3 * 1.5;
   const text1H = text1W * (56 / 128);
   const text1Left = (screenW - text1W) / 2;
-  const text1Top = sign2Top + sign2H + 60 * bgScale;
+  const text1Top = screenH * 0.56;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);

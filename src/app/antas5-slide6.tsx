@@ -166,7 +166,7 @@ export default function Antas5Slide6Screen() {
           }}
         >
           <Pressable
-            onPress={() => router.navigate("/antas5")}
+            onPress={() => router.navigate("/antas5-level1")}
             hitSlop={8}
             className="w-full h-full active:scale-95 active:opacity-90"
           >

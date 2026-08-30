@@ -39,12 +39,13 @@ export default function Antas5Slide1Screen() {
   const signLeft = (screenW - signW) / 2;
   const signTop = (screenH - signH) / 2;
 
-  // Next button (antas5-next.png) — below the sign
+  // Next button (antas5-next.png) — absolute, fixed position so it doesn't move
+  // when other components are added or change
   // Source 128x56
   const nextW = 420 * bgScale * 0.8;
   const nextH = nextW * (56 / 128);
   const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW - 0.05 * screenW;
-  const nextTop = signTop + signH + 60 * bgScale + 0.20 * screenH - 0.05 * screenH;
+  const nextTop = screenH * 0.72;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);

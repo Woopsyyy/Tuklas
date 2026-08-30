@@ -1,15 +1,19 @@
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Image, Pressable, useWindowDimensions, View } from "react-native";
 import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
+import { useSettingsStore } from "@/store/use-settings-store";
 
 export default function Slide2Screen() {
   const router = useRouter();
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const narration = useAudioPlayer(require("../../assets/audio/intro.mp3"));
 
   const screenW = Math.max(width, height);
   const screenH = Math.min(width, height);
@@ -48,6 +52,55 @@ export default function Slide2Screen() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      try {
+        setAudioModeAsync({ playsInSilentMode: true });
+        narration.loop = false;
+        narration.volume = 1;
+        narration.muted = !soundEnabled;
+        narration.seekTo(0);
+        narration.play();
+      } catch (e) {
+        console.warn("Slide2 narration setup error:", e);
+      }
+
+      return () => {
+        try {
+          narration.pause();
+          narration.seekTo(0);
+        } catch (e) {
+          // ignore if already released
+        }
+      };
+    }, [narration, soundEnabled])
+  );
+
+  const handleProceed = () => {
+    try {
+      narration.pause();
+      narration.seekTo(0);
+    } catch (e) {}
+    router.navigate("/slide3");
+  };
+
+  const handleBack = () => {
+    try {
+      narration.pause();
+      narration.seekTo(0);
+    } catch (e) {}
+    router.back();
+  };
+
+  const handleReplayNarration = () => {
+    try {
+      narration.seekTo(0);
+      narration.play();
+    } catch (e) {
+      console.warn("Slide2 narration replay error:", e);
+    }
+  };
+
   return (
     <View className="flex-1 bg-black">
       <StatusBar style="light" hidden={false} />
@@ -61,7 +114,7 @@ export default function Slide2Screen() {
 
       <SafeAreaView className="flex-1" edges={["top", "bottom", "left", "right"]}>
         {/* Full-screen tap to proceed */}
-        <Pressable onPress={() => router.navigate("/slide3")} className="flex-1" />
+        <Pressable onPress={handleProceed} className="flex-1" />
 
         {/* Top Header Bar */}
         <View
@@ -78,7 +131,7 @@ export default function Slide2Screen() {
         >
           {/* Back button — top left */}
           <Pressable
-            onPress={() => router.back()}
+            onPress={handleBack}
             hitSlop={12}
             className="active:opacity-70"
           >
@@ -91,6 +144,17 @@ export default function Slide2Screen() {
 
           {/* Action buttons — top right */}
           <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
+            <Pressable
+              onPress={handleReplayNarration}
+              hitSlop={12}
+              className="active:opacity-70"
+            >
+              <Image
+                source={require("../../assets/images/ui/sound.png")}
+                style={{ width: soundW, height: soundH }}
+                resizeMode="contain"
+              />
+            </Pressable>
             <Pressable
               onPress={() => router.navigate("/settings")}
               hitSlop={12}

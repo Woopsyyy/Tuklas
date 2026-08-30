@@ -38,7 +38,7 @@ export default function Antas5Slide1Screen() {
   // Source 128x56
   const nextW = 420 * bgScale;
   const nextH = nextW * (56 / 128);
-  const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW;
+  const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW;
   const nextTop = signTop + signH + 60 * bgScale;
 
   useEffect(() => {

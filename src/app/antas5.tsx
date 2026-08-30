@@ -31,8 +31,8 @@ export default function Antas5Screen() {
 
   // Title (text1.png) — "ANTAS 5 / AKLATAN NG KARUNUNGAN"
   // Source is 1456x559 approx — position top-center
-  const titleW = 900 * bgScale;
-  const titleH = 220 * bgScale;
+  const titleW = 900 * bgScale * 1.5;
+  const titleH = 220 * bgScale * 1.5;
   const titleLeft = (screenW - titleW) / 2;
   const titleTop = Math.max(insets.top + 2, bgOffsetY + 10 * bgScale);
 

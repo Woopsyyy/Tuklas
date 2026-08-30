@@ -6,6 +6,7 @@ import { Pressable, useWindowDimensions, View } from "react-native";
 import { Image } from "expo-image";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
 export default function Antas5Slide4Screen() {
@@ -14,6 +15,7 @@ export default function Antas5Slide4Screen() {
   const insets = useSafeAreaInsets();
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
   const toggleSound = useSettingsStore((state) => state.toggleSound);
+  const narration = useAudioPlayer(require("../../assets/audio/noong una.mp3"));
 
   const screenW = Math.max(width, height);
   const screenH = Math.min(width, height);
@@ -54,7 +56,33 @@ export default function Antas5Slide4Screen() {
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-  }, []);
+    try {
+      setAudioModeAsync({ playsInSilentMode: true });
+      narration.loop = false;
+      narration.volume = 1;
+      narration.muted = !soundEnabled;
+      narration.play();
+    } catch (e) {
+      console.warn("Antas5Slide4 narration setup error:", e);
+    }
+    return () => {
+      try {
+        narration.pause();
+        narration.seekTo(0);
+      } catch (e) {
+        console.warn("Antas5Slide4 narration cleanup error:", e);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [narration]);
+
+  useEffect(() => {
+    try {
+      narration.muted = !soundEnabled;
+    } catch (e) {
+      console.warn("Antas5Slide4 narration mute error:", e);
+    }
+  }, [soundEnabled, narration]);
 
   return (
     <View className="flex-1 bg-black">

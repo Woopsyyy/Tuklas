@@ -61,7 +61,7 @@ export default function Antas5Screen() {
   // Book (book.png) — bottom-right corner decoration
   const bookH = screenH * 0.32;
   const bookW = bookH * (1456 / 816);
-  const bookLeft = screenW - bookW * 0.75;
+  const bookLeft = screenW - bookW * 0.75 - 0.05 * screenW;
   const bookTop = screenH - bookH - 5 * bgScale;
 
   useEffect(() => {

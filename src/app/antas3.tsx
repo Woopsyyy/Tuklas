@@ -6,9 +6,12 @@ import { Pressable, useWindowDimensions, View } from "react-native";
 import { Image } from "expo-image";
 import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSettingsStore } from "@/store/use-settings-store";
 
 export default function Antas3Screen() {
   const router = useRouter();
+  const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const toggleSound = useSettingsStore((state) => state.toggleSound);
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
@@ -69,7 +72,15 @@ export default function Antas3Screen() {
           <Pressable onPress={() => router.back()} hitSlop={12} className="active:opacity-70">
             <Image source={require("../../assets/images/ui/back.png")} style={{ width: backW, height: backH }} contentFit="contain" transition={0} />
           </Pressable>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 0.03 * screenW }}>
+            <Pressable onPress={toggleSound} hitSlop={12} className="active:opacity-70">
+              <Image
+                source={require("../../assets/images/ui/sound.png")}
+                style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}
+                contentFit="contain"
+                transition={0}
+              />
+            </Pressable>
             <Pressable onPress={() => router.navigate("/settings")} hitSlop={12} className="active:opacity-70">
               <Image source={require("../../assets/images/ui/settings.png")} style={{ width: settingsW, height: settingsH }} contentFit="contain" transition={0} />
             </Pressable>

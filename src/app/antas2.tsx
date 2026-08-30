@@ -100,7 +100,14 @@ export default function Antas2Screen() {
           <Pressable onPress={() => router.back()} hitSlop={12} className="active:opacity-70">
             <Image source={require("../../assets/images/ui/back.png")} style={{ width: backW, height: backH }} resizeMode="contain" />
           </Pressable>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 0.03 * screenW }}>
+            <Pressable onPress={toggleSound} hitSlop={12} className="active:opacity-70">
+              <Image
+                source={require("../../assets/images/ui/sound.png")}
+                style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}
+                resizeMode="contain"
+              />
+            </Pressable>
             <Pressable onPress={() => router.navigate("/settings")} hitSlop={12} className="active:opacity-70">
               <Image source={require("../../assets/images/ui/settings.png")} style={{ width: settingsW, height: settingsH }} resizeMode="contain" />
             </Pressable>

@@ -98,7 +98,15 @@ export default function Antas4Screen() {
               transition={0}
             />
           </Pressable>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 0.03 * screenW }}>
+            <Pressable onPress={toggleSound} hitSlop={12} className="active:opacity-70">
+              <Image
+                source={require("../../assets/images/ui/sound.png")}
+                style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}
+                contentFit="contain"
+                transition={0}
+              />
+            </Pressable>
             <Pressable onPress={() => router.navigate("/settings")} hitSlop={12} className="active:opacity-70">
               <Image
                 source={require("../../assets/images/ui/settings.png")}

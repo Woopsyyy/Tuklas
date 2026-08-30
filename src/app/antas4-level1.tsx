@@ -384,7 +384,7 @@ export default function Antas4Level1Screen() {
               resizeMode="contain"
             />
           </Pressable>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 0.03 * screenW }}>
             <Pressable onPress={toggleSound} hitSlop={12} className="active:opacity-70">
               <RNImage
                 source={require("../../assets/images/ui/sound.png")}

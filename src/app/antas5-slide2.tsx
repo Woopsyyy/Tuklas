@@ -38,19 +38,19 @@ export default function Antas5Slide2Screen() {
   const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW - 0.05 * screenW;
   const nextTop = (screenH + 700 * bgScale * (56 / 128)) / 2 + 60 * bgScale + 0.20 * screenH - 0.05 * screenH;
 
-  // Text1 (text1.png) — centered in the middle
+  // Sign (sign.png) — centered in the middle, above text1
   // Source 128x56
-  const text1W = 700 * bgScale;
-  const text1H = text1W * (56 / 128);
-  const text1Left = (screenW - text1W) / 2;
-  const text1Top = (screenH - text1H) / 2 - 60 * bgScale;
-
-  // Sign (sign.png) — below text1, centered
-  // Source 128x56
-  const sign2W = 500 * bgScale;
+  const sign2W = 500 * bgScale * 1.5;
   const sign2H = sign2W * (56 / 128);
   const sign2Left = (screenW - sign2W) / 2;
-  const sign2Top = text1Top + text1H + 60 * bgScale;
+  const sign2Top = (screenH - sign2H) / 2 - 60 * bgScale;
+
+  // Text1 (text1.png) — below sign, centered
+  // Source 128x56
+  const text1W = 700 * bgScale * 1.3;
+  const text1H = text1W * (56 / 128);
+  const text1Left = (screenW - text1W) / 2;
+  const text1Top = sign2Top + sign2H + 60 * bgScale;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);

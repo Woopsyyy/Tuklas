@@ -33,17 +33,25 @@ function BackgroundMusicPlayer() {
 
   useEffect(() => {
     try {
-      if (player) {
-        const safeVolume = Number.isFinite(musicVolume)
-          ? Math.max(0, Math.min(1, musicVolume))
-          : 0.7;
-        player.volume = safeVolume;
-        player.muted = Boolean(musicMuted);
-      }
+      if (!player || musicMuted) return;
+      const safeVolume = Number.isFinite(musicVolume)
+        ? Math.max(0, Math.min(1, musicVolume))
+        : 0.7;
+      player.volume = safeVolume;
     } catch (e) {
       console.warn("BackgroundMusicPlayer volume update error:", e);
     }
-  }, [musicVolume, musicMuted, player]);
+  }, [musicVolume, player]);
+
+  useEffect(() => {
+    try {
+      if (player) {
+        player.muted = Boolean(musicMuted);
+      }
+    } catch (e) {
+      console.warn("BackgroundMusicPlayer mute update error:", e);
+    }
+  }, [musicMuted, player]);
 
   return null;
 }

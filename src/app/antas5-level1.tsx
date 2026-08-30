@@ -70,7 +70,7 @@ export default function Antas5Level1Screen() {
   const nextW = 230 * bgScale;
   const nextH = nextW * (56 / 128) * 2.2;
   const nextRight = Math.max(insets.right + 20, 30 * bgScale);
-  const nextBottom = Math.max(insets.bottom + 16, 20 * bgScale) - 0.10 * screenH - 0.10 * screenH;
+  const nextBottom = Math.max(insets.bottom + 16, 20 * bgScale) - 0.10 * screenH - 0.10 * screenH + 0.03 * screenH;
 
   // Pulse animation for selection
   const pulseScale = useSharedValue(1);

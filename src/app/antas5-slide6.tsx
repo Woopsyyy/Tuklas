@@ -41,7 +41,7 @@ export default function Antas5Slide6Screen() {
 
   // Text1 (text1.png) — centered in the middle at 80% size
   // Source 1544x607
-  const text1W = 700 * bgScale * 1.3 * 1.5 * 0.8 * 1.4;
+  const text1W = 700 * bgScale * 1.3 * 1.5 * 0.8 * 1.4 * 0.8;
   const text1H = text1W * (607 / 1544);
   const text1Left = (screenW - text1W) / 2;
   const text1Top = (screenH - text1H) / 2;

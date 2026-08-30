@@ -22,6 +22,8 @@ export default function Antas5Slide3Screen() {
   const DESIGN_H = 1080;
 
   const bgScale = Math.max(screenW / DESIGN_W, screenH / DESIGN_H);
+  const bgOffsetX = (screenW - DESIGN_W * bgScale) / 2;
+  const bgOffsetY = (screenH - DESIGN_H * bgScale) / 2;
 
   // Header icons
   const iconBase = Math.max(36, Math.min(48, 56 * bgScale));
@@ -38,19 +40,18 @@ export default function Antas5Slide3Screen() {
   const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW - 0.05 * screenW;
   const nextTop = (screenH + 700 * bgScale * (56 / 128)) / 2 + 60 * bgScale + 0.20 * screenH - 0.05 * screenH;
 
-  // Sign (sign.png) — centered in the middle, above text1
+  // Text1 (text1.png) — centered in the middle at 80% size
   // Source 128x56
-  const sign3W = 500 * bgScale * 1.5 * 1.5;
-  const sign3H = sign3W * (56 / 128);
-  const sign3Left = (screenW - sign3W) / 2;
-  const sign3Top = (screenH - sign3H) / 2 - 60 * bgScale + 0.05 * screenH - 0.05 * screenH + 0.03 * screenH;
-
-  // Text1 (text1.png) — below sign, centered
-  // Source 128x56
-  const text1W = 700 * bgScale * 1.3 * 1.5;
+  const text1W = 700 * bgScale * 1.3 * 1.5 * 0.8;
   const text1H = text1W * (56 / 128);
   const text1Left = (screenW - text1W) / 2;
-  const text1Top = screenH * 0.56;
+  const text1Top = (screenH - text1H) / 2;
+
+  // NPC (npc.png) — girl on the left side at 50% size
+  const npcH = screenH * 0.80 * 1.5 * 0.5;
+  const npcW = npcH * (1456 / 816);
+  const npcLeft = bgOffsetX - npcW * 0.30;
+  const npcTop = (screenH - npcH) / 2;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
@@ -110,28 +111,28 @@ export default function Antas5Slide3Screen() {
           </View>
         </View>
 
-        {/* Sign — centered in the middle, above text1 */}
+        {/* NPC — girl on the left side */}
         <Animated.View
           entering={FadeIn.duration(700)}
           style={{
             position: "absolute",
-            top: sign3Top,
-            left: sign3Left,
-            width: sign3W,
-            height: sign3H,
+            top: npcTop,
+            left: npcLeft,
+            width: npcW,
+            height: npcH,
             zIndex: 20,
           }}
           pointerEvents="none"
         >
           <Image
-            source={require("../../assets/images/antas5/slide3/sign.png")}
+            source={require("../../assets/images/antas5/npc.png")}
             style={{ width: "100%", height: "100%" }}
             contentFit="contain"
             transition={0}
           />
         </Animated.View>
 
-        {/* Text1 — below sign, centered */}
+        {/* Text1 — centered in the middle */}
         <Animated.View
           entering={FadeIn.duration(700).delay(100)}
           style={{

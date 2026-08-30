@@ -27,11 +27,11 @@ export default function Antas5Slide3Screen() {
   const settingsW = iconBase;
   const settingsH = iconBase;
 
-  // Next button (antas5-next.png) — centered at bottom
-  const nextW = 420 * bgScale;
+  // Next button (antas5-next.png) — same as slide1
+  const nextW = 420 * bgScale * 0.8;
   const nextH = nextW * (56 / 128);
-  const nextLeft = (screenW - nextW) / 2;
-  const nextTop = screenH - nextH - 40 * bgScale;
+  const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW - 0.05 * screenW;
+  const nextTop = (screenH + 700 * bgScale * (56 / 128)) / 2 + 60 * bgScale + 0.20 * screenH - 0.05 * screenH;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);

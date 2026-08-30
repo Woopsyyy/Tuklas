@@ -38,6 +38,20 @@ export default function Antas5Slide2Screen() {
   const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW - 0.05 * screenW;
   const nextTop = (screenH + 700 * bgScale * (56 / 128)) / 2 + 60 * bgScale + 0.20 * screenH - 0.05 * screenH;
 
+  // Text1 (text1.png) — centered in the middle
+  // Source 128x56
+  const text1W = 700 * bgScale;
+  const text1H = text1W * (56 / 128);
+  const text1Left = (screenW - text1W) / 2;
+  const text1Top = (screenH - text1H) / 2 - 60 * bgScale;
+
+  // Sign (sign.png) — below text1, centered
+  // Source 128x56
+  const sign2W = 500 * bgScale;
+  const sign2H = sign2W * (56 / 128);
+  const sign2Left = (screenW - sign2W) / 2;
+  const sign2Top = text1Top + text1H + 60 * bgScale;
+
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
   }, []);
@@ -95,6 +109,48 @@ export default function Antas5Slide2Screen() {
             </Pressable>
           </View>
         </View>
+
+        {/* Text1 — centered in the middle */}
+        <Animated.View
+          entering={FadeIn.duration(700)}
+          style={{
+            position: "absolute",
+            top: text1Top,
+            left: text1Left,
+            width: text1W,
+            height: text1H,
+            zIndex: 20,
+          }}
+          pointerEvents="none"
+        >
+          <Image
+            source={require("../../assets/images/antas5/slide2/text1.png")}
+            style={{ width: "100%", height: "100%" }}
+            contentFit="contain"
+            transition={0}
+          />
+        </Animated.View>
+
+        {/* Sign — below text1 */}
+        <Animated.View
+          entering={FadeIn.duration(700).delay(100)}
+          style={{
+            position: "absolute",
+            top: sign2Top,
+            left: sign2Left,
+            width: sign2W,
+            height: sign2H,
+            zIndex: 20,
+          }}
+          pointerEvents="none"
+        >
+          <Image
+            source={require("../../assets/images/antas5/slide2/sign.png")}
+            style={{ width: "100%", height: "100%" }}
+            contentFit="contain"
+            transition={0}
+          />
+        </Animated.View>
 
         {/* Next button — navigates to slide3 */}
         <Animated.View

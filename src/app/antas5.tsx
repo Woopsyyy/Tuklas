@@ -42,7 +42,7 @@ export default function Antas5Screen() {
   const npcH = screenH * 0.80 * 1.5;
   const npcW = npcH * (1456 / 816);
   const npcLeft = bgOffsetX - npcW * 0.30;   // shift left so character visible in left area
-  const npcTop = screenH - npcH + 10 * bgScale + 0.10 * screenH;
+  const npcTop = screenH - npcH + 10 * bgScale + 0.25 * screenH;
 
   // Dialogue card (text2.png) — center, below title
   // Source 1456x665 approx

@@ -63,7 +63,7 @@ export default function Antas5Level1Screen() {
   const col1Left = marginX;
   const col2Left = screenW - marginX - choiceW;
 
-  const row1Top = bgOffsetY + 530 * bgScale;
+  const row1Top = bgOffsetY + 530 * bgScale + 0.05 * screenH;
   const row2Top = row1Top + choiceH + 34 * bgScale;
 
   // Next button (antas5-next.png: 1920x1080 canvas / badge at bottom right)

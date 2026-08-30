@@ -39,7 +39,7 @@ export default function Antas5Screen() {
   // NPC (npc.png) — girl on the left side
   // Source PNG is wide (1456x816) but character occupies right half
   // We show a tall portrait on the left
-  const npcH = screenH * 0.80;
+  const npcH = screenH * 0.80 * 1.5;
   const npcW = npcH * (1456 / 816);
   const npcLeft = bgOffsetX - npcW * 0.30;   // shift left so character visible in left area
   const npcTop = screenH - npcH + 10 * bgScale;

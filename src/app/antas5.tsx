@@ -49,7 +49,7 @@ export default function Antas5Screen() {
   const cardW = screenW * 0.52 * 1.3;
   const cardH = cardW * (665 / 1456);
   const cardLeft = (screenW - cardW) / 2 + screenW * 0.03;
-  const cardTop = bgOffsetY + 155 * bgScale + 0.50 * screenH;
+  const cardTop = bgOffsetY + 155 * bgScale + 0.50 * screenH - 0.20 * screenH;
 
   // Button (button.png) — "Basahin ang Kuwento", centered at bottom
   // Source 1296x230 approx

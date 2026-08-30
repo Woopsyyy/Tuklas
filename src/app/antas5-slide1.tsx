@@ -1,7 +1,7 @@
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Pressable, useWindowDimensions, View } from "react-native";
 import { Image } from "expo-image";
 import Animated, { FadeIn } from "react-native-reanimated";
@@ -14,7 +14,6 @@ export default function Antas5Slide1Screen() {
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
-  const toggleSound = useSettingsStore((state) => state.toggleSound);
   const narration = useAudioPlayer(require("../../assets/audio/Ang Munting Hakbang.mp3"));
 
   const screenW = Math.max(width, height);
@@ -51,24 +50,47 @@ export default function Antas5Slide1Screen() {
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-    try {
-      setAudioModeAsync({ playsInSilentMode: true });
-      narration.loop = false;
-      narration.volume = 1;
-      narration.muted = !soundEnabled;
-      narration.play();
-    } catch (e) {
-      console.warn("Antas5Slide1 narration setup error:", e);
-    }
-  }, [narration]);
+  }, []);
 
-  useEffect(() => {
+  useFocusEffect(
+    useCallback(() => {
+      try {
+        setAudioModeAsync({ playsInSilentMode: true });
+        narration.loop = false;
+        narration.volume = 1;
+        narration.muted = !soundEnabled;
+        narration.seekTo(0);
+        narration.play();
+      } catch (e) {
+        console.warn("Antas5Slide1 narration setup error:", e);
+      }
+
+      return () => {
+        try {
+          narration.pause();
+          narration.seekTo(0);
+        } catch (e) {
+          // ignore if already released
+        }
+      };
+    }, [narration, soundEnabled])
+  );
+
+  const handleNext = () => {
     try {
-      narration.muted = !soundEnabled;
-    } catch (e) {
-      console.warn("Antas5Slide1 narration mute error:", e);
-    }
-  }, [soundEnabled, narration]);
+      narration.pause();
+      narration.seekTo(0);
+    } catch (e) {}
+    router.navigate("/antas5-slide2");
+  };
+
+  const handleBack = () => {
+    try {
+      narration.pause();
+      narration.seekTo(0);
+    } catch (e) {}
+    router.back();
+  };
 
   const handleReplayNarration = () => {
     try {
@@ -105,7 +127,7 @@ export default function Antas5Slide1Screen() {
             zIndex: 30,
           }}
         >
-          <Pressable onPress={() => router.back()} hitSlop={12} className="active:opacity-70">
+          <Pressable onPress={handleBack} hitSlop={12} className="active:opacity-70">
             <Image
               source={require("../../assets/images/ui/back.png")}
               style={{ width: backW, height: backH }}
@@ -167,7 +189,7 @@ export default function Antas5Slide1Screen() {
           }}
         >
           <Pressable
-            onPress={() => router.navigate("/antas5-slide2")}
+            onPress={handleNext}
             hitSlop={8}
             className="w-full h-full active:scale-95 active:opacity-90"
           >

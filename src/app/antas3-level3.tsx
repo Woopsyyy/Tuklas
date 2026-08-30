@@ -1,7 +1,7 @@
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, useWindowDimensions, View, Image as RNImage } from "react-native";
 import { Image } from "expo-image";
 import Animated, {
@@ -94,27 +94,34 @@ export default function Antas3Level3Screen() {
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-    try {
-      setAudioModeAsync({ playsInSilentMode: true });
-      narration.loop = false;
-      narration.volume = 1;
-      narration.muted = !soundEnabled;
-      narration.play();
-    } catch (e) {
-      console.warn("Antas3Level3 narration setup error:", e);
-    }
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [narration]);
+  }, []);
 
-  useEffect(() => {
-    try {
-      narration.muted = !soundEnabled;
-    } catch (e) {
-      console.warn("Antas3Level3 narration mute error:", e);
-    }
-  }, [soundEnabled, narration]);
+  useFocusEffect(
+    useCallback(() => {
+      try {
+        setAudioModeAsync({ playsInSilentMode: true });
+        narration.loop = false;
+        narration.volume = 1;
+        narration.muted = !soundEnabled;
+        narration.seekTo(0);
+        narration.play();
+      } catch (e) {
+        console.warn("Antas3Level3 narration setup error:", e);
+      }
+
+      return () => {
+        try {
+          narration.pause();
+          narration.seekTo(0);
+        } catch (e) {
+          // ignore if already released
+        }
+      };
+    }, [narration, soundEnabled])
+  );
 
   const handlePlayNarration = () => {
     try {
@@ -135,17 +142,29 @@ export default function Antas3Level3Screen() {
     // Correct answer is A
     if (choice === "A") {
       timerRef.current = setTimeout(() => {
+        try {
+          narration.pause();
+          narration.seekTo(0);
+        } catch (e) {}
         router.navigate("/antas4" as any);
       }, 2000);
     }
   };
 
   const handleNext = () => {
+    try {
+      narration.pause();
+      narration.seekTo(0);
+    } catch (e) {}
     if (timerRef.current) clearTimeout(timerRef.current);
     router.navigate("/antas4" as any);
   };
 
   const handleBack = () => {
+    try {
+      narration.pause();
+      narration.seekTo(0);
+    } catch (e) {}
     if (timerRef.current) clearTimeout(timerRef.current);
     router.back();
   };

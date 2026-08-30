@@ -46,7 +46,7 @@ export default function Antas5Screen() {
 
   // Dialogue card (text2.png) — center, below title
   // Source 1456x665 approx
-  const cardW = screenW * 0.52;
+  const cardW = screenW * 0.52 * 1.3;
   const cardH = cardW * (665 / 1456);
   const cardLeft = (screenW - cardW) / 2 + screenW * 0.03;
   const cardTop = bgOffsetY + 155 * bgScale;

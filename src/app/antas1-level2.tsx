@@ -115,17 +115,6 @@ export default function Antas1Level2Screen() {
       3,
       true
     );
-
-    // Only proceed to the next level when the correct answer (A) is chosen
-    if (choice === "A") {
-      timerRef.current = setTimeout(() => {
-        try {
-          narration.pause();
-          narration.seekTo(0);
-        } catch (e) {}
-        router.navigate("/antas1-level3");
-      }, 2000);
-    }
   };
 
   const handleNext = () => {

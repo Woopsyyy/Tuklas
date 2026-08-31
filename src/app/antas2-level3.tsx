@@ -127,18 +127,7 @@ useEffect(() => {
       withSequence(withTiming(1.03, { duration: 300 }), withTiming(1, { duration: 300 })),
       3,
       true
-    );
-
-// Correct answer for Level 3 is B
-    if (choice === "B") {
-      timerRef.current = setTimeout(() => {
-        try {
-          narration.pause();
-          narration.seekTo(0);
-        } catch (e) {}
-        router.navigate("/antas3" as any);
-      }, 2000);
-    }
+);
   };
 
   const handleNext = () => {

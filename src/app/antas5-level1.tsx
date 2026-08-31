@@ -91,13 +91,6 @@ export default function Antas5Level1Screen() {
       3,
       true
     );
-
-    // Correct answer is "B"
-    if (choice === "B") {
-      timerRef.current = setTimeout(() => {
-        router.navigate("/antas5-level2");
-      }, 2000);
-    }
   };
 
   const handleNext = () => {

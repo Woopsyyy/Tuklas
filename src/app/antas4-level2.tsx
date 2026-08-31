@@ -346,9 +346,7 @@ export default function Antas4Level2Screen() {
         } else {
           playFirstAnswer();
         }
-        timerRef.current = setTimeout(() => {
-          router.navigate("/antas4" as any);
-        }, 5000);
+        timerRef.current = null;
       } else {
         setIsCorrect(false);
         setIsWrong(true);

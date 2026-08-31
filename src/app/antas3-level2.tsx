@@ -138,17 +138,7 @@ export default function Antas3Level2Screen() {
     pulseScale.value = withRepeat(
       withSequence(withTiming(1.03, { duration: 300 }), withTiming(1, { duration: 300 })),
       3, true
-    );
-    // Correct answer is A
-    if (choice === "A") {
-      timerRef.current = setTimeout(() => {
-        try {
-          narration.pause();
-          narration.seekTo(0);
-        } catch (e) {}
-        router.navigate("/antas3-level3" as any);
-      }, 2000);
-    }
+);
   };
 
   const handleNext = () => {

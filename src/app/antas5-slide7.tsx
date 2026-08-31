@@ -46,7 +46,7 @@ export default function Antas5Slide7Screen() {
   // NPC Explorers (npc.png: 387 x 726) — bottom left
   const npcH = Math.min(screenH * 0.64, 726 * bgScale * 0.85) * 1.5 * 0.8;
   const npcW = npcH * (387 / 726);
-  const npcLeft = Math.max(insets.left + 16, bgOffsetX + 50 * bgScale + 0.02 * screenW) + 0.10 * screenW;
+  const npcLeft = Math.max(insets.left + 16, bgOffsetX + 50 * bgScale + 0.02 * screenW) + 0.10 * screenW - 0.05 * screenW;
   const npcBottom = Math.max(insets.bottom + 12, 20 * bgScale) - 0.10 * screenH - 0.05 * screenH;
 
   // Glowing Treasure Chest (chest.png: 406 x 341) — center clearing

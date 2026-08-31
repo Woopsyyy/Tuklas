@@ -174,7 +174,6 @@ export default function Antas4Level1Screen() {
   };
 
   const firstAnswerAudio = useAudioPlayer(require("../../assets/audio/antas4 first answer.mp3"));
-  const firstAnswerPlayedRef = useRef(false);
 
   const [placedWords, setPlacedWords] = useState<string[]>([]);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
@@ -301,9 +300,10 @@ export default function Antas4Level1Screen() {
           3,
           true
         );
+        playFirstAnswer();
         timerRef.current = setTimeout(() => {
           router.navigate("/antas4-level2" as any);
-        }, 2200);
+        }, 5000);
       } else {
         setIsCorrect(false);
         setIsWrong(true);
@@ -358,18 +358,7 @@ export default function Antas4Level1Screen() {
   const handleWordClick = (id: string) => {
     const item = ALL_WORDS.find((w) => w.id === id);
     const isRemoving = placedWords.includes(id);
-    const isCorrectFirst =
-      !isRemoving &&
-      placedWords.length === 0 &&
-      id === CORRECT_ORDER[0] &&
-      !firstAnswerPlayedRef.current;
-
-    if (isCorrectFirst) {
-      firstAnswerPlayedRef.current = true;
-      playFirstAnswer();
-    } else if (item) {
-      playWordAudio(item.text);
-    }
+    if (item) playWordAudio(item.text);
 
     if (isRemoving) {
       const newPlaced = placedWords.filter((wId) => wId !== id);

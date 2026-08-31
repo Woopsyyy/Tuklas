@@ -41,16 +41,16 @@ export default function Antas5Slide9Screen() {
   const npcH = Math.min(screenH * 0.88 * 1.4, 977 * bgScale * 0.95 * 1.4);
   const npcW = npcH * (417 / 977);
   const npcLeft = Math.max(insets.left + 12, bgOffsetX + 60 * bgScale);
-  const npcBottom = Math.max(insets.bottom + 4, 10 * bgScale);
+  const npcBottom = Math.max(insets.bottom + 4, 10 * bgScale) - screenH * 0.10;
 
-  // Parchment Scroll / Sign (sign.png: 1066 x 746) — center-right
-  const signH = Math.min(screenH * 0.72, 746 * bgScale * 0.95);
+  // Parchment Scroll / Sign (sign.png: 1066 x 746) — center-right, 20% larger, 10% left
+  const signH = Math.min(screenH * 0.72 * 1.2, 746 * bgScale * 0.95 * 1.2);
   const signW = signH * (1066 / 746);
-  const signLeft = (screenW - signW) / 2 + 0.08 * screenW;
+  const signLeft = (screenW - signW) / 2 + 0.08 * screenW - 0.10 * screenW;
   const signTop = Math.max(insets.top + 8, screenH * 0.07);
 
-  // Button (button.png: 780 x 97) — "Tignan ang resulta", centered under the parchment
-  const buttonW = Math.min(signW * 0.58, 780 * bgScale * 0.85);
+  // Button (button.png: 780 x 97) — "Tignan ang resulta", 40% larger, centered under the parchment
+  const buttonW = Math.min(signW * 0.58 * 1.4, 780 * bgScale * 0.85 * 1.4);
   const buttonH = buttonW * (97 / 780);
   const buttonLeft = signLeft + (signW - buttonW) / 2;
   const buttonBottom = Math.max(insets.bottom + 12, 16 * bgScale);

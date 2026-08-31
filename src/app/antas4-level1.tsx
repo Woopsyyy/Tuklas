@@ -104,8 +104,8 @@ const ALL_WORDS: WordItem[] = [
   },
 ];
 
-// Correct order: Nagdala (word1) ng (word6) payong (word5) si (word4) Liza (word7) dahil (word2) umuulan (word3)
-const CORRECT_ORDER = ["word1", "word6", "word5", "word4", "word7", "word2", "word3"];
+// Correct order: Nagdala (word1) si (word4) Liza (word7) ng (word6) payong (word5) dahil (word2) umuulan (word3)
+const CORRECT_ORDER = ["word1", "word4", "word7", "word6", "word5", "word2", "word3"];
 
 /**
  * Reusable component to render an uncropped 1920x1080 PNG layer precisely fitted to target dimensions
@@ -301,19 +301,8 @@ export default function Antas4Level1Screen() {
   );
 
   const checkSentence = (newPlaced: string[]) => {
-    const validOrders = [
-      ["word1", "word6", "word5", "word4", "word7", "word2", "word3"], // Nagdala ng payong si Liza dahil umuulan
-      ["word1", "word4", "word7", "word6", "word5", "word2", "word3"], // Nagdala si Liza ng payong dahil umuulan
-      ["word4", "word7", "word1", "word6", "word5", "word2", "word3"], // Si Liza nagdala ng payong dahil umuulan
-      ["word2", "word3", "word1", "word6", "word5", "word4", "word7"], // Dahil umuulan nagdala ng payong si Liza
-      ["word2", "word3", "word1", "word4", "word7", "word6", "word5"], // Dahil umuulan nagdala si Liza ng payong
-      ["word2", "word3", "word4", "word7", "word1", "word6", "word5"], // Dahil umuulan si Liza nagdala ng payong
-    ];
-
     if (newPlaced.length === ALL_WORDS.length) {
-      const isMatched = validOrders.some((order) =>
-        order.every((id, idx) => id === newPlaced[idx])
-      );
+      const isMatched = newPlaced.every((id, idx) => id === CORRECT_ORDER[idx]);
       setScore("antas4Level1", isMatched);
       if (isMatched) {
         setIsCorrect(true);

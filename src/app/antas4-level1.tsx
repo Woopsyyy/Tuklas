@@ -173,6 +173,9 @@ export default function Antas4Level1Screen() {
     liza: useAudioPlayer(require("../../assets/audio/liza.mp3")),
   };
 
+  const firstAnswerAudio = useAudioPlayer(require("../../assets/audio/antas4 first answer.mp3"));
+  const firstAnswerPlayedRef = useRef(false);
+
   const [placedWords, setPlacedWords] = useState<string[]>([]);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [isWrong, setIsWrong] = useState<boolean>(false);
@@ -279,6 +282,11 @@ export default function Antas4Level1Screen() {
           // ignore if already released
         }
       });
+      try {
+        firstAnswerAudio.pause();
+      } catch (e) {
+        // ignore if already released
+      }
     };
   }, []);
 
@@ -320,6 +328,7 @@ export default function Antas4Level1Screen() {
       Object.values(wordAudios).forEach((p) => {
         if (p !== player) p.pause();
       });
+      firstAnswerAudio.pause();
       player.muted = !soundEnabled;
       player.seekTo(0);
       player.play();
@@ -328,11 +337,41 @@ export default function Antas4Level1Screen() {
     }
   };
 
+  const playFirstAnswer = () => {
+    try {
+      setAudioModeAsync({ playsInSilentMode: true });
+      Object.values(wordAudios).forEach((p) => {
+        try {
+          p.pause();
+        } catch (e) {
+          // ignore if already released
+        }
+      });
+      firstAnswerAudio.muted = !soundEnabled;
+      firstAnswerAudio.seekTo(0);
+      firstAnswerAudio.play();
+    } catch (e) {
+      console.warn("Antas4Level1 first answer audio play error:", e);
+    }
+  };
+
   const handleWordClick = (id: string) => {
     const item = ALL_WORDS.find((w) => w.id === id);
-    if (item) playWordAudio(item.text);
+    const isRemoving = placedWords.includes(id);
+    const isCorrectFirst =
+      !isRemoving &&
+      placedWords.length === 0 &&
+      id === CORRECT_ORDER[0] &&
+      !firstAnswerPlayedRef.current;
 
-    if (placedWords.includes(id)) {
+    if (isCorrectFirst) {
+      firstAnswerPlayedRef.current = true;
+      playFirstAnswer();
+    } else if (item) {
+      playWordAudio(item.text);
+    }
+
+    if (isRemoving) {
       const newPlaced = placedWords.filter((wId) => wId !== id);
       setPlacedWords(newPlaced);
       checkSentence(newPlaced);
@@ -352,6 +391,11 @@ export default function Antas4Level1Screen() {
         // ignore if already released
       }
     });
+    try {
+      firstAnswerAudio.pause();
+    } catch (e) {
+      // ignore if already released
+    }
     router.navigate("/antas4-level2" as any);
   };
 
@@ -364,6 +408,11 @@ export default function Antas4Level1Screen() {
         // ignore if already released
       }
     });
+    try {
+      firstAnswerAudio.pause();
+    } catch (e) {
+      // ignore if already released
+    }
     router.back();
   };
 

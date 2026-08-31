@@ -72,7 +72,7 @@ describe("useSettingsStore", () => {
     const state = useSettingsStore.getState();
     expect(state.theme).toBe("system");
     expect(state.soundEnabled).toBe(true);
-    expect(state.narrationVolume).toBe(0.7);
+    expect(state.narrationVolume).toBe(1.0);
     expect(state.musicVolume).toBe(0.7);
     expect(state.musicMuted).toBe(false);
   });

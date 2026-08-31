@@ -4,7 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect } from "react";
 import { Pressable, useWindowDimensions, View } from "react-native";
 import { Image } from "expo-image";
-import Animated, { FadeIn, FadeInDown, FadeInLeft, FadeInUp } from "react-native-reanimated";
+import Animated, { FadeIn, FadeInDown, FadeInLeft } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
@@ -54,12 +54,6 @@ export default function Antas5Slide7Screen() {
   const chestH = chestW * (341 / 406);
   const chestLeft = (screenW - chestW) / 2 + 0.03 * screenW;
   const chestTop = signTop + signH + 0.02 * screenH - 0.10 * screenH;
-
-  // Action Button (button.png: 780 x 97) — "Buksan ang kaban ng kayamanan"
-  const buttonW = Math.min(screenW * 0.40, 780 * bgScale * 0.85);
-  const buttonH = buttonW * (97 / 780);
-  const buttonLeft = (screenW - buttonW) / 2 + 0.03 * screenW;
-  const buttonBottom = Math.max(insets.bottom + 18, 25 * bgScale) - 0.03 * screenH - 0.05 * screenH;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
@@ -204,7 +198,7 @@ export default function Antas5Slide7Screen() {
           />
         </Animated.View>
 
-        {/* Glowing Treasure Chest (chest.png) — center clearing */}
+        {/* Glowing Treasure Chest (chest.png) — center clearing (tap to continue) */}
         <Animated.View
           entering={FadeIn.duration(800).delay(250)}
           style={{
@@ -215,35 +209,14 @@ export default function Antas5Slide7Screen() {
             height: chestH,
             zIndex: 21,
           }}
-          pointerEvents="none"
-        >
-          <Image
-            source={require("../../assets/images/antas5/slide7/chest.png")}
-            style={{ width: "100%", height: "100%" }}
-            contentFit="contain"
-            transition={0}
-          />
-        </Animated.View>
-
-        {/* Action Button (button.png) — "Buksan ang kaban ng kayamanan" */}
-        <Animated.View
-          entering={FadeInUp.duration(700).delay(350)}
-          style={{
-            position: "absolute",
-            bottom: buttonBottom,
-            left: buttonLeft,
-            width: buttonW,
-            height: buttonH,
-            zIndex: 25,
-          }}
         >
           <Pressable
             onPress={handleOpenChest}
-            hitSlop={8}
+            hitSlop={16}
             className="w-full h-full active:scale-95 active:opacity-90"
           >
             <Image
-              source={require("../../assets/images/antas5/slide7/button.png")}
+              source={require("../../assets/images/antas5/slide7/chest.png")}
               style={{ width: "100%", height: "100%" }}
               contentFit="contain"
               transition={0}

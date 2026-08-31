@@ -53,13 +53,13 @@ export default function Antas5Level3Screen() {
   const settingsH = iconBase;
 
   // Signboard (sign.png: 624 x 521) — hangs from ceiling at top center
-  const signW = Math.min(screenW * 0.38, 680 * bgScale) * 0.6 * 1.4;
+  const signW = Math.min(screenW * 0.38, 680 * bgScale) * 0.6 * 1.4 * 0.9 * 0.95 * 0.9;
   const signH = signW * (521 / 624);
   const signLeft = (screenW - signW) / 2;
-  const signTop = Math.min(0, bgOffsetY) + 0.10 * screenH + 0.40 * screenH - 0.10 * screenH - 0.20 * screenH;
+  const signTop = Math.min(0, bgOffsetY) + 0.10 * screenH + 0.40 * screenH - 0.10 * screenH - 0.20 * screenH + 0.10 * screenH + 0.05 * screenH - 0.02 * screenH;
 
   // Choice cards (A/B/D: 757x142, C: 758x133)
-  const choiceW = Math.min(screenW * 0.41, 760 * bgScale);
+  const choiceW = Math.min(screenW * 0.41, 760 * bgScale) * 0.9 * 0.9;
   const choiceH = choiceW * (142 / 757);
   const choiceCH = choiceW * (133 / 758);
 
@@ -68,7 +68,7 @@ export default function Antas5Level3Screen() {
   const col1Left = marginX;
   const col2Left = screenW - marginX - choiceW;
 
-  const row1Top = bgOffsetY + 530 * bgScale + 0.05 * screenH + 0.05 * screenH;
+  const row1Top = bgOffsetY + 530 * bgScale + 0.05 * screenH + 0.05 * screenH + 0.05 * screenH;
   const row2Top = row1Top + choiceH + 34 * bgScale;
 
   // Next button (antas5-next.png)

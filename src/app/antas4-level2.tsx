@@ -17,6 +17,10 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import { setAudioModeAsync, useAudioPlayer, type AudioStatus } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
+// Initialize audio session at module load time so the Android MediaSession is
+// ready before any AudioPlayer instance is constructed (prevents NullPointerException).
+setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
+
 interface WordItem {
   id: string;
   source: any;

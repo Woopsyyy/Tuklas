@@ -1,12 +1,24 @@
 import { useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Pressable, useWindowDimensions, View } from "react-native";
 import { Image } from "expo-image";
-import Animated, { FadeIn } from "react-native-reanimated";
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSettingsStore } from "@/store/use-settings-store";
+
+type ChoiceType = "A" | "B" | "C" | "D";
+
+const CORRECT_CHOICE: ChoiceType = "C";
 
 export default function Antas5Level2Screen() {
   const router = useRouter();
@@ -15,6 +27,9 @@ export default function Antas5Level2Screen() {
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
   const toggleSound = useSettingsStore((state) => state.toggleSound);
 
+  const [selectedChoice, setSelectedChoice] = useState<ChoiceType | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
   const screenW = Math.max(width, height);
   const screenH = Math.min(width, height);
 
@@ -22,6 +37,8 @@ export default function Antas5Level2Screen() {
   const DESIGN_H = 1080;
 
   const bgScale = Math.max(screenW / DESIGN_W, screenH / DESIGN_H);
+  const bgOffsetX = (screenW - DESIGN_W * bgScale) / 2;
+  const bgOffsetY = (screenH - DESIGN_H * bgScale) / 2;
 
   // Header icons
   const iconBase = Math.max(36, Math.min(48, 56 * bgScale));
@@ -32,15 +49,96 @@ export default function Antas5Level2Screen() {
   const settingsW = iconBase;
   const settingsH = iconBase;
 
-  // Next button (antas5-next.png) — same as slide1
-  const nextW = 420 * bgScale * 0.8;
-  const nextH = nextW * (56 / 128);
-  const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW - 0.05 * screenW;
-  const nextTop = (screenH + 700 * bgScale * (56 / 128)) / 2 + 60 * bgScale + 0.20 * screenH - 0.05 * screenH;
+  // Signboard (sign.png: 624 x 525) — hangs from ceiling at top center
+  const signW = Math.min(screenW * 0.38, 680 * bgScale) * 0.6 * 1.4;
+  const signH = signW * (525 / 624);
+  const signLeft = (screenW - signW) / 2;
+  const signTop = Math.min(0, bgOffsetY) + 0.10 * screenH + 0.40 * screenH - 0.10 * screenH - 0.20 * screenH;
+
+  // Choice cards (A/B/D: 757x142, C: 758x133)
+  const choiceW = Math.min(screenW * 0.41, 760 * bgScale);
+  const choiceH = choiceW * (142 / 757);
+  const choiceCH = choiceW * (133 / 758);
+
+  // Column positions (2 columns x 2 rows)
+  const marginX = Math.max(insets.left + 24, bgOffsetX + 120 * bgScale);
+  const col1Left = marginX;
+  const col2Left = screenW - marginX - choiceW;
+
+  const row1Top = bgOffsetY + 530 * bgScale + 0.05 * screenH + 0.05 * screenH;
+  const row2Top = row1Top + choiceH + 34 * bgScale;
+
+  // Next button (antas5-next.png)
+  const nextW = 230 * bgScale;
+  const nextH = nextW * (56 / 128) * 2.2;
+  const nextRight = Math.max(insets.right + 20, 30 * bgScale);
+  const nextBottom = Math.max(insets.bottom + 16, 20 * bgScale) - 0.10 * screenH - 0.10 * screenH + 0.03 * screenH;
+
+  // Pulse animation for selection
+  const pulseScale = useSharedValue(1);
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
   }, []);
+
+  const handleSelectChoice = (choice: ChoiceType) => {
+    if (selectedChoice !== null) return;
+    setSelectedChoice(choice);
+
+    pulseScale.value = withRepeat(
+      withSequence(withTiming(1.03, { duration: 250 }), withTiming(1, { duration: 250 })),
+      3,
+      true
+    );
+  };
+
+  const handleNext = () => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    router.navigate("/antas5-level3");
+  };
+
+  const handleBack = () => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    router.back();
+  };
+
+  const animatedPulseStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: pulseScale.value }],
+  }));
+
+  const getChoiceFeedbackStyle = (choice: ChoiceType) => {
+    if (selectedChoice === null) {
+      return {
+        borderWidth: 0,
+        borderColor: "transparent",
+        backgroundColor: "transparent",
+      };
+    }
+    // Correct answer (C) turns green
+    if (choice === CORRECT_CHOICE) {
+      return {
+        borderWidth: 4,
+        borderColor: "#22c55e",
+        backgroundColor: "rgba(34, 197, 94, 0.24)",
+      };
+    }
+    // Selected wrong answer turns red
+    if (selectedChoice === choice) {
+      return {
+        borderWidth: 4,
+        borderColor: "#ef4444",
+        backgroundColor: "rgba(239, 68, 68, 0.24)",
+      };
+    }
+    return {
+      borderWidth: 0,
+      borderColor: "transparent",
+      backgroundColor: "transparent",
+    };
+  };
 
   return (
     <View className="flex-1 bg-black">
@@ -68,7 +166,7 @@ export default function Antas5Level2Screen() {
             zIndex: 30,
           }}
         >
-          <Pressable onPress={() => router.back()} hitSlop={12} className="active:opacity-70">
+          <Pressable onPress={handleBack} hitSlop={12} className="active:opacity-70">
             <Image
               source={require("../../assets/images/ui/back.png")}
               style={{ width: backW, height: backH }}
@@ -96,20 +194,193 @@ export default function Antas5Level2Screen() {
           </View>
         </View>
 
-        {/* Next button — navigates to level3 */}
+        {/* Question Hanging Signboard (sign.png) */}
         <Animated.View
-          entering={FadeIn.duration(700)}
+          entering={FadeInDown.duration(600)}
           style={{
             position: "absolute",
-            top: nextTop,
-            left: nextLeft,
+            top: signTop,
+            left: signLeft,
+            width: signW,
+            height: signH,
+            zIndex: 20,
+          }}
+          pointerEvents="none"
+        >
+          <Image
+            source={require("../../assets/images/antas5/question2/sign.png")}
+            style={{ width: "100%", height: "100%" }}
+            contentFit="contain"
+            transition={0}
+          />
+        </Animated.View>
+
+        {/* Choice A (Top-Left) */}
+        <Animated.View
+          entering={FadeIn.duration(600).delay(100)}
+          style={[
+            {
+              position: "absolute",
+              top: row1Top,
+              left: col1Left,
+              width: choiceW,
+              height: choiceH,
+              zIndex: 25,
+            },
+            selectedChoice === "A" && animatedPulseStyle,
+          ]}
+        >
+          <Pressable
+            onPress={() => handleSelectChoice("A")}
+            disabled={selectedChoice !== null}
+            style={[
+              {
+                width: "100%",
+                height: "100%",
+                borderRadius: 14 * bgScale,
+                overflow: "hidden",
+              },
+              getChoiceFeedbackStyle("A"),
+            ]}
+            className="active:scale-[0.98] active:opacity-90"
+          >
+            <Image
+              source={require("../../assets/images/antas5/question2/A.png")}
+              style={{ width: "100%", height: "100%" }}
+              contentFit="contain"
+              transition={0}
+            />
+          </Pressable>
+        </Animated.View>
+
+        {/* Choice B (Bottom-Left) */}
+        <Animated.View
+          entering={FadeIn.duration(600).delay(200)}
+          style={[
+            {
+              position: "absolute",
+              top: row2Top,
+              left: col1Left,
+              width: choiceW,
+              height: choiceH,
+              zIndex: 25,
+            },
+            selectedChoice === "B" && animatedPulseStyle,
+          ]}
+        >
+          <Pressable
+            onPress={() => handleSelectChoice("B")}
+            disabled={selectedChoice !== null}
+            style={[
+              {
+                width: "100%",
+                height: "100%",
+                borderRadius: 14 * bgScale,
+                overflow: "hidden",
+              },
+              getChoiceFeedbackStyle("B"),
+            ]}
+            className="active:scale-[0.98] active:opacity-90"
+          >
+            <Image
+              source={require("../../assets/images/antas5/question2/B.png")}
+              style={{ width: "100%", height: "100%" }}
+              contentFit="contain"
+              transition={0}
+            />
+          </Pressable>
+        </Animated.View>
+
+        {/* Choice C (Top-Right) — CORRECT */}
+        <Animated.View
+          entering={FadeIn.duration(600).delay(150)}
+          style={[
+            {
+              position: "absolute",
+              top: row1Top + (choiceH - choiceCH) / 2,
+              left: col2Left,
+              width: choiceW,
+              height: choiceCH,
+              zIndex: 25,
+            },
+            selectedChoice === "C" && animatedPulseStyle,
+          ]}
+        >
+          <Pressable
+            onPress={() => handleSelectChoice("C")}
+            disabled={selectedChoice !== null}
+            style={[
+              {
+                width: "100%",
+                height: "100%",
+                borderRadius: 14 * bgScale,
+                overflow: "hidden",
+              },
+              getChoiceFeedbackStyle("C"),
+            ]}
+            className="active:scale-[0.98] active:opacity-90"
+          >
+            <Image
+              source={require("../../assets/images/antas5/question2/C.png")}
+              style={{ width: "100%", height: "100%" }}
+              contentFit="contain"
+              transition={0}
+            />
+          </Pressable>
+        </Animated.View>
+
+        {/* Choice D (Bottom-Right) */}
+        <Animated.View
+          entering={FadeIn.duration(600).delay(250)}
+          style={[
+            {
+              position: "absolute",
+              top: row2Top,
+              left: col2Left,
+              width: choiceW,
+              height: choiceH,
+              zIndex: 25,
+            },
+            selectedChoice === "D" && animatedPulseStyle,
+          ]}
+        >
+          <Pressable
+            onPress={() => handleSelectChoice("D")}
+            disabled={selectedChoice !== null}
+            style={[
+              {
+                width: "100%",
+                height: "100%",
+                borderRadius: 14 * bgScale,
+                overflow: "hidden",
+              },
+              getChoiceFeedbackStyle("D"),
+            ]}
+            className="active:scale-[0.98] active:opacity-90"
+          >
+            <Image
+              source={require("../../assets/images/antas5/question2/D.png")}
+              style={{ width: "100%", height: "100%" }}
+              contentFit="contain"
+              transition={0}
+            />
+          </Pressable>
+        </Animated.View>
+
+        {/* Next button — positioned at bottom right */}
+        <Animated.View
+          entering={FadeIn.duration(700).delay(300)}
+          style={{
+            position: "absolute",
+            bottom: nextBottom,
+            right: nextRight,
             width: nextW,
             height: nextH,
-            zIndex: 25,
+            zIndex: 35,
           }}
         >
           <Pressable
-            onPress={() => router.navigate("/antas5-level3")}
+            onPress={handleNext}
             hitSlop={8}
             className="w-full h-full active:scale-95 active:opacity-90"
           >

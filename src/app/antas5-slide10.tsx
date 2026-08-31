@@ -5,7 +5,7 @@ import { useCallback, useEffect } from "react";
 import { Pressable, Text, useWindowDimensions, View } from "react-native";
 import { Image } from "expo-image";
 import Animated, { FadeIn, FadeInDown, FadeInLeft, FadeInUp } from "react-native-reanimated";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 import { countCorrect, TOTAL_LEVELS, useScoreStore } from "@/store/use-score-store";
@@ -130,7 +130,7 @@ export default function Antas5Slide10Screen() {
         transition={0}
       />
 
-      <SafeAreaView className="flex-1" edges={["top", "bottom", "left", "right"]}>
+      <View className="flex-1">
         {/* Top Header Bar */}
         <View
           style={{
@@ -477,7 +477,7 @@ export default function Antas5Slide10Screen() {
             </Pressable>
           </View>
         </Animated.View>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

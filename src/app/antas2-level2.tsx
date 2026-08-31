@@ -13,7 +13,7 @@ import Animated, {
   withSequence,
   withTiming,
 } from "react-native-reanimated";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 import { useScoreStore } from "@/store/use-score-store";
@@ -162,7 +162,7 @@ export default function Antas2Level2Screen() {
         }}
       />
 
-      <SafeAreaView className="flex-1" edges={["top", "bottom", "left", "right"]}>
+      <View className="flex-1">
         {/* Top Header Bar */}
         <View
           style={{
@@ -393,7 +393,7 @@ export default function Antas2Level2Screen() {
             />
           </Pressable>
         </Animated.View>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

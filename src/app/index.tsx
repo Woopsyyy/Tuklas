@@ -4,7 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { Image, Pressable, useWindowDimensions, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -36,7 +36,7 @@ export default function HomeScreen() {
         className="absolute inset-0 h-full w-full"
       />
 
-      <SafeAreaView className="flex-1" edges={["top", "bottom", "left", "right"]}>
+      <View className="flex-1">
         {/* Settings button — top right only */}
         <View
           style={{
@@ -59,11 +59,11 @@ export default function HomeScreen() {
           </Pressable>
         </View>
 
-        {/* START button — positioned directly below title in the dark bush area */}
+        {/* START button — positioned directly in the dark bush area */}
         <View
           style={{
             position: "absolute",
-            top: screenH * 0.74 + screenH * 0.05 + screenH * 0.1,
+            bottom: Math.max(insets.bottom + 12, screenH * 0.06),
             left: 0,
             right: 0,
             alignItems: "center",
@@ -84,7 +84,7 @@ export default function HomeScreen() {
             </Pressable>
           </Animated.View>
         </View>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

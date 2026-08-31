@@ -4,7 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect } from "react";
 import { Image, Pressable, useWindowDimensions, View } from "react-native";
 import Animated, { FadeIn, FadeInLeft, FadeInUp } from "react-native-reanimated";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
@@ -117,7 +117,7 @@ export default function Antas1Screen() {
         className="absolute inset-0 h-full w-full"
       />
 
-      <SafeAreaView className="flex-1" edges={["top", "bottom", "left", "right"]}>
+      <View className="flex-1">
         {/* Top Header Bar */}
         <View
           style={{
@@ -212,7 +212,7 @@ export default function Antas1Screen() {
             />
           </Pressable>
         </Animated.View>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

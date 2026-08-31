@@ -13,7 +13,7 @@ import Animated, {
   withSequence,
   withTiming,
 } from "react-native-reanimated";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 import { useScoreStore } from "@/store/use-score-store";
@@ -171,7 +171,7 @@ useFocusEffect(
         contentFit="cover"
         transition={0}
       />
-      <SafeAreaView className="flex-1" edges={["top", "bottom", "left", "right"]}>
+      <View className="flex-1">
         {/* Top Header Bar */}
         <View style={{ position: "absolute", top: Math.max(insets.top, 12), left: Math.max(insets.left, 16), right: Math.max(insets.right, 16), flexDirection: "row", justifyContent: "space-between", alignItems: "center", zIndex: 30 }}>
           <Pressable onPress={handleBack} hitSlop={12} className="active:opacity-70">
@@ -238,7 +238,7 @@ useFocusEffect(
             <RNImage source={require("../../assets/images/ui/back-green.png")} style={{ width: "100%", height: "100%" }} resizeMode="contain" />
           </Pressable>
         </Animated.View>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

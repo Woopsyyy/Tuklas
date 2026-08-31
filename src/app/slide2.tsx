@@ -4,7 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect } from "react";
 import { Image, Pressable, useWindowDimensions, View } from "react-native";
 import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
@@ -109,7 +109,7 @@ export default function Slide2Screen() {
         className="absolute inset-0 h-full w-full"
       />
 
-      <SafeAreaView className="flex-1" edges={["top", "bottom", "left", "right"]}>
+      <View className="flex-1">
         {/* Full-screen tap to proceed */}
         <Pressable onPress={handleProceed} className="flex-1" />
 
@@ -205,7 +205,7 @@ export default function Slide2Screen() {
             resizeMode="contain"
           />
         </Animated.View>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

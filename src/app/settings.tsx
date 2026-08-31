@@ -12,7 +12,7 @@ import { useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
 import Animated, { FadeInUp } from "react-native-reanimated";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
 
 import { VolumeSlider } from "@/components/volume-slider";
@@ -111,10 +111,7 @@ export default function SettingsScreen() {
       {/* Ambient Vignette Overlay */}
       <View className="absolute inset-0 bg-black/55" />
 
-      <SafeAreaView
-        className="flex-1"
-        edges={["top", "bottom", "left", "right"]}
-      >
+      <View className="flex-1">
         {/* Top Header Bar */}
         <View
           style={{
@@ -271,7 +268,7 @@ export default function SettingsScreen() {
             </Animated.View>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

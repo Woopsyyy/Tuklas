@@ -1,11 +1,11 @@
-﻿import { useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect } from "react";
 import { Pressable, useWindowDimensions, View } from "react-native";
 import { Image } from "expo-image";
 import Animated, { FadeIn } from "react-native-reanimated";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
@@ -111,7 +111,7 @@ export default function Antas5Slide3Screen() {
         transition={0}
       />
 
-      <SafeAreaView className="flex-1" edges={["top", "bottom", "left", "right"]}>
+      <View className="flex-1">
         {/* Top Header Bar */}
         <View
           style={{
@@ -220,7 +220,7 @@ export default function Antas5Slide3Screen() {
             />
           </Pressable>
         </Animated.View>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }

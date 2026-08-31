@@ -1,11 +1,11 @@
-﻿import { useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect } from "react";
 import { Pressable, useWindowDimensions, View } from "react-native";
 import { Image } from "expo-image";
 import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
@@ -100,7 +100,7 @@ export default function Antas3Screen() {
         contentFit="cover"
         transition={0}
       />
-      <SafeAreaView className="flex-1" edges={["top", "bottom", "left", "right"]}>
+      <View className="flex-1">
         <View style={{ position: "absolute", top: Math.max(insets.top, 12), left: Math.max(insets.left, 16), right: Math.max(insets.right, 16), flexDirection: "row", justifyContent: "space-between", alignItems: "center", zIndex: 30 }}>
           <Pressable onPress={() => router.back()} hitSlop={12} className="active:opacity-70">
             <Image source={require("../../assets/images/ui/back.png")} style={{ width: backW, height: backH }} contentFit="contain" transition={0} />
@@ -130,9 +130,7 @@ export default function Antas3Screen() {
             <Image source={require("../../assets/images/antas3/button.png")} style={{ width: "100%", height: "100%" }} contentFit="contain" transition={0} />
           </Pressable>
         </Animated.View>
-      </SafeAreaView>
+      </View>
     </View>
   );
 }
-
-

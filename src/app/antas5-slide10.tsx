@@ -120,7 +120,7 @@ export default function Antas5Slide10Screen() {
 
   return (
     <View className="flex-1 bg-black">
-      <StatusBar style="light" hidden={false} />
+      <StatusBar hidden={true} />
 
       {/* Full-screen Background (Same as Slide 9) */}
       <Image

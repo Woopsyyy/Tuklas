@@ -67,7 +67,7 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <BackgroundMusicPlayer />
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+        <StatusBar hidden={true} />
         <Stack
           screenOptions={{
             animation: "fade",

@@ -147,7 +147,7 @@ export default function Antas2Level2Screen() {
 
   return (
     <View className="flex-1 bg-black">
-      <StatusBar style="light" hidden={false} />
+      <StatusBar hidden={true} />
 
       {/* Full-screen Question Background (antas2/background.png) */}
       <Image

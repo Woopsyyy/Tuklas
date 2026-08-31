@@ -141,7 +141,7 @@ export default function Antas1Level1Screen() {
 
   return (
     <View className="flex-1 bg-black">
-      <StatusBar style="light" hidden={false} />
+      <StatusBar hidden={true} />
 
       {/* Full-screen Question Background (antas1-background.png) */}
       <RNImage

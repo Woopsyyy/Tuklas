@@ -97,7 +97,7 @@ export default function Antas4Screen() {
 
   return (
     <View className="flex-1 bg-black">
-      <StatusBar style="light" hidden={false} />
+      <StatusBar hidden={true} />
 
       {/* Background */}
       <Image

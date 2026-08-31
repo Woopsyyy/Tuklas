@@ -99,7 +99,7 @@ export default function SettingsScreen() {
 
   return (
     <View className="flex-1 bg-black">
-      <StatusBar style="light" hidden={false} />
+      <StatusBar hidden={true} />
 
       {/* Jungle / Forest Background matching Tuklas */}
       <Image

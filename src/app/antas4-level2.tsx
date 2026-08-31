@@ -531,7 +531,7 @@ export default function Antas4Level2Screen() {
 
   return (
     <View className="flex-1 bg-black">
-      <StatusBar style="light" hidden={false} />
+      <StatusBar hidden={true} />
 
       {/* Background */}
       <Image

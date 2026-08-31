@@ -135,7 +135,7 @@ export default function Slide3Screen() {
 
   return (
     <View className="flex-1 bg-black">
-      <StatusBar style="light" hidden={false} />
+      <StatusBar hidden={true} />
       <Image
         source={require("../../assets/images/slide3/slide3-background.png")}
         resizeMode="cover"

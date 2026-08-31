@@ -40,7 +40,7 @@ export default function Antas5Slide7Screen() {
   // Dialogue Speech Bubble (sign.png: 1169 x 381) — top-center, tail pointing left
   const signW = Math.min(screenW * 0.62, 1169 * bgScale * 0.95);
   const signH = signW * (381 / 1169);
-  const signLeft = (screenW - signW) / 2 + 0.04 * screenW;
+  const signLeft = (screenW - signW) / 2 + 0.04 * screenW - 0.05 * screenW;
   const signTop = Math.max(insets.top + 8, bgOffsetY + 80 * bgScale + 0.04 * screenH);
 
   // NPC Explorers (npc.png: 387 x 726) — bottom left

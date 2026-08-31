@@ -63,10 +63,10 @@ export default function Antas5Slide10Screen() {
     return "🌱 Magandang subok! Maaari mong ulitin upang maging mas mahusay! 🌱";
   };
 
-  // Board layout sizing
-  const cardW = Math.min(screenW * 0.56, 750 * bgScale);
-  const cardLeft = (screenW - cardW) / 2 + 0.12 * screenW;
-  const cardTop = Math.max(insets.top + 8, screenH * 0.06);
+  // Board layout sizing - centered in the middle
+  const cardW = Math.min(screenW * 0.58, 760 * bgScale);
+  const cardLeft = (screenW - cardW) / 2;
+  const cardTop = Math.max(insets.top + 8, screenH * 0.07);
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);

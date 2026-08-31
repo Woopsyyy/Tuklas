@@ -1,10 +1,11 @@
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Image, Pressable, useWindowDimensions, View } from "react-native";
 import Animated, { FadeIn, FadeInLeft, FadeInUp } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
 export default function Antas2Screen() {
@@ -13,6 +14,7 @@ export default function Antas2Screen() {
   const toggleSound = useSettingsStore((state) => state.toggleSound);
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const narration = useAudioPlayer(require("../../assets/audio/antas2.mp3"));
 
   const screenW = Math.max(width, height);
   const screenH = Math.min(width, height);
@@ -62,7 +64,35 @@ export default function Antas2Screen() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      try {
+        setAudioModeAsync({ playsInSilentMode: true });
+        narration.loop = false;
+        narration.volume = 1;
+        narration.muted = !soundEnabled;
+        narration.seekTo(0);
+        narration.play();
+      } catch (e) {
+        console.warn("Antas2 narration setup error:", e);
+      }
+
+      return () => {
+        try {
+          narration.pause();
+          narration.seekTo(0);
+        } catch (e) {
+          // ignore if already released
+        }
+      };
+    }, [narration, soundEnabled])
+  );
+
   const handleStartMission = () => {
+    try {
+      narration.pause();
+      narration.seekTo(0);
+    } catch (e) {}
     router.navigate("/antas2-level1" as any);
   };
 

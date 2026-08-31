@@ -1,4 +1,4 @@
-import { useFocusEffect, useRouter } from "expo-router";
+﻿import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -19,7 +19,7 @@ import { useSettingsStore } from "@/store/use-settings-store";
 
 export default function Antas3Level1Screen() {
   const router = useRouter();
-  const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const narrationVolume = useSettingsStore((state) => state.narrationVolume);
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const narration = useAudioPlayer(require("../../assets/audio/antas3 level1.mp3"));
@@ -46,13 +46,13 @@ export default function Antas3Level1Screen() {
   const settingsW = iconBase;
   const settingsH = iconBase;
 
-  // Text 1 — large passage box at top (increased by 50% and moved down 10%)
+  // Text 1 â€” large passage box at top (increased by 50% and moved down 10%)
   const text1W = screenW * 0.72 * 1.50;
   const text1H = screenH * 0.52 * 1.50;
   const text1Left = bgOffsetX + 30 * bgScale - 0.05 * screenW;
   const text1Top = bgOffsetY + 20 * bgScale + 0.10 * screenH + 0.03 * screenH;
 
-  // Choice images — side by side in the middle (rescaled so A's drawn illustration matches B's exact size)
+  // Choice images â€” side by side in the middle (rescaled so A's drawn illustration matches B's exact size)
   const choiceW = screenW * 0.38;
   const choiceH = choiceW * (1080 / 1920);
   const choiceAW = choiceW * (1592 / 1359);
@@ -77,7 +77,7 @@ export default function Antas3Level1Screen() {
   const redBtnLeft = choiceBLeft + (choiceW - redBtnW) / 2 + 0.05 * choiceW;
   const redBtnTop = choiceTop + (choiceH - redBtnH) / 2 + 0.05 * choiceH + 0.03 * choiceH + 0.01 * choiceH - 0.03 * choiceH;
 
-  // Text 2 — question bar at the bottom
+  // Text 2 â€” question bar at the bottom
   const text2W = screenW * 0.80 * 2 * 1.70;
   const text2H = screenH * 0.20 * 2 * 1.70;
   const text2Left = bgOffsetX + (DESIGN_W - (text2W / bgScale)) / 2 * bgScale;
@@ -113,12 +113,12 @@ useFocusEffect(
     }, [narration])
   );
 
-  const handlePlayNarration = () => {
+  const handlePlayNarration = async () => {
     try {
-      setAudioModeAsync({ playsInSilentMode: true });
+      await setAudioModeAsync({ playsInSilentMode: true });
       narration.loop = false;
-      narration.volume = 1;
-      narration.muted = !soundEnabled;
+      narration.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
+      narration.muted = false;
       narration.seekTo(0);
       narration.play();
     } catch (e) {
@@ -187,13 +187,13 @@ useFocusEffect(
           </View>
         </View>
 
-        {/* Text 1 — Passage box (top) */}
+        {/* Text 1 â€” Passage box (top) */}
         <Animated.View entering={FadeInUp.duration(600)} style={{ position: "absolute", top: text1Top, left: text1Left, width: text1W, height: text1H, zIndex: 20 }} pointerEvents="none">
           <Image source={require("../../assets/images/antas3/question1/text1.png")} style={{ width: "100%", height: "100%" }} contentFit="contain"
             transition={0} />
         </Animated.View>
 
-        {/* Choice A — Image (CORRECT) */}
+        {/* Choice A â€” Image (CORRECT) */}
         <Animated.View entering={FadeIn.duration(600).delay(200)} style={{ position: "absolute", left: choiceALeft, top: choiceATop, width: choiceAW, height: choiceAH, zIndex: 40 }} pointerEvents="none">
           <Image source={require("../../assets/images/antas3/question1/A.png")} style={{ width: "100%", height: "100%" }} contentFit="contain"
             transition={0} />
@@ -204,7 +204,7 @@ useFocusEffect(
           <Pressable onPress={() => handleSelectChoice("A")} disabled={selectedChoice !== null} style={{ width: "100%", height: "100%", borderRadius: 10 * bgScale, borderWidth: selectedChoice !== null ? 4 : 0, borderColor: selectedChoice !== null ? "#22c55e" : "transparent", backgroundColor: selectedChoice !== null ? "rgba(34,197,94,0.22)" : "transparent", overflow: "hidden" }} className="active:opacity-80" />
         </Animated.View>
 
-        {/* Choice B — Image (WRONG) */}
+        {/* Choice B â€” Image (WRONG) */}
         <Animated.View entering={FadeIn.duration(600).delay(250)} style={{ position: "absolute", left: choiceBLeft, top: choiceTop, width: choiceW, height: choiceH, zIndex: 40 }} pointerEvents="none">
           <Image source={require("../../assets/images/antas3/question1/B.png")} style={{ width: "100%", height: "100%" }} contentFit="contain"
             transition={0} />
@@ -215,7 +215,7 @@ useFocusEffect(
           <Pressable onPress={() => handleSelectChoice("B")} disabled={selectedChoice !== null} style={{ width: "100%", height: "100%", borderRadius: 10 * bgScale, borderWidth: selectedChoice === "B" ? 4 : 0, borderColor: selectedChoice === "B" ? "#ef4444" : "transparent", backgroundColor: selectedChoice === "B" ? "rgba(239,68,68,0.22)" : "transparent", overflow: "hidden" }} className="active:opacity-80" />
         </Animated.View>
 
-        {/* Text 2 — Question bar (bottom) */}
+        {/* Text 2 â€” Question bar (bottom) */}
         <Animated.View entering={FadeIn.duration(700).delay(100)} style={{ position: "absolute", top: text2Top, left: text2Left, width: text2W, height: text2H, zIndex: 20 }} pointerEvents="none">
           <Image source={require("../../assets/images/antas3/question1/text2.png")} style={{ width: "100%", height: "100%" }} contentFit="contain"
             transition={0} />
@@ -238,3 +238,4 @@ useFocusEffect(
     </View>
   );
 }
+

@@ -25,7 +25,7 @@ export const useSettingsStore = create<SettingsState>()(
     (set) => ({
       theme: "system",
       soundEnabled: true,
-      narrationVolume: 0.7,
+      narrationVolume: 1.0,
       musicVolume: 0.7,
       musicMuted: false,
       setTheme: (theme) => set({ theme }),
@@ -39,7 +39,7 @@ export const useSettingsStore = create<SettingsState>()(
         set({
           theme: "system",
           soundEnabled: true,
-          narrationVolume: 0.7,
+          narrationVolume: 1.0,
           musicVolume: 0.7,
           musicMuted: false,
         }),

@@ -1,4 +1,4 @@
-import { useFocusEffect, useRouter } from "expo-router";
+﻿import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect } from "react";
@@ -11,7 +11,7 @@ import { useSettingsStore } from "@/store/use-settings-store";
 
 export default function Antas4Screen() {
   const router = useRouter();
-  const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const narrationVolume = useSettingsStore((state) => state.narrationVolume);
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const narration = useAudioPlayer(require("../../assets/audio/antas4 intro.mp3"));
@@ -34,13 +34,13 @@ export default function Antas4Screen() {
   const settingsW = iconBase;
   const settingsH = iconBase;
 
-  // Title: "ANTAS 4" & "KASTILYO NG MGA SALITA" (text1.png) — increased by 50% more
+  // Title: "ANTAS 4" & "KASTILYO NG MGA SALITA" (text1.png) â€” increased by 50% more
   const titleW = 750 * 1.5 * 1.5 * bgScale;
   const titleH = 220 * 1.5 * 1.5 * bgScale;
   const titleLeft = (screenW - titleW) / 2;
   const titleTop = Math.max(insets.top - 20, bgOffsetY - 10 * bgScale) - 0.05 * screenH;
 
-  // Dialogue Box: Story card in the center (text2.png) — moved down by 5%
+  // Dialogue Box: Story card in the center (text2.png) â€” moved down by 5%
   const text2W = 1280 * 1.5 * 1.2 * 1.2 * bgScale;
   const text2H = 340 * 1.5 * 1.2 * 1.2 * bgScale;
   const text2Left = (screenW - text2W) / 2;
@@ -69,12 +69,12 @@ export default function Antas4Screen() {
     }, [narration])
   );
 
-  const handlePlayNarration = () => {
+  const handlePlayNarration = async () => {
     try {
-      setAudioModeAsync({ playsInSilentMode: true });
+      await setAudioModeAsync({ playsInSilentMode: true });
       narration.loop = false;
-      narration.volume = 1;
-      narration.muted = !soundEnabled;
+      narration.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
+      narration.muted = false;
       narration.seekTo(0);
       narration.play();
     } catch (e) {
@@ -133,7 +133,7 @@ export default function Antas4Screen() {
             <Pressable onPress={handlePlayNarration} hitSlop={12} className="active:opacity-70">
               <Image
                 source={require("../../assets/images/ui/sound.png")}
-                style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}
+                style={{ width: soundW, height: soundH }}
                 contentFit="contain"
                 transition={0}
               />
@@ -220,3 +220,5 @@ export default function Antas4Screen() {
     </View>
   );
 }
+
+

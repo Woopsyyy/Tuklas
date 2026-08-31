@@ -1,4 +1,4 @@
-import { useFocusEffect, useRouter } from "expo-router";
+﻿import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect } from "react";
@@ -13,7 +13,7 @@ export default function Antas5Slide1Screen() {
   const router = useRouter();
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const narrationVolume = useSettingsStore((state) => state.narrationVolume);
   const narration = useAudioPlayer(require("../../assets/audio/Ang Munting Hakbang.mp3"));
 
   const screenW = Math.max(width, height);
@@ -33,14 +33,14 @@ export default function Antas5Slide1Screen() {
   const settingsW = iconBase;
   const settingsH = iconBase;
 
-  // Sign (sign.png) — centered in the middle
+  // Sign (sign.png) â€” centered in the middle
   // Source 128x56
   const signW = 700 * bgScale * 1.5 * 1.2;
   const signH = signW * (56 / 128);
   const signLeft = (screenW - signW) / 2;
   const signTop = (screenH - signH) / 2;
 
-  // Next button (antas5-next.png) — absolute, fixed position so it doesn't move
+  // Next button (antas5-next.png) â€” absolute, fixed position so it doesn't move
   // when other components are added or change
   // Source 128x56
   const nextW = 420 * bgScale * 0.8;
@@ -81,12 +81,12 @@ export default function Antas5Slide1Screen() {
     router.back();
   };
 
-  const handleReplayNarration = () => {
+  const handleReplayNarration = async () => {
     try {
-      setAudioModeAsync({ playsInSilentMode: true });
+      await setAudioModeAsync({ playsInSilentMode: true });
       narration.loop = false;
-      narration.volume = 1;
-      narration.muted = !soundEnabled;
+      narration.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
+      narration.muted = false;
       narration.seekTo(0);
       narration.play();
     } catch (e) {
@@ -148,7 +148,7 @@ export default function Antas5Slide1Screen() {
           </View>
         </View>
 
-        {/* Sign — centered in the middle */}
+        {/* Sign â€” centered in the middle */}
         <Animated.View
           entering={FadeIn.duration(700)}
           style={{
@@ -169,7 +169,7 @@ export default function Antas5Slide1Screen() {
           />
         </Animated.View>
 
-        {/* Next button — navigates to slide2 */}
+        {/* Next button â€” navigates to slide2 */}
         <Animated.View
           entering={FadeIn.duration(700).delay(150)}
           style={{
@@ -198,3 +198,4 @@ export default function Antas5Slide1Screen() {
     </View>
   );
 }
+

@@ -1,4 +1,4 @@
-import { useFocusEffect, useRouter } from "expo-router";
+﻿import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect } from "react";
@@ -13,7 +13,7 @@ export default function Antas5Slide4Screen() {
   const router = useRouter();
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const narrationVolume = useSettingsStore((state) => state.narrationVolume);
   const narration = useAudioPlayer(require("../../assets/audio/noong una.mp3"));
 
   const screenW = Math.max(width, height);
@@ -33,20 +33,20 @@ export default function Antas5Slide4Screen() {
   const settingsW = iconBase;
   const settingsH = iconBase;
 
-  // Next button (antas5-next.png) — same as slide1
+  // Next button (antas5-next.png) â€” same as slide1
   const nextW = 420 * bgScale * 0.8;
   const nextH = nextW * (56 / 128);
   const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW - 0.05 * screenW;
   const nextTop = (screenH + 700 * bgScale * (56 / 128)) / 2 + 60 * bgScale + 0.20 * screenH - 0.05 * screenH;
 
-  // Sign (sign.png) — centered in the middle, above text1
+  // Sign (sign.png) â€” centered in the middle, above text1
   // Source 214x103
   const sign4W = 500 * bgScale * 1.5 * 1.5;
   const sign4H = sign4W * (103 / 214);
   const sign4Left = (screenW - sign4W) / 2;
   const sign4Top = (screenH - sign4H) / 2 - 60 * bgScale + 0.05 * screenH - 0.05 * screenH + 0.03 * screenH;
 
-  // Text1 (text1.png) — below sign, centered
+  // Text1 (text1.png) â€” below sign, centered
   // Source 128x56
   const text1W = 700 * bgScale * 1.3 * 1.5;
   const text1H = text1W * (56 / 128);
@@ -86,12 +86,12 @@ export default function Antas5Slide4Screen() {
     router.back();
   };
 
-  const handleReplayNarration = () => {
+  const handleReplayNarration = async () => {
     try {
-      setAudioModeAsync({ playsInSilentMode: true });
+      await setAudioModeAsync({ playsInSilentMode: true });
       narration.loop = false;
-      narration.volume = 1;
-      narration.muted = !soundEnabled;
+      narration.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
+      narration.muted = false;
       narration.seekTo(0);
       narration.play();
     } catch (e) {
@@ -153,7 +153,7 @@ export default function Antas5Slide4Screen() {
           </View>
         </View>
 
-        {/* Sign — centered in the middle, above text1 */}
+        {/* Sign â€” centered in the middle, above text1 */}
         <Animated.View
           entering={FadeIn.duration(700)}
           style={{
@@ -174,7 +174,7 @@ export default function Antas5Slide4Screen() {
           />
         </Animated.View>
 
-        {/* Text1 — below sign, centered */}
+        {/* Text1 â€” below sign, centered */}
         <Animated.View
           entering={FadeIn.duration(700).delay(100)}
           style={{
@@ -195,7 +195,7 @@ export default function Antas5Slide4Screen() {
           />
         </Animated.View>
 
-        {/* Next button — navigates to slide5 */}
+        {/* Next button â€” navigates to slide5 */}
         <Animated.View
           entering={FadeIn.duration(700)}
           style={{
@@ -224,3 +224,4 @@ export default function Antas5Slide4Screen() {
     </View>
   );
 }
+

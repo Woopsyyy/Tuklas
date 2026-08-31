@@ -17,11 +17,14 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
+setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
+
 export default function Antas2Level1Screen() {
   const router = useRouter();
-const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const narrationVolume = useSettingsStore((state) => state.narrationVolume);
   const { width, height } = useWindowDimensions();
-const insets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets();
   const narration = useAudioPlayer(require("../../assets/audio/antas2 question1.mp3"));
 
   const [selectedChoice, setSelectedChoice] = useState<"A" | "B" | null>(null);
@@ -78,7 +81,7 @@ const insets = useSafeAreaInsets();
   // Pulsing animation for feedback
   const pulseScale = useSharedValue(1);
 
-useEffect(() => {
+  useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
@@ -98,13 +101,15 @@ useEffect(() => {
     }, [narration])
   );
 
-  const handlePlayNarration = () => {
+  const handlePlayNarration = async () => {
     try {
-      setAudioModeAsync({ playsInSilentMode: true });
+      await setAudioModeAsync({ playsInSilentMode: true });
       narration.loop = false;
-      narration.volume = 1;
-      narration.muted = !soundEnabled;
-      narration.seekTo(0);
+      narration.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
+      narration.muted = false;
+      try {
+        narration.seekTo(0);
+      } catch (_) {}
       narration.play();
     } catch (e) {
       console.warn("Antas2Level1 narration play error:", e);
@@ -119,7 +124,7 @@ useEffect(() => {
       withSequence(withTiming(1.03, { duration: 300 }), withTiming(1, { duration: 300 })),
       3,
       true
-);
+    );
   };
 
   const handleNext = () => {
@@ -148,7 +153,7 @@ useEffect(() => {
     <View className="flex-1 bg-black">
       <StatusBar style="light" hidden={false} />
 
-{/* Full-screen Question Background (antas2/background.png) */}
+      {/* Full-screen Question Background (antas2/background.png) */}
       <Image
         source={require("../../assets/images/antas2/background.png")}
         resizeMode="contain"
@@ -182,7 +187,7 @@ useEffect(() => {
             <Pressable onPress={handlePlayNarration} hitSlop={12} className="active:opacity-70">
               <Image
                 source={require("../../assets/images/ui/sound.png")}
-                style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}
+                style={{ width: soundW, height: soundH }}
                 contentFit="contain"
                 transition={0}
               />

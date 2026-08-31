@@ -8,11 +8,13 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
+setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
+
 export default function Slide3Screen() {
   const router = useRouter();
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const narrationVolume = useSettingsStore((state) => state.narrationVolume);
   const narration = useAudioPlayer(require("../../assets/audio/pumili ng antas.mp3"));
 
   const screenW = Math.max(width, height);
@@ -116,13 +118,15 @@ export default function Slide3Screen() {
     router.navigate(route as any);
   };
 
-  const handleReplayNarration = () => {
+  const handleReplayNarration = async () => {
     try {
-      setAudioModeAsync({ playsInSilentMode: true });
+      await setAudioModeAsync({ playsInSilentMode: true });
       narration.loop = false;
-      narration.volume = 1;
-      narration.muted = !soundEnabled;
-      narration.seekTo(0);
+      narration.muted = false;
+      narration.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
+      try {
+        narration.seekTo(0);
+      } catch (_) {}
       narration.play();
     } catch (e) {
       console.warn("Slide3 narration replay error:", e);

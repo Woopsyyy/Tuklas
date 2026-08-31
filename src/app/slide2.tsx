@@ -8,11 +8,13 @@ import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
+setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
+
 export default function Slide2Screen() {
   const router = useRouter();
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const soundEnabled = useSettingsStore((state) => state.soundEnabled);
+  const narrationVolume = useSettingsStore((state) => state.narrationVolume);
   const narration = useAudioPlayer(require("../../assets/audio/intro.mp3"));
 
   const screenW = Math.max(width, height);
@@ -81,13 +83,15 @@ export default function Slide2Screen() {
     router.back();
   };
 
-  const handleReplayNarration = () => {
+  const handleReplayNarration = async () => {
     try {
-      setAudioModeAsync({ playsInSilentMode: true });
+      await setAudioModeAsync({ playsInSilentMode: true });
       narration.loop = false;
-      narration.volume = 1;
-      narration.muted = !soundEnabled;
-      narration.seekTo(0);
+      narration.muted = false;
+      narration.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
+      try {
+        narration.seekTo(0);
+      } catch (_) {}
       narration.play();
     } catch (e) {
       console.warn("Slide2 narration replay error:", e);

@@ -44,7 +44,7 @@ export default function Antas5Slide7Screen() {
   const signTop = Math.max(insets.top + 8, bgOffsetY + 80 * bgScale + 0.04 * screenH);
 
   // NPC Explorers (npc.png: 387 x 726) — bottom left
-  const npcH = Math.min(screenH * 0.64, 726 * bgScale * 0.85) * 1.5;
+  const npcH = Math.min(screenH * 0.64, 726 * bgScale * 0.85) * 1.5 * 0.8;
   const npcW = npcH * (387 / 726);
   const npcLeft = Math.max(insets.left + 16, bgOffsetX + 50 * bgScale + 0.02 * screenW);
   const npcBottom = Math.max(insets.bottom + 12, 20 * bgScale) - 0.10 * screenH - 0.05 * screenH;

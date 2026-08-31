@@ -54,17 +54,6 @@ export default function Slide2Screen() {
 
   useFocusEffect(
     useCallback(() => {
-      try {
-        setAudioModeAsync({ playsInSilentMode: true });
-        narration.loop = false;
-        narration.volume = 1;
-        narration.muted = !soundEnabled;
-        narration.seekTo(0);
-        narration.play();
-      } catch (e) {
-        console.warn("Slide2 narration setup error:", e);
-      }
-
       return () => {
         try {
           narration.pause();
@@ -73,7 +62,7 @@ export default function Slide2Screen() {
           // ignore if already released
         }
       };
-    }, [narration, soundEnabled])
+    }, [narration])
   );
 
   const handleProceed = () => {
@@ -94,6 +83,10 @@ export default function Slide2Screen() {
 
   const handleReplayNarration = () => {
     try {
+      setAudioModeAsync({ playsInSilentMode: true });
+      narration.loop = false;
+      narration.volume = 1;
+      narration.muted = !soundEnabled;
       narration.seekTo(0);
       narration.play();
     } catch (e) {

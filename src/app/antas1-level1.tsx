@@ -19,7 +19,6 @@ import { useSettingsStore } from "@/store/use-settings-store";
 export default function Antas1Level1Screen() {
   const router = useRouter();
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
-  const toggleSound = useSettingsStore((state) => state.toggleSound);
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const narration = useAudioPlayer(require("../../assets/audio/antas1 level1.mp3"));
@@ -75,17 +74,6 @@ export default function Antas1Level1Screen() {
 
   useFocusEffect(
     useCallback(() => {
-      try {
-        setAudioModeAsync({ playsInSilentMode: true });
-        narration.loop = false;
-        narration.volume = 1;
-        narration.muted = !soundEnabled;
-        narration.seekTo(0);
-        narration.play();
-      } catch (e) {
-        console.warn("Antas1Level1 narration setup error:", e);
-      }
-
       return () => {
         try {
           narration.pause();
@@ -94,11 +82,15 @@ export default function Antas1Level1Screen() {
           // ignore if already released
         }
       };
-    }, [narration, soundEnabled])
+    }, [narration])
   );
 
   const handlePlayNarration = () => {
     try {
+      setAudioModeAsync({ playsInSilentMode: true });
+      narration.loop = false;
+      narration.volume = 1;
+      narration.muted = !soundEnabled;
       narration.seekTo(0);
       narration.play();
     } catch (e) {
@@ -168,7 +160,7 @@ export default function Antas1Level1Screen() {
             <RNImage source={require("../../assets/images/ui/back.png")} style={{ width: backW, height: backH }} resizeMode="contain" />
           </Pressable>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 0.03 * screenW }}>
-            <Pressable onPress={toggleSound} hitSlop={12} className="active:opacity-70">
+            <Pressable onPress={handlePlayNarration} hitSlop={12} className="active:opacity-70">
               <RNImage
                 source={require("../../assets/images/ui/sound.png")}
                 style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}

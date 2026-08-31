@@ -20,7 +20,6 @@ import { useSettingsStore } from "@/store/use-settings-store";
 export default function Antas2Level2Screen() {
   const router = useRouter();
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
-  const toggleSound = useSettingsStore((state) => state.toggleSound);
   const { width, height } = useWindowDimensions();
 const insets = useSafeAreaInsets();
   const narration = useAudioPlayer(require("../../assets/audio/antas2 question2.mp3"));
@@ -88,17 +87,6 @@ useEffect(() => {
 
   useFocusEffect(
     useCallback(() => {
-      try {
-        setAudioModeAsync({ playsInSilentMode: true });
-        narration.loop = false;
-        narration.volume = 1;
-        narration.muted = !soundEnabled;
-        narration.seekTo(0);
-        narration.play();
-      } catch (e) {
-        console.warn("Antas2Level2 narration setup error:", e);
-      }
-
       return () => {
         try {
           narration.pause();
@@ -107,11 +95,15 @@ useEffect(() => {
           // ignore if already released
         }
       };
-    }, [narration, soundEnabled])
+    }, [narration])
   );
 
   const handlePlayNarration = () => {
     try {
+      setAudioModeAsync({ playsInSilentMode: true });
+      narration.loop = false;
+      narration.volume = 1;
+      narration.muted = !soundEnabled;
       narration.seekTo(0);
       narration.play();
     } catch (e) {
@@ -187,7 +179,7 @@ useEffect(() => {
             <RNImage source={require("../../assets/images/ui/back.png")} style={{ width: backW, height: backH }} resizeMode="contain" />
           </Pressable>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 0.03 * screenW }}>
-            <Pressable onPress={toggleSound} hitSlop={12} className="active:opacity-70">
+            <Pressable onPress={handlePlayNarration} hitSlop={12} className="active:opacity-70">
               <Image
                 source={require("../../assets/images/ui/sound.png")}
                 style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}

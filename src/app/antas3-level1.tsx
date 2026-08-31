@@ -100,19 +100,8 @@ export default function Antas3Level1Screen() {
     };
   }, []);
 
-  useFocusEffect(
+useFocusEffect(
     useCallback(() => {
-      try {
-        setAudioModeAsync({ playsInSilentMode: true });
-        narration.loop = false;
-        narration.volume = 1;
-        narration.muted = !soundEnabled;
-        narration.seekTo(0);
-        narration.play();
-      } catch (e) {
-        console.warn("Antas3Level1 narration setup error:", e);
-      }
-
       return () => {
         try {
           narration.pause();
@@ -121,11 +110,15 @@ export default function Antas3Level1Screen() {
           // ignore if already released
         }
       };
-    }, [narration, soundEnabled])
+    }, [narration])
   );
 
   const handlePlayNarration = () => {
     try {
+      setAudioModeAsync({ playsInSilentMode: true });
+      narration.loop = false;
+      narration.volume = 1;
+      narration.muted = !soundEnabled;
       narration.seekTo(0);
       narration.play();
     } catch (e) {

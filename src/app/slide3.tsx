@@ -89,17 +89,6 @@ export default function Slide3Screen() {
 
   useFocusEffect(
     useCallback(() => {
-      try {
-        setAudioModeAsync({ playsInSilentMode: true });
-        narration.loop = false;
-        narration.volume = 1;
-        narration.muted = !soundEnabled;
-        narration.seekTo(0);
-        narration.play();
-      } catch (e) {
-        console.warn("Slide3 narration setup error:", e);
-      }
-
       return () => {
         try {
           narration.pause();
@@ -108,7 +97,7 @@ export default function Slide3Screen() {
           // ignore if already released
         }
       };
-    }, [narration, soundEnabled])
+    }, [narration])
   );
 
   const handleBack = () => {
@@ -129,6 +118,10 @@ export default function Slide3Screen() {
 
   const handleReplayNarration = () => {
     try {
+      setAudioModeAsync({ playsInSilentMode: true });
+      narration.loop = false;
+      narration.volume = 1;
+      narration.muted = !soundEnabled;
       narration.seekTo(0);
       narration.play();
     } catch (e) {

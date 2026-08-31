@@ -38,7 +38,7 @@ export default function Antas5Slide9Screen() {
   const settingsH = iconBase;
 
   // NPC Explorer Girl (npc.png: 417 x 977) — standing on the left
-  const npcH = Math.min(screenH * 0.88, 977 * bgScale * 0.95);
+  const npcH = Math.min(screenH * 0.88 * 1.4, 977 * bgScale * 0.95 * 1.4);
   const npcW = npcH * (417 / 977);
   const npcLeft = Math.max(insets.left + 12, bgOffsetX + 60 * bgScale);
   const npcBottom = Math.max(insets.bottom + 4, 10 * bgScale);

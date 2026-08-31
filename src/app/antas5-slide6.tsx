@@ -16,7 +16,7 @@ export default function Antas5Slide6Screen() {
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const narrationVolume = useSettingsStore((state) => state.narrationVolume);
-  const narration = useAudioPlayer(require("../../assets/audio/antas5 after slid1.mp3"));
+  const narration = useAudioPlayer(require("../../assets/audio/antas 5 slide6.mp3"));
 
   const screenW = Math.max(width, height);
   const screenH = Math.min(width, height);

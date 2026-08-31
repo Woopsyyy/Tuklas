@@ -130,7 +130,7 @@ export default function Antas5Level3Screen() {
       narration.seekTo(0);
     } catch (e) {}
     if (timerRef.current) clearTimeout(timerRef.current);
-    router.navigate("/antas5");
+    router.navigate("/antas5-slide7");
   };
 
   const handleBack = () => {

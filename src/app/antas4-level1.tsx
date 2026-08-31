@@ -301,8 +301,19 @@ export default function Antas4Level1Screen() {
   );
 
   const checkSentence = (newPlaced: string[]) => {
+    const validOrders = [
+      ["word1", "word6", "word5", "word4", "word7", "word2", "word3"], // Nagdala ng payong si Liza dahil umuulan
+      ["word1", "word4", "word7", "word6", "word5", "word2", "word3"], // Nagdala si Liza ng payong dahil umuulan
+      ["word4", "word7", "word1", "word6", "word5", "word2", "word3"], // Si Liza nagdala ng payong dahil umuulan
+      ["word2", "word3", "word1", "word6", "word5", "word4", "word7"], // Dahil umuulan nagdala ng payong si Liza
+      ["word2", "word3", "word1", "word4", "word7", "word6", "word5"], // Dahil umuulan nagdala si Liza ng payong
+      ["word2", "word3", "word4", "word7", "word1", "word6", "word5"], // Dahil umuulan si Liza nagdala ng payong
+    ];
+
     if (newPlaced.length === ALL_WORDS.length) {
-      const isMatched = newPlaced.every((id, idx) => id === CORRECT_ORDER[idx]);
+      const isMatched = validOrders.some((order) =>
+        order.every((id, idx) => id === newPlaced[idx])
+      );
       setScore("antas4Level1", isMatched);
       if (isMatched) {
         setIsCorrect(true);
@@ -343,12 +354,17 @@ export default function Antas4Level1Screen() {
     try {
       await setAudioModeAsync({ playsInSilentMode: true });
       Object.values(wordAudios).forEach((p) => {
-        if (p !== player) p.pause();
+        if (p !== player) {
+          try { p.pause(); } catch (_) {}
+        }
       });
-      firstAnswerAudio.pause();
-      player.muted = !soundEnabled;
-      player.volume = soundEnabled ? Math.max(0, Math.min(1, narrationVolume)) : 0;
-      player.seekTo(0);
+      try { firstAnswerAudio.pause(); } catch (_) {}
+      player.loop = false;
+      player.muted = false;
+      player.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
+      try {
+        player.seekTo(0);
+      } catch (_) {}
       player.play();
     } catch (e) {
       console.warn("Antas4Level1 word audio play error:", e);
@@ -363,9 +379,12 @@ export default function Antas4Level1Screen() {
           p.pause();
         } catch (e) {}
       });
-      firstAnswerAudio.muted = !soundEnabled;
-      firstAnswerAudio.volume = soundEnabled ? Math.max(0, Math.min(1, narrationVolume)) : 0;
-      firstAnswerAudio.seekTo(0);
+      firstAnswerAudio.loop = false;
+      firstAnswerAudio.muted = false;
+      firstAnswerAudio.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
+      try {
+        firstAnswerAudio.seekTo(0);
+      } catch (_) {}
       firstAnswerAudio.play();
     } catch (e) {
       console.warn("Antas4Level1 first answer audio play error:", e);

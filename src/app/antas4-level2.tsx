@@ -378,12 +378,17 @@ export default function Antas4Level2Screen() {
     try {
       await setAudioModeAsync({ playsInSilentMode: true });
       Object.values(wordAudios).forEach((p) => {
-        if (p !== player) p.pause();
+        if (p !== player) {
+          try { p.pause(); } catch (_) {}
+        }
       });
-      firstAnswerAudio.pause();
-      player.muted = !soundEnabled;
-      player.volume = soundEnabled ? Math.max(0, Math.min(1, narrationVolume)) : 0;
-      player.seekTo(0);
+      try { firstAnswerAudio.pause(); } catch (_) {}
+      player.loop = false;
+      player.muted = false;
+      player.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
+      try {
+        player.seekTo(0);
+      } catch (_) {}
       player.play();
     } catch (e) {
       console.warn("Antas4Level2 word audio play error:", e);
@@ -396,13 +401,14 @@ export default function Antas4Level2Screen() {
       Object.values(wordAudios).forEach((p) => {
         try {
           p.pause();
-        } catch (e) {
-          // ignore if already released
-        }
+        } catch (e) {}
       });
-      firstAnswerAudio.muted = !soundEnabled;
-      firstAnswerAudio.volume = soundEnabled ? Math.max(0, Math.min(1, narrationVolume)) : 0;
-      firstAnswerAudio.seekTo(0);
+      firstAnswerAudio.loop = false;
+      firstAnswerAudio.muted = false;
+      firstAnswerAudio.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
+      try {
+        firstAnswerAudio.seekTo(0);
+      } catch (_) {}
       firstAnswerAudio.play();
     } catch (e) {
       console.warn("Antas4Level2 first answer audio play error:", e);

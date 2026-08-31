@@ -184,6 +184,7 @@ export default function Antas4Level2Screen() {
   const router = useRouter();
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
   const toggleSound = useSettingsStore((state) => state.toggleSound);
+  const narrationVolume = useSettingsStore((state) => state.narrationVolume);
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
@@ -364,16 +365,17 @@ export default function Antas4Level2Screen() {
     }
   };
 
-  const playWordAudio = (text: string) => {
+  const playWordAudio = async (text: string) => {
     const player = wordAudios[text];
     if (!player) return;
     try {
-      setAudioModeAsync({ playsInSilentMode: true });
+      await setAudioModeAsync({ playsInSilentMode: true });
       Object.values(wordAudios).forEach((p) => {
         if (p !== player) p.pause();
       });
       firstAnswerAudio.pause();
       player.muted = !soundEnabled;
+      player.volume = soundEnabled ? Math.max(0, Math.min(1, narrationVolume)) : 0;
       player.seekTo(0);
       player.play();
     } catch (e) {
@@ -381,9 +383,9 @@ export default function Antas4Level2Screen() {
     }
   };
 
-  const playFirstAnswer = () => {
+  const playFirstAnswer = async () => {
     try {
-      setAudioModeAsync({ playsInSilentMode: true });
+      await setAudioModeAsync({ playsInSilentMode: true });
       Object.values(wordAudios).forEach((p) => {
         try {
           p.pause();
@@ -392,6 +394,7 @@ export default function Antas4Level2Screen() {
         }
       });
       firstAnswerAudio.muted = !soundEnabled;
+      firstAnswerAudio.volume = soundEnabled ? Math.max(0, Math.min(1, narrationVolume)) : 0;
       firstAnswerAudio.seekTo(0);
       firstAnswerAudio.play();
     } catch (e) {

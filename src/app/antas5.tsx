@@ -1,19 +1,23 @@
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Pressable, useWindowDimensions, View } from "react-native";
 import { Image } from "expo-image";
 import Animated, { FadeIn, FadeInUp, FadeInLeft } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
+
+setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
 
 export default function Antas5Screen() {
   const router = useRouter();
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
-  const toggleSound = useSettingsStore((state) => state.toggleSound);
+  const narrationVolume = useSettingsStore((state) => state.narrationVolume);
+  const narration = useAudioPlayer(require("../../assets/audio/antas5.mp3"));
 
   const screenW = Math.max(width, height);
   const screenH = Math.min(width, height);
@@ -73,7 +77,35 @@ export default function Antas5Screen() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        try {
+          narration.pause();
+          narration.seekTo(0);
+        } catch (e) {}
+      };
+    }, [narration])
+  );
+
+  const handlePlayNarration = async () => {
+    try {
+      await setAudioModeAsync({ playsInSilentMode: true });
+      narration.loop = false;
+      narration.volume = soundEnabled ? Math.max(0, Math.min(1, narrationVolume)) : 0;
+      narration.muted = !soundEnabled;
+      narration.seekTo(0);
+      narration.play();
+    } catch (e) {
+      console.warn("Antas5 narration play error:", e);
+    }
+  };
+
   const handleStart = () => {
+    try {
+      narration.pause();
+      narration.seekTo(0);
+    } catch (e) {}
     router.navigate("/antas5-slide1");
   };
 
@@ -154,7 +186,7 @@ export default function Antas5Screen() {
             />
           </Pressable>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 0.03 * screenW }}>
-            <Pressable onPress={toggleSound} hitSlop={12} className="active:opacity-70">
+            <Pressable onPress={handlePlayNarration} hitSlop={12} className="active:opacity-70">
               <Image
                 source={require("../../assets/images/ui/sound.png")}
                 style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}

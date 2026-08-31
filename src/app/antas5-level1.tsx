@@ -1,7 +1,7 @@
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, useWindowDimensions, View, Image as RNImage } from "react-native";
 import { Image } from "expo-image";
 import Animated, {
@@ -14,7 +14,10 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
+
+setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
 
 type ChoiceType = "A" | "B" | "C" | "D";
 
@@ -23,7 +26,8 @@ export default function Antas5Level1Screen() {
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
-  const toggleSound = useSettingsStore((state) => state.toggleSound);
+  const narrationVolume = useSettingsStore((state) => state.narrationVolume);
+  const narration = useAudioPlayer(require("../../assets/audio/antas5 question1.mp3"));
 
   const [selectedChoice, setSelectedChoice] = useState<ChoiceType | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -82,6 +86,30 @@ export default function Antas5Level1Screen() {
     };
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        try {
+          narration.pause();
+          narration.seekTo(0);
+        } catch (e) {}
+      };
+    }, [narration])
+  );
+
+  const handlePlayNarration = async () => {
+    try {
+      await setAudioModeAsync({ playsInSilentMode: true });
+      narration.loop = false;
+      narration.volume = soundEnabled ? Math.max(0, Math.min(1, narrationVolume)) : 0;
+      narration.muted = !soundEnabled;
+      narration.seekTo(0);
+      narration.play();
+    } catch (e) {
+      console.warn("Antas5Level1 narration play error:", e);
+    }
+  };
+
   const handleSelectChoice = (choice: ChoiceType) => {
     if (selectedChoice !== null) return;
     setSelectedChoice(choice);
@@ -94,11 +122,19 @@ export default function Antas5Level1Screen() {
   };
 
   const handleNext = () => {
+    try {
+      narration.pause();
+      narration.seekTo(0);
+    } catch (e) {}
     if (timerRef.current) clearTimeout(timerRef.current);
     router.navigate("/antas5-level2");
   };
 
   const handleBack = () => {
+    try {
+      narration.pause();
+      narration.seekTo(0);
+    } catch (e) {}
     if (timerRef.current) clearTimeout(timerRef.current);
     router.back();
   };
@@ -173,7 +209,7 @@ export default function Antas5Level1Screen() {
             />
           </Pressable>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 0.03 * screenW }}>
-            <Pressable onPress={toggleSound} hitSlop={12} className="active:opacity-70">
+            <Pressable onPress={handlePlayNarration} hitSlop={12} className="active:opacity-70">
               <Image
                 source={require("../../assets/images/ui/sound.png")}
                 style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}

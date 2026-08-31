@@ -1,7 +1,7 @@
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, useWindowDimensions, View, Image as RNImage } from "react-native";
 import { Image } from "expo-image";
 import Animated, {
@@ -183,7 +183,6 @@ function CroppedImage({
 export default function Antas4Level2Screen() {
   const router = useRouter();
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
-  const toggleSound = useSettingsStore((state) => state.toggleSound);
   const narrationVolume = useSettingsStore((state) => state.narrationVolume);
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
@@ -301,20 +300,26 @@ export default function Antas4Level2Screen() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
-      Object.values(wordAudios).forEach((p) => {
-        try {
-          p.pause();
-        } catch (e) {
-          // ignore if already released
-        }
-      });
-      try {
-        firstAnswerAudio.pause();
-      } catch (e) {
-        // ignore if already released
-      }
     };
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        if (timerRef.current) clearTimeout(timerRef.current);
+        Object.values(wordAudios).forEach((p) => {
+          try {
+            p.pause();
+            p.seekTo(0);
+          } catch (e) {}
+        });
+        try {
+          firstAnswerAudio.pause();
+          firstAnswerAudio.seekTo(0);
+        } catch (e) {}
+      };
+    }, [wordAudios, firstAnswerAudio])
+  );
 
   const checkSentence = (newPlaced: string[]) => {
     const validOrders = [
@@ -398,6 +403,10 @@ export default function Antas4Level2Screen() {
     } catch (e) {
       console.warn("Antas4Level2 first answer audio play error:", e);
     }
+  };
+
+  const handlePlayNarration = async () => {
+    playFirstAnswer();
   };
 
   const chainFirstAnswerAfter = (player: ReturnType<typeof useAudioPlayer>) => {
@@ -544,7 +553,7 @@ export default function Antas4Level2Screen() {
             />
           </Pressable>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 0.03 * screenW }}>
-            <Pressable onPress={toggleSound} hitSlop={12} className="active:opacity-70">
+            <Pressable onPress={handlePlayNarration} hitSlop={12} className="active:opacity-70">
               <RNImage
                 source={require("../../assets/images/ui/sound.png")}
                 style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}

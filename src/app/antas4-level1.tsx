@@ -1,7 +1,7 @@
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, useWindowDimensions, View, Image as RNImage } from "react-native";
 import { Image } from "expo-image";
 import Animated, {
@@ -16,6 +16,8 @@ import Animated, {
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer, type AudioStatus } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
+
+setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
 
 interface WordItem {
   id: string;
@@ -159,7 +161,7 @@ function CroppedImage({
 export default function Antas4Level1Screen() {
   const router = useRouter();
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
-  const toggleSound = useSettingsStore((state) => state.toggleSound);
+  const narrationVolume = useSettingsStore((state) => state.narrationVolume);
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
@@ -274,20 +276,26 @@ export default function Antas4Level1Screen() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
-      Object.values(wordAudios).forEach((p) => {
-        try {
-          p.pause();
-        } catch (e) {
-          // ignore if already released
-        }
-      });
-      try {
-        firstAnswerAudio.pause();
-      } catch (e) {
-        // ignore if already released
-      }
     };
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        if (timerRef.current) clearTimeout(timerRef.current);
+        Object.values(wordAudios).forEach((p) => {
+          try {
+            p.pause();
+            p.seekTo(0);
+          } catch (e) {}
+        });
+        try {
+          firstAnswerAudio.pause();
+          firstAnswerAudio.seekTo(0);
+        } catch (e) {}
+      };
+    }, [wordAudios, firstAnswerAudio])
+  );
 
   const checkSentence = (newPlaced: string[]) => {
     if (newPlaced.length === ALL_WORDS.length) {
@@ -325,16 +333,17 @@ export default function Antas4Level1Screen() {
     }
   };
 
-  const playWordAudio = (text: string) => {
+  const playWordAudio = async (text: string) => {
     const player = wordAudios[text];
     if (!player) return;
     try {
-      setAudioModeAsync({ playsInSilentMode: true });
+      await setAudioModeAsync({ playsInSilentMode: true });
       Object.values(wordAudios).forEach((p) => {
         if (p !== player) p.pause();
       });
       firstAnswerAudio.pause();
       player.muted = !soundEnabled;
+      player.volume = soundEnabled ? Math.max(0, Math.min(1, narrationVolume)) : 0;
       player.seekTo(0);
       player.play();
     } catch (e) {
@@ -342,22 +351,25 @@ export default function Antas4Level1Screen() {
     }
   };
 
-  const playFirstAnswer = () => {
+  const playFirstAnswer = async () => {
     try {
-      setAudioModeAsync({ playsInSilentMode: true });
+      await setAudioModeAsync({ playsInSilentMode: true });
       Object.values(wordAudios).forEach((p) => {
         try {
           p.pause();
-        } catch (e) {
-          // ignore if already released
-        }
+        } catch (e) {}
       });
       firstAnswerAudio.muted = !soundEnabled;
+      firstAnswerAudio.volume = soundEnabled ? Math.max(0, Math.min(1, narrationVolume)) : 0;
       firstAnswerAudio.seekTo(0);
       firstAnswerAudio.play();
     } catch (e) {
       console.warn("Antas4Level1 first answer audio play error:", e);
     }
+  };
+
+  const handlePlayNarration = async () => {
+    playFirstAnswer();
   };
 
   const chainFirstAnswerAfter = (player: ReturnType<typeof useAudioPlayer>) => {
@@ -505,7 +517,7 @@ export default function Antas4Level1Screen() {
             />
           </Pressable>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 0.03 * screenW }}>
-            <Pressable onPress={toggleSound} hitSlop={12} className="active:opacity-70">
+            <Pressable onPress={handlePlayNarration} hitSlop={12} className="active:opacity-70">
               <RNImage
                 source={require("../../assets/images/ui/sound.png")}
                 style={{ width: soundW, height: soundH, opacity: soundEnabled ? 1 : 0.5 }}

@@ -14,7 +14,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
+import { setAudioModeAsync, useAudioPlayer, type AudioStatus } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
 interface WordItem {
@@ -300,7 +300,14 @@ export default function Antas4Level1Screen() {
           3,
           true
         );
-        playFirstAnswer();
+        const lastId = newPlaced[newPlaced.length - 1];
+        const lastItem = ALL_WORDS.find((w) => w.id === lastId);
+        const lastPlayer = lastItem ? wordAudios[lastItem.text] : undefined;
+        if (lastPlayer) {
+          chainFirstAnswerAfter(lastPlayer);
+        } else {
+          playFirstAnswer();
+        }
         timerRef.current = setTimeout(() => {
           router.navigate("/antas4-level2" as any);
         }, 5000);
@@ -353,6 +360,32 @@ export default function Antas4Level1Screen() {
     } catch (e) {
       console.warn("Antas4Level1 first answer audio play error:", e);
     }
+  };
+
+  const chainFirstAnswerAfter = (player: ReturnType<typeof useAudioPlayer>) => {
+    let fallbackTimer: ReturnType<typeof setTimeout> | null = null;
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      try {
+        player.removeListener("playbackStatusUpdate", onStatus);
+      } catch (e) {
+        // ignore if already released
+      }
+      if (fallbackTimer) clearTimeout(fallbackTimer);
+      playFirstAnswer();
+    };
+    const onStatus = (status: AudioStatus) => {
+      if (status.didJustFinish) finish();
+    };
+    try {
+      player.addListener("playbackStatusUpdate", onStatus);
+    } catch (e) {
+      // ignore if already released
+    }
+    const ms = player.duration && player.duration > 0 ? player.duration * 1000 + 400 : 2500;
+    fallbackTimer = setTimeout(finish, ms);
   };
 
   const handleWordClick = (id: string) => {

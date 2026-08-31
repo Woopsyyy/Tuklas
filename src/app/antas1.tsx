@@ -1,10 +1,11 @@
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Image, Pressable, useWindowDimensions, View } from "react-native";
 import Animated, { FadeIn, FadeInLeft, FadeInUp } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
 export default function Antas1Screen() {
@@ -13,6 +14,7 @@ export default function Antas1Screen() {
   const toggleSound = useSettingsStore((state) => state.toggleSound);
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const narration = useAudioPlayer(require("../../assets/audio/antas1 intro.mp3"));
 
   const screenW = Math.max(width, height);
   const screenH = Math.min(width, height);
@@ -66,6 +68,38 @@ export default function Antas1Screen() {
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      try {
+        setAudioModeAsync({ playsInSilentMode: true });
+        narration.loop = false;
+        narration.volume = 1;
+        narration.muted = !soundEnabled;
+        narration.seekTo(0);
+        narration.play();
+      } catch (e) {
+        console.warn("Antas1 narration setup error:", e);
+      }
+
+      return () => {
+        try {
+          narration.pause();
+          narration.seekTo(0);
+        } catch (e) {
+          // ignore if already released
+        }
+      };
+    }, [narration, soundEnabled])
+  );
+
+  const handleStartMission = () => {
+    try {
+      narration.pause();
+      narration.seekTo(0);
+    } catch (e) {}
+    router.navigate("/antas1-level1");
+  };
 
   return (
     <View className="flex-1 bg-black">
@@ -162,7 +196,7 @@ export default function Antas1Screen() {
           }}
         >
           <Pressable
-            onPress={() => router.navigate("/antas1-level1")}
+            onPress={handleStartMission}
             hitSlop={10}
             className="w-full h-full active:scale-95 active:opacity-85"
           >

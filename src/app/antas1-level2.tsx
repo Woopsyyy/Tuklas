@@ -1,7 +1,7 @@
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, useWindowDimensions, View, Image as RNImage } from "react-native";
 import { Image } from "expo-image";
 import Animated, {
@@ -13,6 +13,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
 export default function Antas1Level2Screen() {
@@ -21,6 +22,7 @@ export default function Antas1Level2Screen() {
   const toggleSound = useSettingsStore((state) => state.toggleSound);
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const narration = useAudioPlayer(require("../../assets/audio/antas1 level2.mp3"));
 
   const [selectedChoice, setSelectedChoice] = useState<"A" | "B" | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -71,6 +73,39 @@ export default function Antas1Level2Screen() {
     };
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      try {
+        setAudioModeAsync({ playsInSilentMode: true });
+        narration.loop = false;
+        narration.volume = 1;
+        narration.muted = !soundEnabled;
+        narration.seekTo(0);
+        narration.play();
+      } catch (e) {
+        console.warn("Antas1Level2 narration setup error:", e);
+      }
+
+      return () => {
+        try {
+          narration.pause();
+          narration.seekTo(0);
+        } catch (e) {
+          // ignore if already released
+        }
+      };
+    }, [narration, soundEnabled])
+  );
+
+  const handlePlayNarration = () => {
+    try {
+      narration.seekTo(0);
+      narration.play();
+    } catch (e) {
+      console.warn("Antas1Level2 narration play error:", e);
+    }
+  };
+
   const handleSelectChoice = (choice: "A" | "B") => {
     if (selectedChoice !== null) return; // already answered
     setSelectedChoice(choice);
@@ -84,17 +119,29 @@ export default function Antas1Level2Screen() {
     // Only proceed to the next level when the correct answer (A) is chosen
     if (choice === "A") {
       timerRef.current = setTimeout(() => {
+        try {
+          narration.pause();
+          narration.seekTo(0);
+        } catch (e) {}
         router.navigate("/antas1-level3");
       }, 2000);
     }
   };
 
   const handleNext = () => {
+    try {
+      narration.pause();
+      narration.seekTo(0);
+    } catch (e) {}
     if (timerRef.current) clearTimeout(timerRef.current);
     router.navigate("/antas1-level3");
   };
 
   const handleBack = () => {
+    try {
+      narration.pause();
+      narration.seekTo(0);
+    } catch (e) {}
     if (timerRef.current) clearTimeout(timerRef.current);
     router.back();
   };

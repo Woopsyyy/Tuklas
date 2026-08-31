@@ -44,7 +44,7 @@ export default function Antas5Slide9Screen() {
   const npcBottom = Math.max(insets.bottom + 4, 10 * bgScale) - screenH * 0.10;
 
   // Parchment Scroll / Sign (sign.png: 1066 x 746) — center-right, 20% larger, 10% left
-  const signH = Math.min(screenH * 0.72 * 1.2, 746 * bgScale * 0.95 * 1.2);
+  const signH = Math.min(screenH * 0.72 * 1.08, 746 * bgScale * 0.95 * 1.08);
   const signW = signH * (1066 / 746);
   const signLeft = (screenW - signW) / 2 + 0.08 * screenW - 0.10 * screenW;
   const signTop = Math.max(insets.top + 8, screenH * 0.07);

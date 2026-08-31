@@ -4,14 +4,14 @@ import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect } from "react";
 import { Pressable, useWindowDimensions, View } from "react-native";
 import { Image } from "expo-image";
-import Animated, { FadeIn, FadeInDown, FadeInLeft, FadeInUp } from "react-native-reanimated";
+import Animated, { FadeInUp } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
 setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
 
-export default function Antas5Slide7Screen() {
+export default function Antas5Slide8Screen() {
   const router = useRouter();
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
@@ -37,25 +37,7 @@ export default function Antas5Slide7Screen() {
   const settingsW = iconBase;
   const settingsH = iconBase;
 
-  // Dialogue Speech Bubble (sign.png: 1169 x 381) — top-center, tail pointing left
-  const signW = Math.min(screenW * 0.62, 1169 * bgScale * 0.95);
-  const signH = signW * (381 / 1169);
-  const signLeft = (screenW - signW) / 2 + 0.04 * screenW - 0.05 * screenW;
-  const signTop = Math.max(insets.top + 8, bgOffsetY + 80 * bgScale + 0.04 * screenH);
-
-  // NPC Explorers (npc.png: 387 x 726) — bottom left
-  const npcH = Math.min(screenH * 0.64, 726 * bgScale * 0.85) * 1.5 * 0.8;
-  const npcW = npcH * (387 / 726);
-  const npcLeft = Math.max(insets.left + 16, bgOffsetX + 50 * bgScale + 0.02 * screenW) + 0.10 * screenW - 0.05 * screenW;
-  const npcBottom = Math.max(insets.bottom + 12, 20 * bgScale) - 0.10 * screenH - 0.05 * screenH;
-
-  // Glowing Treasure Chest (chest.png: 406 x 341) — center clearing
-  const chestW = Math.min(screenW * 0.24, 406 * bgScale * 1.05);
-  const chestH = chestW * (341 / 406);
-  const chestLeft = (screenW - chestW) / 2 + 0.03 * screenW;
-  const chestTop = signTop + signH + 0.02 * screenH - 0.10 * screenH;
-
-  // Action Button (button.png: 780 x 97) — "Buksan ang kaban ng kayamanan"
+  // Continue Button (button.png)
   const buttonW = Math.min(screenW * 0.40, 780 * bgScale * 0.85);
   const buttonH = buttonW * (97 / 780);
   const buttonLeft = (screenW - buttonW) / 2 + 0.03 * screenW;
@@ -87,17 +69,16 @@ export default function Antas5Slide7Screen() {
       } catch (_) {}
       narration.play();
     } catch (e) {
-      console.warn("Antas5Slide7 narration play error:", e);
+      console.warn("Antas5Slide8 narration play error:", e);
     }
   };
 
-  const handleOpenChest = () => {
+  const handleContinue = () => {
     try {
       narration.pause();
       narration.seekTo(0);
     } catch (e) {}
-    // Advance to the final slide
-    router.navigate("/antas5-slide8");
+    router.navigate("/antas5");
   };
 
   const handleBack = () => {
@@ -114,7 +95,7 @@ export default function Antas5Slide7Screen() {
 
       {/* Full-screen Background */}
       <Image
-        source={require("../../assets/images/antas5/slide7/background.png")}
+        source={require("../../assets/images/antas5/slide8/background.png")}
         style={{ position: "absolute", width: "100%", height: "100%" }}
         contentFit="cover"
         transition={0}
@@ -162,70 +143,7 @@ export default function Antas5Slide7Screen() {
           </View>
         </View>
 
-        {/* Speech Bubble (sign.png) */}
-        <Animated.View
-          entering={FadeInDown.duration(700)}
-          style={{
-            position: "absolute",
-            top: signTop,
-            left: signLeft,
-            width: signW,
-            height: signH,
-            zIndex: 20,
-          }}
-          pointerEvents="none"
-        >
-          <Image
-            source={require("../../assets/images/antas5/slide7/sign.png")}
-            style={{ width: "100%", height: "100%" }}
-            contentFit="contain"
-            transition={0}
-          />
-        </Animated.View>
-
-        {/* NPC Explorers (npc.png) — left side */}
-        <Animated.View
-          entering={FadeInLeft.duration(700).delay(150)}
-          style={{
-            position: "absolute",
-            bottom: npcBottom,
-            left: npcLeft,
-            width: npcW,
-            height: npcH,
-            zIndex: 22,
-          }}
-          pointerEvents="none"
-        >
-          <Image
-            source={require("../../assets/images/antas5/slide7/npc.png")}
-            style={{ width: "100%", height: "100%" }}
-            contentFit="contain"
-            transition={0}
-          />
-        </Animated.View>
-
-        {/* Glowing Treasure Chest (chest.png) — center clearing */}
-        <Animated.View
-          entering={FadeIn.duration(800).delay(250)}
-          style={{
-            position: "absolute",
-            top: chestTop,
-            left: chestLeft,
-            width: chestW,
-            height: chestH,
-            zIndex: 21,
-          }}
-          pointerEvents="none"
-        >
-          <Image
-            source={require("../../assets/images/antas5/slide7/chest.png")}
-            style={{ width: "100%", height: "100%" }}
-            contentFit="contain"
-            transition={0}
-          />
-        </Animated.View>
-
-        {/* Action Button (button.png) — "Buksan ang kaban ng kayamanan" */}
+        {/* Continue Button (button.png) */}
         <Animated.View
           entering={FadeInUp.duration(700).delay(350)}
           style={{
@@ -238,7 +156,7 @@ export default function Antas5Slide7Screen() {
           }}
         >
           <Pressable
-            onPress={handleOpenChest}
+            onPress={handleContinue}
             hitSlop={8}
             className="w-full h-full active:scale-95 active:opacity-90"
           >

@@ -4,19 +4,19 @@ import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect } from "react";
 import { Pressable, useWindowDimensions, View } from "react-native";
 import { Image } from "expo-image";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import Animated, { FadeIn, FadeInDown, FadeInLeft, FadeInUp } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
 setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
 
-export default function Antas5Slide8Screen() {
+export default function Antas5Slide9Screen() {
   const router = useRouter();
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const narrationVolume = useSettingsStore((state) => state.narrationVolume);
-  const narration = useAudioPlayer(require("../../assets/audio/antas5 after slid1.mp3"));
+  const narration = useAudioPlayer(require("../../assets/audio/end.mp3"));
 
   const screenW = Math.max(width, height);
   const screenH = Math.min(width, height);
@@ -37,11 +37,23 @@ export default function Antas5Slide8Screen() {
   const settingsW = iconBase;
   const settingsH = iconBase;
 
-  // Continue Button (button.png)
-  const buttonW = Math.min(screenW * 0.40, 780 * bgScale * 0.85);
+  // NPC Explorer Girl (npc.png: 417 x 977) — standing on the left
+  const npcH = Math.min(screenH * 0.88, 977 * bgScale * 0.95);
+  const npcW = npcH * (417 / 977);
+  const npcLeft = Math.max(insets.left + 12, bgOffsetX + 60 * bgScale);
+  const npcBottom = Math.max(insets.bottom + 4, 10 * bgScale);
+
+  // Parchment Scroll / Sign (sign.png: 1066 x 746) — center-right
+  const signH = Math.min(screenH * 0.72, 746 * bgScale * 0.95);
+  const signW = signH * (1066 / 746);
+  const signLeft = (screenW - signW) / 2 + 0.08 * screenW;
+  const signTop = Math.max(insets.top + 8, screenH * 0.07);
+
+  // Button (button.png: 780 x 97) — "Tignan ang resulta", centered under the parchment
+  const buttonW = Math.min(signW * 0.58, 780 * bgScale * 0.85);
   const buttonH = buttonW * (97 / 780);
-  const buttonLeft = (screenW - buttonW) / 2 + 0.03 * screenW;
-  const buttonBottom = Math.max(insets.bottom + 18, 25 * bgScale) - 0.03 * screenH - 0.05 * screenH;
+  const buttonLeft = signLeft + (signW - buttonW) / 2;
+  const buttonBottom = Math.max(insets.bottom + 12, 16 * bgScale);
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
@@ -69,16 +81,16 @@ export default function Antas5Slide8Screen() {
       } catch (_) {}
       narration.play();
     } catch (e) {
-      console.warn("Antas5Slide8 narration play error:", e);
+      console.warn("Antas5Slide9 narration play error:", e);
     }
   };
 
-  const handleContinue = () => {
+  const handleFinish = () => {
     try {
       narration.pause();
       narration.seekTo(0);
     } catch (e) {}
-    router.navigate("/antas5-slide9");
+    router.navigate("/slide3");
   };
 
   const handleBack = () => {
@@ -95,7 +107,7 @@ export default function Antas5Slide8Screen() {
 
       {/* Full-screen Background */}
       <Image
-        source={require("../../assets/images/antas5/slide8/background.png")}
+        source={require("../../assets/images/antas5/slide9/background.png")}
         style={{ position: "absolute", width: "100%", height: "100%" }}
         contentFit="cover"
         transition={0}
@@ -143,9 +155,51 @@ export default function Antas5Slide8Screen() {
           </View>
         </View>
 
-        {/* Continue Button (button.png) */}
+        {/* NPC Explorer Girl (npc.png) — standing on the left */}
         <Animated.View
-          entering={FadeInUp.duration(700).delay(350)}
+          entering={FadeInLeft.duration(700).delay(100)}
+          style={{
+            position: "absolute",
+            bottom: npcBottom,
+            left: npcLeft,
+            width: npcW,
+            height: npcH,
+            zIndex: 20,
+          }}
+          pointerEvents="none"
+        >
+          <Image
+            source={require("../../assets/images/antas5/slide9/npc.png")}
+            style={{ width: "100%", height: "100%" }}
+            contentFit="contain"
+            transition={0}
+          />
+        </Animated.View>
+
+        {/* Parchment Scroll / Sign (sign.png) — center-right */}
+        <Animated.View
+          entering={FadeInDown.duration(700)}
+          style={{
+            position: "absolute",
+            top: signTop,
+            left: signLeft,
+            width: signW,
+            height: signH,
+            zIndex: 15,
+          }}
+          pointerEvents="none"
+        >
+          <Image
+            source={require("../../assets/images/antas5/slide9/sign.png")}
+            style={{ width: "100%", height: "100%" }}
+            contentFit="contain"
+            transition={0}
+          />
+        </Animated.View>
+
+        {/* Action Button (button.png) — "Tignan ang resulta" */}
+        <Animated.View
+          entering={FadeInUp.duration(700).delay(250)}
           style={{
             position: "absolute",
             bottom: buttonBottom,
@@ -156,12 +210,12 @@ export default function Antas5Slide8Screen() {
           }}
         >
           <Pressable
-            onPress={handleContinue}
+            onPress={handleFinish}
             hitSlop={8}
             className="w-full h-full active:scale-95 active:opacity-90"
           >
             <Image
-              source={require("../../assets/images/antas5/slide7/button.png")}
+              source={require("../../assets/images/antas5/slide9/button.png")}
               style={{ width: "100%", height: "100%" }}
               contentFit="contain"
               transition={0}

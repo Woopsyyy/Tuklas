@@ -455,7 +455,7 @@ export default function Antas4Level2Screen() {
     } catch (e) {
       // ignore if already released
     }
-    router.navigate("/antas4" as any);
+    router.navigate("/antas5" as any);
   };
 
   const handleBack = () => {

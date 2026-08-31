@@ -14,6 +14,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { setAudioModeAsync, useAudioPlayer, type AudioStatus } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
 interface WordItem {
@@ -182,6 +183,20 @@ export default function Antas4Level2Screen() {
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
+  const wordAudios: Record<string, ReturnType<typeof useAudioPlayer>> = {
+    sa: useAudioPlayer(require("../../assets/audio/level2 sa.mp3")),
+    si: useAudioPlayer(require("../../assets/audio/level2 si.mp3")),
+    dahil: useAudioPlayer(require("../../assets/audio/level2 dahil.mp3")),
+    maaga: useAudioPlayer(require("../../assets/audio/level2 maaga.mp3")),
+    pumasok: useAudioPlayer(require("../../assets/audio/level2 pumasok.mp3")),
+    pagsusulit: useAudioPlayer(require("../../assets/audio/level2 pagsusulit.mp3")),
+    paaralan: useAudioPlayer(require("../../assets/audio/level2 paaralan.mp3")),
+    anna: useAudioPlayer(require("../../assets/audio/level2 anna.mp3")),
+    may: useAudioPlayer(require("../../assets/audio/level2 may.mp3")),
+  };
+
+  const firstAnswerAudio = useAudioPlayer(require("../../assets/audio/second answer.mp3"));
+
   const [placedWords, setPlacedWords] = useState<string[]>([]);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [isWrong, setIsWrong] = useState<boolean>(false);
@@ -281,6 +296,18 @@ export default function Antas4Level2Screen() {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
+      Object.values(wordAudios).forEach((p) => {
+        try {
+          p.pause();
+        } catch (e) {
+          // ignore if already released
+        }
+      });
+      try {
+        firstAnswerAudio.pause();
+      } catch (e) {
+        // ignore if already released
+      }
     };
   }, []);
 
@@ -306,9 +333,17 @@ export default function Antas4Level2Screen() {
           3,
           true
         );
+        const lastId = newPlaced[newPlaced.length - 1];
+        const lastItem = ALL_WORDS.find((w) => w.id === lastId);
+        const lastPlayer = lastItem ? wordAudios[lastItem.text] : undefined;
+        if (lastPlayer) {
+          chainFirstAnswerAfter(lastPlayer);
+        } else {
+          playFirstAnswer();
+        }
         timerRef.current = setTimeout(() => {
           router.navigate("/antas4" as any);
-        }, 2200);
+        }, 5000);
       } else {
         setIsCorrect(false);
         setIsWrong(true);
@@ -325,7 +360,71 @@ export default function Antas4Level2Screen() {
     }
   };
 
+  const playWordAudio = (text: string) => {
+    const player = wordAudios[text];
+    if (!player) return;
+    try {
+      setAudioModeAsync({ playsInSilentMode: true });
+      Object.values(wordAudios).forEach((p) => {
+        if (p !== player) p.pause();
+      });
+      firstAnswerAudio.pause();
+      player.muted = !soundEnabled;
+      player.seekTo(0);
+      player.play();
+    } catch (e) {
+      console.warn("Antas4Level2 word audio play error:", e);
+    }
+  };
+
+  const playFirstAnswer = () => {
+    try {
+      setAudioModeAsync({ playsInSilentMode: true });
+      Object.values(wordAudios).forEach((p) => {
+        try {
+          p.pause();
+        } catch (e) {
+          // ignore if already released
+        }
+      });
+      firstAnswerAudio.muted = !soundEnabled;
+      firstAnswerAudio.seekTo(0);
+      firstAnswerAudio.play();
+    } catch (e) {
+      console.warn("Antas4Level2 first answer audio play error:", e);
+    }
+  };
+
+  const chainFirstAnswerAfter = (player: ReturnType<typeof useAudioPlayer>) => {
+    let fallbackTimer: ReturnType<typeof setTimeout> | null = null;
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      try {
+        player.removeListener("playbackStatusUpdate", onStatus);
+      } catch (e) {
+        // ignore if already released
+      }
+      if (fallbackTimer) clearTimeout(fallbackTimer);
+      playFirstAnswer();
+    };
+    const onStatus = (status: AudioStatus) => {
+      if (status.didJustFinish) finish();
+    };
+    try {
+      player.addListener("playbackStatusUpdate", onStatus);
+    } catch (e) {
+      // ignore if already released
+    }
+    const ms = player.duration && player.duration > 0 ? player.duration * 1000 + 400 : 2500;
+    fallbackTimer = setTimeout(finish, ms);
+  };
+
   const handleWordClick = (id: string) => {
+    const item = ALL_WORDS.find((w) => w.id === id);
+    if (item) playWordAudio(item.text);
+
     if (placedWords.includes(id)) {
       const newPlaced = placedWords.filter((wId) => wId !== id);
       setPlacedWords(newPlaced);
@@ -339,11 +438,35 @@ export default function Antas4Level2Screen() {
 
   const handleNext = () => {
     if (timerRef.current) clearTimeout(timerRef.current);
+    Object.values(wordAudios).forEach((p) => {
+      try {
+        p.pause();
+      } catch (e) {
+        // ignore if already released
+      }
+    });
+    try {
+      firstAnswerAudio.pause();
+    } catch (e) {
+      // ignore if already released
+    }
     router.navigate("/antas4" as any);
   };
 
   const handleBack = () => {
     if (timerRef.current) clearTimeout(timerRef.current);
+    Object.values(wordAudios).forEach((p) => {
+      try {
+        p.pause();
+      } catch (e) {
+        // ignore if already released
+      }
+    });
+    try {
+      firstAnswerAudio.pause();
+    } catch (e) {
+      // ignore if already released
+    }
     router.back();
   };
 

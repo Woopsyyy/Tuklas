@@ -47,7 +47,7 @@ export default function Antas5Slide7Screen() {
   const npcH = Math.min(screenH * 0.64, 726 * bgScale * 0.85) * 1.5;
   const npcW = npcH * (387 / 726);
   const npcLeft = Math.max(insets.left + 16, bgOffsetX + 50 * bgScale + 0.02 * screenW);
-  const npcBottom = Math.max(insets.bottom + 12, 20 * bgScale) - 0.10 * screenH;
+  const npcBottom = Math.max(insets.bottom + 12, 20 * bgScale) - 0.10 * screenH - 0.05 * screenH;
 
   // Glowing Treasure Chest (chest.png: 406 x 341) — center clearing
   const chestW = Math.min(screenW * 0.24, 406 * bgScale * 1.05);

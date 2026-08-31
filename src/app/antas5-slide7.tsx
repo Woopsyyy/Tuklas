@@ -53,7 +53,7 @@ export default function Antas5Slide7Screen() {
   const chestW = Math.min(screenW * 0.24, 406 * bgScale * 1.05);
   const chestH = chestW * (341 / 406);
   const chestLeft = (screenW - chestW) / 2 + 0.03 * screenW;
-  const chestTop = signTop + signH + 0.02 * screenH;
+  const chestTop = signTop + signH + 0.02 * screenH - 0.10 * screenH;
 
   // Action Button (button.png: 780 x 97) — "Buksan ang kaban ng kayamanan"
   const buttonW = Math.min(screenW * 0.40, 780 * bgScale * 0.85);

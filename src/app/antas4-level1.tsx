@@ -16,6 +16,7 @@ import Animated, {
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer, type AudioStatus } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
+import { useScoreStore } from "@/store/use-score-store";
 
 setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
 
@@ -162,6 +163,8 @@ export default function Antas4Level1Screen() {
   const router = useRouter();
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
   const narrationVolume = useSettingsStore((state) => state.narrationVolume);
+  const setScore = useScoreStore((state) => state.setScore);
+
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
@@ -300,6 +303,7 @@ export default function Antas4Level1Screen() {
   const checkSentence = (newPlaced: string[]) => {
     if (newPlaced.length === ALL_WORDS.length) {
       const isMatched = newPlaced.every((id, idx) => id === CORRECT_ORDER[idx]);
+      setScore("antas4Level1", isMatched);
       if (isMatched) {
         setIsCorrect(true);
         setIsWrong(false);

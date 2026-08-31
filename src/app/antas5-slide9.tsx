@@ -90,7 +90,7 @@ export default function Antas5Slide9Screen() {
       narration.pause();
       narration.seekTo(0);
     } catch (e) {}
-    router.navigate("/slide3");
+    router.navigate("/antas5-slide10");
   };
 
   const handleBack = () => {

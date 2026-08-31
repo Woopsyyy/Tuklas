@@ -16,6 +16,7 @@ import Animated, {
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer, type AudioStatus } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
+import { useScoreStore } from "@/store/use-score-store";
 
 // Initialize audio session at module load time so the Android MediaSession is
 // ready before any AudioPlayer instance is constructed (prevents NullPointerException).
@@ -184,6 +185,8 @@ export default function Antas4Level2Screen() {
   const router = useRouter();
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
   const narrationVolume = useSettingsStore((state) => state.narrationVolume);
+  const setScore = useScoreStore((state) => state.setScore);
+
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
@@ -335,6 +338,7 @@ export default function Antas4Level2Screen() {
       const isMatched = validOrders.some(
         (order) => order.every((id, idx) => id === newPlaced[idx])
       );
+      setScore("antas4Level2", isMatched);
       if (isMatched) {
         setIsCorrect(true);
         setIsWrong(false);

@@ -1,4 +1,4 @@
-﻿import { useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -16,10 +16,13 @@ import Animated, {
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
+import { useScoreStore } from "@/store/use-score-store";
 
 export default function Antas3Level1Screen() {
   const router = useRouter();
   const narrationVolume = useSettingsStore((state) => state.narrationVolume);
+  const setScore = useScoreStore((state) => state.setScore);
+
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const narration = useAudioPlayer(require("../../assets/audio/antas3 level1.mp3"));
@@ -129,6 +132,7 @@ useFocusEffect(
   const handleSelectChoice = (choice: "A" | "B") => {
     if (selectedChoice !== null) return;
     setSelectedChoice(choice);
+    setScore("antas3Level1", choice === "A");
     pulseScale.value = withRepeat(
       withSequence(withTiming(1.03, { duration: 300 }), withTiming(1, { duration: 300 })),
       3, true

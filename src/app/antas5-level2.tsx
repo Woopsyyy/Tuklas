@@ -16,6 +16,7 @@ import Animated, {
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
+import { useScoreStore } from "@/store/use-score-store";
 
 setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
 
@@ -28,6 +29,8 @@ export default function Antas5Level2Screen() {
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const narrationVolume = useSettingsStore((state) => state.narrationVolume);
+  const setScore = useScoreStore((state) => state.setScore);
+
   const narration = useAudioPlayer(require("../../assets/audio/antas5 question2.mp3"));
 
   const [selectedChoice, setSelectedChoice] = useState<ChoiceType | null>(null);
@@ -116,6 +119,7 @@ export default function Antas5Level2Screen() {
   const handleSelectChoice = (choice: ChoiceType) => {
     if (selectedChoice !== null) return;
     setSelectedChoice(choice);
+    setScore("antas5Level2", choice === CORRECT_CHOICE);
 
     pulseScale.value = withRepeat(
       withSequence(withTiming(1.03, { duration: 250 }), withTiming(1, { duration: 250 })),

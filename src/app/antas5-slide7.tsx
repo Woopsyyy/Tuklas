@@ -67,19 +67,13 @@ export default function Antas5Slide7Screen() {
 
   useFocusEffect(
     useCallback(() => {
-      // Auto-play narration when screen enters
-      const playTimer = setTimeout(() => {
-        handlePlayNarration();
-      }, 300);
-
       return () => {
-        clearTimeout(playTimer);
         try {
           narration.pause();
           narration.seekTo(0);
         } catch (e) {}
       };
-    }, [narration, narrationVolume])
+    }, [narration])
   );
 
   const handlePlayNarration = async () => {

@@ -59,7 +59,7 @@ export default function Antas5Slide7Screen() {
   const buttonW = Math.min(screenW * 0.40, 780 * bgScale * 0.85);
   const buttonH = buttonW * (97 / 780);
   const buttonLeft = (screenW - buttonW) / 2 + 0.03 * screenW;
-  const buttonBottom = Math.max(insets.bottom + 18, 25 * bgScale);
+  const buttonBottom = Math.max(insets.bottom + 18, 25 * bgScale) - 0.03 * screenH;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);

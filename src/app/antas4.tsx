@@ -47,8 +47,8 @@ const text2W = 1280 * 1.5 * 1.2 * 1.2 * 1.3 * bgScale;
   const text2Top = bgOffsetY + 270 * bgScale + 0.05 * screenH;
 
   // Action Button: "Ayusin ang mga Salita" (button.png)
-  const buttonW = 420 * 2 * 1.5 * bgScale;
-  const buttonH = 80 * 2 * 1.5 * bgScale;
+const buttonW = 420 * 2 * 1.5 * 1.2 * bgScale;
+  const buttonH = 80 * 2 * 1.5 * 1.2 * bgScale;
   const buttonLeft = (screenW - buttonW) / 2;
   const buttonTop = bgOffsetY + 820 * bgScale;
 

@@ -7,6 +7,7 @@ import Animated, { FadeIn, FadeInLeft, FadeInUp } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
+import { CroppedCanvasImage } from "@/components/cropped-canvas-image";
 
 setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
 
@@ -24,7 +25,7 @@ export default function Antas2Screen() {
   const DESIGN_W = 1920;
   const DESIGN_H = 1080;
 
-  const bgScale = Math.max(screenW / DESIGN_W, screenH / DESIGN_H);
+  const bgScale = Math.min(screenW / DESIGN_W, screenH / DESIGN_H);
   const bgOffsetX = (screenW - DESIGN_W * bgScale) / 2;
   const bgOffsetY = (screenH - DESIGN_H * bgScale) / 2;
 
@@ -37,29 +38,35 @@ export default function Antas2Screen() {
   const settingsW = iconBase;
   const settingsH = iconBase;
 
-  // NPC: Girl Explorer on the left (moved left by 7%, up by 4%)
-  const npcW = 420 * 3.24 * bgScale;
-  const npcH = 840 * 3.24 * bgScale;
-  const npcLeft = bgOffsetX - 230 * bgScale - 0.07 * screenW;
-  const npcTop = screenH - Math.max(insets.bottom, 0) - npcH * 0.95 + 0.4 * npcH - 0.04 * screenH;
+  const titleCrop = { x: 82, y: 328, width: 1789, height: 369 };
+  const storyCrop = { x: 28, y: 262, width: 1863, height: 419 };
+  const buttonCrop = { x: 210, y: 336, width: 1601, height: 275 };
+  const npcCrop = { x: 872, y: 68, width: 285, height: 973 };
 
-  // Header Title Text (text1.png) — "ANTAS 2 / TULAY NG PANGUNGUSAP" (moved right by 5%)
-  const titleW = 900 * 2.2 * bgScale;
-  const titleH = 200 * 2.2 * bgScale;
-  const titleLeft = bgOffsetX + (DESIGN_W - 900 * 2.2) / 2 * bgScale + 0.05 * screenW;
-  const titleTop = Math.max(insets.top - 20, bgOffsetY - 10 * bgScale) - 0.05 * screenH;
+  // NPC: keep the visible character inside the left side on narrow phones.
+  const npcH = Math.min(screenH * 0.88, 900 * bgScale);
+  const npcW = npcH * (npcCrop.width / npcCrop.height);
+  const npcLeft = Math.max(insets.left + 8, bgOffsetX + 44 * bgScale);
+  const npcTop = screenH - Math.max(insets.bottom, 0) - npcH * 0.97;
 
-  // Dialogue / Story text box (text2.png) — (increased by 120%)
-  const text2W = 1200 * 2.2 * bgScale;
-  const text2H = 310 * 2.2 * bgScale;
-  const text2Left = bgOffsetX + (DESIGN_W - 1200 * 2.2) / 2 * bgScale + 120 * bgScale - 0.05 * screenW + 0.02 * screenW;
-  const text2Top = bgOffsetY + 450 * bgScale;
+  // Title, story, and button are cropped from padded 1920x1080 artwork.
+  const titleW = Math.min(screenW * 0.62, 1080 * bgScale);
+  const titleH = titleW * (titleCrop.height / titleCrop.width);
+  const titleLeft = (screenW - titleW) / 2 + screenW * 0.05;
+  const titleTop = Math.max(insets.top + 4, bgOffsetY + 36 * bgScale);
 
-  // Action Button (buttons.png) — "Tawirin ang Tulay" (increased by 20%)
-  const buttonW = 460 * 1.375 * 1.3 * 1.2 * bgScale;
-  const buttonH = 100 * 1.375 * 1.3 * 1.2 * bgScale;
-  const buttonLeft = bgOffsetX + (DESIGN_W - 460 * 1.375 * 1.3 * 1.2) / 2 * bgScale - 30 * bgScale + 0.08 * screenW - 0.03 * screenW;
-  const buttonTop = bgOffsetY + 870 * bgScale - 0.02 * screenH;
+  const text2W = Math.min(screenW * 0.66, 1120 * bgScale);
+  const text2H = text2W * (storyCrop.height / storyCrop.width);
+  const text2Left = (screenW - text2W) / 2 + screenW * 0.05;
+  const text2Top = Math.max(titleTop + titleH + Math.max(8, 16 * bgScale), screenH * 0.35);
+
+  const buttonW = Math.min(screenW * 0.32, Math.max(220, 560 * bgScale));
+  const buttonH = buttonW * (buttonCrop.height / buttonCrop.width);
+  const buttonLeft = (screenW - buttonW) / 2 + screenW * 0.05;
+  const buttonTop = Math.min(
+    screenH - Math.max(insets.bottom, 10) - buttonH - 10,
+    text2Top + text2H + Math.max(12, 24 * bgScale)
+  );
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
@@ -108,14 +115,8 @@ export default function Antas2Screen() {
       {/* Full-screen Background (assets/images/antas2/background.png) — zoomed in by 5% */}
       <Image
         source={require("../../assets/images/antas2/background.png")}
-        resizeMode="contain"
-        style={{
-          position: "absolute",
-          left: bgOffsetX + (DESIGN_W * bgScale * 0.02) / 2 - 0.02 * screenW,
-          top: bgOffsetY + (DESIGN_H * bgScale * 0.02) / 2,
-          width: DESIGN_W * bgScale * 0.98,
-          height: DESIGN_H * bgScale * 0.98,
-        }}
+        resizeMode="cover"
+        className="absolute inset-0 h-full w-full"
       />
 
       <View className="flex-1">
@@ -162,10 +163,11 @@ export default function Antas2Screen() {
           }}
           pointerEvents="none"
         >
-          <Image
+          <CroppedCanvasImage
             source={require("../../assets/images/antas2/text1.png")}
-            style={{ width: "100%", height: "100%" }}
-            resizeMode="contain"
+            crop={titleCrop}
+            width={titleW}
+            height={titleH}
           />
         </Animated.View>
 
@@ -182,10 +184,11 @@ export default function Antas2Screen() {
           }}
           pointerEvents="none"
         >
-          <Image
+          <CroppedCanvasImage
             source={require("../../assets/images/antas2/npc.png")}
-            style={{ width: "100%", height: "100%" }}
-            resizeMode="contain"
+            crop={npcCrop}
+            width={npcW}
+            height={npcH}
           />
         </Animated.View>
 
@@ -202,10 +205,11 @@ export default function Antas2Screen() {
           }}
           pointerEvents="none"
         >
-          <Image
+          <CroppedCanvasImage
             source={require("../../assets/images/antas2/text2.png")}
-            style={{ width: "100%", height: "100%" }}
-            resizeMode="contain"
+            crop={storyCrop}
+            width={text2W}
+            height={text2H}
           />
         </Animated.View>
 
@@ -226,10 +230,11 @@ export default function Antas2Screen() {
             hitSlop={8}
             className="w-full h-full active:scale-95 active:opacity-90"
           >
-            <Image
+            <CroppedCanvasImage
               source={require("../../assets/images/antas2/buttons.png")}
-              style={{ width: "100%", height: "100%" }}
-              resizeMode="contain"
+              crop={buttonCrop}
+              width={buttonW}
+              height={buttonH}
             />
           </Pressable>
         </Animated.View>

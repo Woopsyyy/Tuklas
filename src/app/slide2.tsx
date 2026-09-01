@@ -25,7 +25,7 @@ export default function Slide2Screen() {
   const DESIGN_H = 945;
 
   // Background transform matching resizeMode="cover"
-  const bgScale = Math.max(screenW / DESIGN_W, screenH / DESIGN_H);
+  const bgScale = Math.min(screenW / DESIGN_W, screenH / DESIGN_H);
   const bgOffsetX = (screenW - DESIGN_W * bgScale) / 2;
   const bgOffsetY = (screenH - DESIGN_H * bgScale) / 2;
 

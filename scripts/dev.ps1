@@ -49,13 +49,22 @@ if (-not $MetroOnly) {
         Write-Host "  Killing $em..."
         & $ADB -s $em emu kill 2>&1 | Out-Null
     }
+
+    # Force kill any stuck processes and clear lock files
+    Stop-Process -Name emulator, qemu-system-x86_64 -Force -ErrorAction SilentlyContinue
+    $avdLockDir = "C:\Users\woopsy\.android\avd\$AVD.avd"
+    if (Test-Path $avdLockDir) {
+        Write-Host "Clearing lock files in $avdLockDir..."
+        Remove-Item "$avdLockDir\*.lock" -Force -ErrorAction SilentlyContinue
+    }
+
     if ($existing.Count -gt 0) {
         Start-Sleep -Seconds 3
         Write-Host "All emulators stopped."
     }
 
-    Write-Host "Launching fresh emulator: $AVD (window hidden)..."
-    $proc = Start-Process $EMULATOR_EXE -ArgumentList "-avd", $AVD -WindowStyle Hidden -PassThru
+    Write-Host "Launching fresh emulator: $AVD (no-snapshot)..."
+    $proc = Start-Process $EMULATOR_EXE -ArgumentList "-avd", $AVD, "-no-snapshot-load" -PassThru
     $EMULATOR_PID = $proc.Id
     Write-Host "Emulator process started (PID: $EMULATOR_PID)"
     Start-Sleep -Seconds 5

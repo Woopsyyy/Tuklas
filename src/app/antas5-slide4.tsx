@@ -22,7 +22,7 @@ export default function Antas5Slide4Screen() {
   const DESIGN_W = 1920;
   const DESIGN_H = 1080;
 
-  const bgScale = Math.max(screenW / DESIGN_W, screenH / DESIGN_H);
+  const bgScale = Math.min(screenW / DESIGN_W, screenH / DESIGN_H);
 
   // Header icons
   const iconBase = Math.max(36, Math.min(48, 56 * bgScale));

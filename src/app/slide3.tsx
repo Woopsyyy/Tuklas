@@ -24,7 +24,7 @@ export default function Slide3Screen() {
   const DESIGN_W = 1680;
   const DESIGN_H = 945;
 
-  const bgScale = Math.max(screenW / DESIGN_W, screenH / DESIGN_H);
+  const bgScale = Math.min(screenW / DESIGN_W, screenH / DESIGN_H);
   const bgOffsetX = (screenW - DESIGN_W * bgScale) / 2;
   const bgOffsetY = (screenH - DESIGN_H * bgScale) / 2;
 

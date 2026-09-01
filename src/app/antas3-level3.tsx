@@ -36,7 +36,7 @@ export default function Antas3Level3Screen() {
   const DESIGN_W = 1920;
   const DESIGN_H = 1080;
 
-  const bgScale = Math.max(screenW / DESIGN_W, screenH / DESIGN_H);
+  const bgScale = Math.min(screenW / DESIGN_W, screenH / DESIGN_H);
   const bgOffsetX = (screenW - DESIGN_W * bgScale) / 2;
   const bgOffsetY = (screenH - DESIGN_H * bgScale) / 2;
 
@@ -50,8 +50,8 @@ export default function Antas3Level3Screen() {
   const settingsH = iconBase;
 
   // Text 1 â€” large passage box at top (increased by 50% and moved down 10% + 3%, left 5%)
-  const text1W = screenW * 0.72 * 1.50;
-  const text1H = screenH * 0.52 * 1.50;
+  const text1W = Math.min(screenW * 0.84, 1080 * bgScale);
+  const text1H = text1W * (520 / 1440);
   const text1Left = bgOffsetX + 30 * bgScale - 0.05 * screenW;
   const text1Top = bgOffsetY + 20 * bgScale + 0.10 * screenH + 0.03 * screenH;
 
@@ -80,8 +80,8 @@ export default function Antas3Level3Screen() {
   const redBtnTop = choiceBTop + (choiceH - redBtnH) / 2 + 0.06 * choiceH;
 
   // Text 2 â€” question bar at the bottom
-  const text2W = screenW * 0.80 * 2 * 1.70;
-  const text2H = screenH * 0.20 * 2 * 1.70;
+  const text2W = Math.min(screenW * 0.88, 1280 * bgScale);
+  const text2H = text2W * (340 / 1280);
   const text2Left = bgOffsetX + (DESIGN_W - (text2W / bgScale)) / 2 * bgScale;
   const text2Top = bgOffsetY + 860 * bgScale - 0.10 * screenH - 0.10 * screenH + 0.20 * screenH;
 

@@ -24,7 +24,7 @@ export default function Antas1Screen() {
   const DESIGN_W = 1920;
   const DESIGN_H = 1080;
 
-  const bgScale = Math.max(screenW / DESIGN_W, screenH / DESIGN_H);
+  const bgScale = Math.min(screenW / DESIGN_W, screenH / DESIGN_H);
   const bgOffsetX = (screenW - DESIGN_W * bgScale) / 2;
   const bgOffsetY = (screenH - DESIGN_H * bgScale) / 2;
 
@@ -37,34 +37,29 @@ export default function Antas1Screen() {
   const settingsW = iconBase;
   const settingsH = iconBase;
 
-  // Boy NPC: 250x745 — placed on ground at bottom-left
-  const npcW = 250 * bgScale;
-  const npcH = 745 * bgScale;
-  const npcLeft = Math.max(insets.left + 16, bgOffsetX + 60 * bgScale) + 0.5 * screenW - 0.3 * screenW - 0.1 * screenW;
-  const npcTop = screenH - Math.max(insets.bottom, 8) - npcH * 0.94 + 0.05 * screenH + 0.1 * screenH;
+  // Boy NPC: placed on the left side of the fitted 16:9 play area.
+  const npcH = Math.min(screenH * 0.74, 745 * bgScale);
+  const npcW = npcH * (250 / 745);
+  const npcLeft = Math.max(insets.left + 12, bgOffsetX + 80 * bgScale);
+  const npcTop = screenH - Math.max(insets.bottom, 8) - npcH * 0.94;
 
-  // Parchment Scroll (885x825) & Button (1392x239)
   const safeTop = Math.max(insets.top, 10);
   const safeBottom = Math.max(insets.bottom, 10);
-  const availH = screenH - safeTop - safeBottom;
+  const contentTop = Math.max(safeTop + iconBase + 8, bgOffsetY + 170 * bgScale);
+  const contentBottom = screenH - safeBottom - 8;
+  const contentGap = Math.max(8, 18 * bgScale);
 
-  // Scale scroll proportionally to fit with title above and button below
-  const scrollScale = Math.min(bgScale, (availH * 0.76) / 825);
-  const scrollW = 885 * scrollScale * 1.5;
-  const scrollH = 825 * scrollScale * 1.5 * 0.95;
-
-  // Position parchment right below the title "GUBAT NG MGA SALITA"
-  const scrollTop = Math.max(bgOffsetY + 185 * bgScale, safeTop + 8);
-  const scrollLeft = bgOffsetX + (DESIGN_W / 2 - scrollW / 2) * bgScale - 0.1 * screenW;
-
-  // "Simulan ang Misyon" Button — enlarged and placed prominently below parchment
-  const actionBtnW = Math.min(500 * bgScale, 460) * 0.5 * 1.2;
+  const actionBtnW = Math.min(screenW * 0.34, Math.max(220, 360 * bgScale));
   const actionBtnH = actionBtnW * (239 / 1392);
-  const actionBtnLeft = bgOffsetX + (DESIGN_W / 2 - actionBtnW / 2) * bgScale - 0.05 * screenW;
-  const actionBtnTop = Math.min(
-    screenH - safeBottom - actionBtnH - 6,
-    scrollTop + scrollH + 16 * bgScale
-  ) + 0.5 * screenH - 0.3 * screenH;
+
+  const maxScrollH = Math.max(120, contentBottom - contentTop - contentGap - actionBtnH);
+  const scrollH = Math.min(825 * bgScale, screenH * 0.6, maxScrollH);
+  const scrollW = Math.min(scrollH * (885 / 825), screenW * 0.56);
+  const scrollTop = contentTop;
+  const scrollLeft = (screenW - scrollW) / 2 + screenW * 0.04;
+
+  const actionBtnLeft = (screenW - actionBtnW) / 2 + screenW * 0.04;
+  const actionBtnTop = Math.min(contentBottom - actionBtnH, scrollTop + scrollH + contentGap);
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);

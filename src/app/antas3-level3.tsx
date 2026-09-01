@@ -84,7 +84,7 @@ const choiceAW = choiceW * (1592 / 1359) * 0.8;
   const text2W = Math.min(screenW * 0.88, 1280 * bgScale) * 2.25;
   const text2H = text2W * (340 / 1280);
   const text2Left = bgOffsetX + (DESIGN_W - (text2W / bgScale)) / 2 * bgScale;
-  const text2Top = (bgOffsetY + 860 * bgScale - 0.10 * screenH - 0.10 * screenH + 0.20 * screenH) * 0.7 * 1.1;
+  const text2Top = (bgOffsetY + 860 * bgScale - 0.10 * screenH - 0.10 * screenH + 0.20 * screenH) * 0.7 * 1.1 * 1.1;
 
   // Signpost (right side)
   const signLeft = bgOffsetX + 1660 * bgScale + 0.05 * screenW - 0.05 * screenW + 0.03 * screenW;

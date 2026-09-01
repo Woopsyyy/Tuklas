@@ -54,10 +54,10 @@ export default function Antas2Level1Screen() {
   const settingsH = iconBase;
 
   // Text 1 (Situation prompt): "Kahit malakas ang ulan..." (moved up by another 10%)
-  const text1W = 1200 * 1.6 * 1.4 * bgScale;
-  const text1H = 220 * 1.6 * 1.4 * bgScale;
-  const text1Left = bgOffsetX + (DESIGN_W - 1200 * 1.6 * 1.4) / 2 * bgScale;
-  const text1Top = bgOffsetY + 70 * bgScale + 0.05 * screenH;
+const text1W = 1200 * 1.6 * 1.4 * 1.3 * bgScale;
+  const text1H = 220 * 1.6 * 1.4 * 1.3 * bgScale;
+  const text1Left = bgOffsetX + (DESIGN_W - 1200 * 1.6 * 1.4 * 1.3) / 2 * bgScale;
+  const text1Top = (bgOffsetY + 70 * bgScale + 0.05 * screenH) * -0.1875 - 0.5 * screenH;
 
   // Text 2 (Question box): "Aling larawan ang pinakamahusay..." (increased by 50%, moved down 10%)
   const text2W = 950 * 1.5 * bgScale;
@@ -66,12 +66,12 @@ export default function Antas2Level1Screen() {
   const text2Top = bgOffsetY + 300 * bgScale + 0.1 * screenH;
 
   // Choices A and B frames (increased by 50%)
-  const choiceW = 500 * 1.5 * bgScale;
-  const choiceH = 320 * 1.5 * bgScale;
-  const choiceTop = bgOffsetY + 550 * bgScale + 0.05 * screenH;
+const choiceW = 500 * 1.5 * 1.5 * bgScale;
+  const choiceH = 320 * 1.5 * 1.5 * bgScale;
+  const choiceTop = (bgOffsetY + 550 * bgScale + 0.05 * screenH) * 0.9;
 
-  const choiceALeft = bgOffsetX + 200 * bgScale;
-  const choiceBLeft = bgOffsetX + 970 * bgScale;
+const choiceALeft = (bgOffsetX + 200 * bgScale) * 0.9;
+  const choiceBLeft = (bgOffsetX + 970 * bgScale) * 0.9;
 
   // Wooden signpost Next & Back
   const signLeft = bgOffsetX + 1660 * bgScale + 0.05 * screenW - 0.05 * screenW + 0.05 * screenW - 0.03 * screenW;
@@ -157,16 +157,16 @@ export default function Antas2Level1Screen() {
     <View className="flex-1 bg-black">
       <StatusBar hidden={true} />
 
-      {/* Full-screen Question Background (antas2/background.png) */}
+{/* Full-screen Question Background (antas2/background.png) */}
       <Image
         source={require("../../assets/images/antas2/background.png")}
-        resizeMode="contain"
+        contentFit="cover"
         style={{
           position: "absolute",
-          left: bgOffsetX + (DESIGN_W * bgScale * 0.02) / 2 - 0.02 * screenW,
-          top: bgOffsetY + (DESIGN_H * bgScale * 0.02) / 2,
-          width: DESIGN_W * bgScale * 0.98,
-          height: DESIGN_H * bgScale * 0.98,
+          left: 0,
+          top: 0,
+          width: "100%",
+          height: "100%",
         }}
       />
 
@@ -360,11 +360,11 @@ export default function Antas2Level1Screen() {
         <Animated.View
           entering={FadeIn.duration(600)}
           style={{
-            position: "absolute",
-            left: signLeft - 0.03 * screenW,
-            top: nextTop,
-            width: signW,
-            height: nextH,
+position: "absolute",
+            left: signLeft - 0.03 * screenW + signW * 1.56,
+            top: nextTop * 1.1025,
+            width: signW * 1.2,
+            height: nextH * 1.2,
             zIndex: 25,
           }}
         >
@@ -384,11 +384,11 @@ export default function Antas2Level1Screen() {
         <Animated.View
           entering={FadeIn.duration(600)}
           style={{
-            position: "absolute",
-            left: signLeft - 0.03 * screenW,
-            top: backTop,
-            width: signW * 0.95,
-            height: backSignH * 0.95,
+position: "absolute",
+            left: signLeft - 0.03 * screenW + signW * 1.56,
+            top: backTop * 1.1025,
+            width: signW * 0.95 * 1.2,
+            height: backSignH * 0.95 * 1.2,
             zIndex: 25,
           }}
         >

@@ -41,8 +41,8 @@ export default function Antas4Screen() {
   const titleTop = Math.max(insets.top - 20, bgOffsetY - 10 * bgScale) - 0.05 * screenH;
 
   // Dialogue Box: Story card in the center (text2.png) â€” moved down by 5%
-  const text2W = 1280 * 1.5 * 1.2 * 1.2 * bgScale;
-  const text2H = 340 * 1.5 * 1.2 * 1.2 * bgScale;
+const text2W = 1280 * 1.5 * 1.2 * 1.2 * 1.3 * bgScale;
+  const text2H = 340 * 1.5 * 1.2 * 1.2 * 1.3 * bgScale;
   const text2Left = (screenW - text2W) / 2;
   const text2Top = bgOffsetY + 270 * bgScale + 0.05 * screenH;
 

@@ -233,7 +233,7 @@ useFocusEffect(
         </Animated.View>
 
         {/* Signpost Back */}
-        <Animated.View entering={FadeIn.duration(600)} style={{ position: "absolute", left: signLeft - 0.03 * screenW + signW * 1.45, top: backTop, width: signW * 0.95, height: backSignH * 0.95, zIndex: 25 }}>
+        <Animated.View entering={FadeIn.duration(600)} style={{ position: "absolute", left: signLeft - 0.03 * screenW + signW * 1.52, top: backTop * 1.02, width: signW * 0.95, height: backSignH * 0.95, zIndex: 25 }}>
           <Pressable onPress={handleBack} hitSlop={8} className="w-full h-full active:scale-95 active:opacity-80">
             <RNImage source={require("../../assets/images/ui/back-green.png")} style={{ width: "100%", height: "100%" }} resizeMode="contain" />
           </Pressable>

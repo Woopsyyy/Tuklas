@@ -50,40 +50,41 @@ export default function Antas3Level3Screen() {
   const settingsH = iconBase;
 
   // Text 1 â€” large passage box at top (increased by 50% and moved down 10% + 3%, left 5%)
-  const text1W = Math.min(screenW * 0.84, 1080 * bgScale);
+  const text1W = Math.min(screenW * 0.84, 1080 * bgScale) * 1.95;
   const text1H = text1W * (520 / 1440);
   const text1Left = bgOffsetX + 30 * bgScale - 0.05 * screenW;
-  const text1Top = bgOffsetY + 20 * bgScale + 0.10 * screenH + 0.03 * screenH;
+  const text1Top = (bgOffsetY + 20 * bgScale + 0.10 * screenH + 0.03 * screenH) * -0.76;
 
   // Choice images â€” side by side in the middle (matching level 1 layout and padding alignment)
   const choiceW = screenW * 0.38;
   const choiceH = choiceW * (1080 / 1920);
+  const choiceAW = choiceW * (1592 / 1359);
+  const choiceAH = choiceH * (916 / 771);
   const choiceGap = 20 * bgScale;
   const totalChoicesW = choiceW * 2 + choiceGap;
-  const choiceTop = bgOffsetY + 310 * bgScale + 0.05 * screenH + 0.10 * screenH + 0.10 * screenH;
-  const choiceATop = choiceTop;
-  const choiceBTop = choiceTop - (39 - 22) / 1080 * choiceH;
-  const choiceALeft = (screenW - totalChoicesW) / 2 - 0.03 * screenW;
-  const choiceBLeft = choiceALeft + choiceW + choiceGap;
+  const choiceTop = (bgOffsetY + 310 * bgScale + 0.05 * screenH + 0.10 * screenH + 0.10 * screenH) * 0.76;
+  const choiceATop = choiceTop - choiceH * 0.0522;
+  const choiceALeft = (screenW - totalChoicesW) / 2 - choiceW * 0.0493 - 0.03 * screenW;
+  const choiceBLeft = (screenW - totalChoicesW) / 2 + choiceW + choiceGap - 0.03 * screenW;
 
   // Separate Feedback / Button Overlays (independent from image sizes)
   // Green Choice (A - Correct) - reduced by 15%
   const greenBtnW = choiceW * 0.85;
   const greenBtnH = choiceH * 0.85;
-  const greenBtnLeft = choiceALeft + (choiceW - greenBtnW) / 2;
-  const greenBtnTop = choiceATop + (choiceH - greenBtnH) / 2;
+  const greenBtnLeft = choiceALeft + (choiceAW - greenBtnW) / 2;
+  const greenBtnTop = choiceATop + (choiceAH - greenBtnH) / 2;
 
   // Red Choice (B - Wrong) - matched to tight artwork framing
-  const redBtnW = choiceW * 0.81;
-  const redBtnH = choiceH * 0.81;
+  const redBtnW = choiceW * 0.90 * 0.90;
+  const redBtnH = choiceH * 0.95 * 0.95 * 0.95 * 0.95 * 0.95;
   const redBtnLeft = choiceBLeft + (choiceW - redBtnW) / 2 + 0.05 * choiceW;
-  const redBtnTop = choiceBTop + (choiceH - redBtnH) / 2 + 0.06 * choiceH;
+  const redBtnTop = choiceTop + (choiceH - redBtnH) / 2 + 0.05 * choiceH + 0.03 * choiceH + 0.01 * choiceH - 0.03 * choiceH;
 
   // Text 2 â€” question bar at the bottom
-  const text2W = Math.min(screenW * 0.88, 1280 * bgScale);
+  const text2W = Math.min(screenW * 0.88, 1280 * bgScale) * 2.25;
   const text2H = text2W * (340 / 1280);
   const text2Left = bgOffsetX + (DESIGN_W - (text2W / bgScale)) / 2 * bgScale;
-  const text2Top = bgOffsetY + 860 * bgScale - 0.10 * screenH - 0.10 * screenH + 0.20 * screenH;
+  const text2Top = (bgOffsetY + 860 * bgScale - 0.10 * screenH - 0.10 * screenH + 0.20 * screenH) * 0.7 * 1.1;
 
   // Signpost (right side)
   const signLeft = bgOffsetX + 1660 * bgScale + 0.05 * screenW - 0.05 * screenW + 0.03 * screenW;
@@ -197,7 +198,7 @@ useCallback(() => {
         </Animated.View>
 
         {/* Choice A â€” Image (CORRECT) */}
-        <Animated.View entering={FadeIn.duration(600).delay(200)} style={{ position: "absolute", left: choiceALeft, top: choiceATop, width: choiceW, height: choiceH, zIndex: 40 }} pointerEvents="none">
+        <Animated.View entering={FadeIn.duration(600).delay(200)} style={{ position: "absolute", left: choiceALeft, top: choiceATop, width: choiceAW, height: choiceAH, zIndex: 40 }} pointerEvents="none">
           <Image source={require("../../assets/images/antas3/question3/A.png")} style={{ width: "100%", height: "100%" }} contentFit="contain"
             transition={0} />
         </Animated.View>
@@ -208,7 +209,7 @@ useCallback(() => {
         </Animated.View>
 
         {/* Choice B â€” Image (WRONG) */}
-        <Animated.View entering={FadeIn.duration(600).delay(250)} style={{ position: "absolute", left: choiceBLeft, top: choiceBTop, width: choiceW, height: choiceH, zIndex: 40 }} pointerEvents="none">
+        <Animated.View entering={FadeIn.duration(600).delay(250)} style={{ position: "absolute", left: choiceBLeft, top: choiceTop, width: choiceW, height: choiceH, zIndex: 40 }} pointerEvents="none">
           <Image source={require("../../assets/images/antas3/question3/B.png")} style={{ width: "100%", height: "100%" }} contentFit="contain"
             transition={0} />
         </Animated.View>
@@ -225,14 +226,14 @@ useCallback(() => {
         </Animated.View>
 
         {/* Signpost Next */}
-        <Animated.View entering={FadeIn.duration(600)} style={{ position: "absolute", left: signLeft - 0.03 * screenW, top: nextTop, width: signW, height: nextH, zIndex: 25 }}>
+        <Animated.View entering={FadeIn.duration(600)} style={{ position: "absolute", left: signLeft - 0.03 * screenW + signW * 1.54, top: nextTop * 0.98, width: signW, height: nextH, zIndex: 25 }}>
           <Pressable onPress={handleNext} hitSlop={8} className="w-full h-full active:scale-95 active:opacity-80">
             <RNImage source={require("../../assets/images/ui/next.png")} style={{ width: "100%", height: "100%" }} resizeMode="contain" />
           </Pressable>
         </Animated.View>
 
         {/* Signpost Back */}
-        <Animated.View entering={FadeIn.duration(600)} style={{ position: "absolute", left: signLeft - 0.03 * screenW, top: backTop, width: signW * 0.95, height: backSignH * 0.95, zIndex: 25 }}>
+        <Animated.View entering={FadeIn.duration(600)} style={{ position: "absolute", left: signLeft - 0.03 * screenW + signW * 1.52, top: backTop * 1.02, width: signW * 0.95, height: backSignH * 0.95, zIndex: 25 }}>
           <Pressable onPress={handleBack} hitSlop={8} className="w-full h-full active:scale-95 active:opacity-80">
             <RNImage source={require("../../assets/images/ui/back-green.png")} style={{ width: "100%", height: "100%" }} resizeMode="contain" />
           </Pressable>

@@ -219,7 +219,7 @@ export default function Antas4Level1Screen() {
   const NPC_CONTENT_Y = 49;
   const NPC_CONTENT_W = 296;
   const NPC_CONTENT_H = 993;
-  const npcDesiredH = screenH * 0.72;
+  const npcDesiredH = screenH * 0.72 * 1.2;
   const npcClipW = npcDesiredH * (NPC_CONTENT_W / NPC_CONTENT_H);
   const npcClipH = npcDesiredH;
   const npcLeft = Math.max(insets.left + 4, bgOffsetX + 16 * bgScale);

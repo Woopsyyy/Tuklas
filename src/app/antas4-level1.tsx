@@ -184,6 +184,12 @@ export default function Antas4Level1Screen() {
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [isWrong, setIsWrong] = useState<boolean>(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const answerChainCleanupRef = useRef<(() => void) | null>(null);
+  const isScreenActiveRef = useRef(false);
+  const wordAudiosRef = useRef(wordAudios);
+  const firstAnswerAudioRef = useRef(firstAnswerAudio);
+  wordAudiosRef.current = wordAudios;
+  firstAnswerAudioRef.current = firstAnswerAudio;
 
   const screenW = Math.max(width, height);
   const screenH = Math.min(width, height);
@@ -275,29 +281,47 @@ export default function Antas4Level1Screen() {
   // Pulsing animation
   const pulseScale = useSharedValue(1);
 
+  const clearAnswerChain = useCallback(() => {
+    if (answerChainCleanupRef.current) {
+      answerChainCleanupRef.current();
+      answerChainCleanupRef.current = null;
+    }
+  }, []);
+
+  const stopAllAudio = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    clearAnswerChain();
+    Object.values(wordAudiosRef.current).forEach((p) => {
+      try {
+        p.pause();
+        p.seekTo(0);
+      } catch (e) {}
+    });
+    try {
+      firstAnswerAudioRef.current.pause();
+      firstAnswerAudioRef.current.seekTo(0);
+    } catch (e) {}
+  }, [clearAnswerChain]);
+
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
     return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
+      isScreenActiveRef.current = false;
+      stopAllAudio();
     };
-  }, []);
+  }, [stopAllAudio]);
 
   useFocusEffect(
     useCallback(() => {
+      isScreenActiveRef.current = true;
       return () => {
-        if (timerRef.current) clearTimeout(timerRef.current);
-        Object.values(wordAudios).forEach((p) => {
-          try {
-            p.pause();
-            p.seekTo(0);
-          } catch (e) {}
-        });
-        try {
-          firstAnswerAudio.pause();
-          firstAnswerAudio.seekTo(0);
-        } catch (e) {}
+        isScreenActiveRef.current = false;
+        stopAllAudio();
       };
-    }, [wordAudios, firstAnswerAudio])
+    }, [stopAllAudio])
   );
 
   const checkSentence = (newPlaced: string[]) => {
@@ -334,20 +358,23 @@ export default function Antas4Level1Screen() {
       setIsCorrect(false);
       setIsWrong(false);
       if (timerRef.current) clearTimeout(timerRef.current);
+      clearAnswerChain();
     }
   };
 
   const playWordAudio = async (text: string) => {
-    const player = wordAudios[text];
+    if (!isScreenActiveRef.current) return;
+    const player = wordAudiosRef.current[text];
     if (!player) return;
     try {
       await setAudioModeAsync({ playsInSilentMode: true });
-      Object.values(wordAudios).forEach((p) => {
+      if (!isScreenActiveRef.current) return;
+      Object.values(wordAudiosRef.current).forEach((p) => {
         if (p !== player) {
           try { p.pause(); } catch (_) {}
         }
       });
-      try { firstAnswerAudio.pause(); } catch (_) {}
+      try { firstAnswerAudioRef.current.pause(); } catch (_) {}
       player.loop = false;
       player.muted = false;
       player.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
@@ -361,20 +388,24 @@ export default function Antas4Level1Screen() {
   };
 
   const playFirstAnswer = async () => {
+    if (!isScreenActiveRef.current) return;
     try {
       await setAudioModeAsync({ playsInSilentMode: true });
-      Object.values(wordAudios).forEach((p) => {
+      if (!isScreenActiveRef.current) return;
+      Object.values(wordAudiosRef.current).forEach((p) => {
         try {
           p.pause();
         } catch (e) {}
       });
-      firstAnswerAudio.loop = false;
-      firstAnswerAudio.muted = false;
-      firstAnswerAudio.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
+      const player = firstAnswerAudioRef.current;
+      player.loop = false;
+      player.muted = false;
+      player.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
       try {
-        firstAnswerAudio.seekTo(0);
+        player.seekTo(0);
       } catch (_) {}
-      firstAnswerAudio.play();
+      if (!isScreenActiveRef.current) return;
+      player.play();
     } catch (e) {
       console.warn("Antas4Level1 first answer audio play error:", e);
     }
@@ -385,10 +416,10 @@ export default function Antas4Level1Screen() {
   };
 
   const chainFirstAnswerAfter = (player: ReturnType<typeof useAudioPlayer>) => {
+    clearAnswerChain();
     let fallbackTimer: ReturnType<typeof setTimeout> | null = null;
     let done = false;
-    const finish = () => {
-      if (done) return;
+    const cleanup = () => {
       done = true;
       try {
         player.removeListener("playbackStatusUpdate", onStatus);
@@ -396,6 +427,12 @@ export default function Antas4Level1Screen() {
         // ignore if already released
       }
       if (fallbackTimer) clearTimeout(fallbackTimer);
+      fallbackTimer = null;
+    };
+    const finish = () => {
+      if (done) return;
+      cleanup();
+      if (!isScreenActiveRef.current) return;
       playFirstAnswer();
     };
     const onStatus = (status: AudioStatus) => {
@@ -408,6 +445,7 @@ export default function Antas4Level1Screen() {
     }
     const ms = player.duration && player.duration > 0 ? player.duration * 1000 + 400 : 2500;
     fallbackTimer = setTimeout(finish, ms);
+    answerChainCleanupRef.current = cleanup;
   };
 
   const handleWordClick = (id: string) => {
@@ -427,37 +465,21 @@ export default function Antas4Level1Screen() {
   };
 
   const handleNext = () => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    Object.values(wordAudios).forEach((p) => {
-      try {
-        p.pause();
-      } catch (e) {
-        // ignore if already released
-      }
-    });
-    try {
-      firstAnswerAudio.pause();
-    } catch (e) {
-      // ignore if already released
-    }
+    isScreenActiveRef.current = false;
+    stopAllAudio();
     router.navigate("/antas4-level2" as any);
   };
 
   const handleBack = () => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    Object.values(wordAudios).forEach((p) => {
-      try {
-        p.pause();
-      } catch (e) {
-        // ignore if already released
-      }
-    });
-    try {
-      firstAnswerAudio.pause();
-    } catch (e) {
-      // ignore if already released
-    }
+    isScreenActiveRef.current = false;
+    stopAllAudio();
     router.back();
+  };
+
+  const handleSettings = () => {
+    isScreenActiveRef.current = false;
+    stopAllAudio();
+    router.navigate("/settings");
   };
 
   const animatedPulseStyle = useAnimatedStyle(() => ({
@@ -536,7 +558,7 @@ export default function Antas4Level1Screen() {
                 resizeMode="contain"
               />
             </Pressable>
-            <Pressable onPress={() => router.navigate("/settings")} hitSlop={12} className="active:opacity-70">
+            <Pressable onPress={handleSettings} hitSlop={12} className="active:opacity-70">
               <RNImage
                 source={require("../../assets/images/ui/settings.png")}
                 style={{ width: settingsW, height: settingsH }}

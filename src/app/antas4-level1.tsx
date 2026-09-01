@@ -239,7 +239,7 @@ export default function Antas4Level1Screen() {
   const BOARD_CROP_W = 1870;
   const BOARD_CROP_H = 413;
   const BOARD_ASPECT = BOARD_CROP_W / BOARD_CROP_H;
-  const boardH = Math.min(screenH * 0.31, 165 * bgScale * 1.4);
+  const boardH = Math.min(screenH * 0.31, 165 * bgScale * 1.4) * 1.2;
   const boardW = boardH * BOARD_ASPECT;
   const availableLeft = npcLeft + npcClipW + 12 * bgScale;
   const availableRight = screenW - (screenW * 0.12);

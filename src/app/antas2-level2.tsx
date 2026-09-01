@@ -54,31 +54,31 @@ export default function Antas2Level2Screen() {
   const settingsH = iconBase;
 
   // Text 1 (Situation prompt)
-  const text1W = 1200 * 1.6 * 1.4 * bgScale;
-  const text1H = 220 * 1.6 * 1.4 * bgScale;
-  const text1Left = bgOffsetX + (DESIGN_W - 1200 * 1.6 * 1.4) / 2 * bgScale;
-  const text1Top = bgOffsetY + 70 * bgScale + 0.05 * screenH;
+  const text1W = 1200 * 1.6 * 1.4 * 1.3 * bgScale;
+  const text1H = 220 * 1.6 * 1.4 * 1.3 * bgScale;
+  const text1Left = bgOffsetX + (DESIGN_W - 1200 * 1.6 * 1.4 * 1.3) / 2 * bgScale;
+  const text1Top = (bgOffsetY + 70 * bgScale + 0.05 * screenH) * -0.06 - 0.1 * screenH;
 
   // Text 2 (Question box)
-  const text2W = 950 * 1.5 * bgScale;
-  const text2H = 210 * 1.5 * bgScale;
-  const text2Left = bgOffsetX + (DESIGN_W - 950 * 1.5) / 2 * bgScale;
-  const text2Top = bgOffsetY + 300 * bgScale + 0.1 * screenH;
+  const text2W = 950 * 1.5 * 1.3 * bgScale;
+  const text2H = 210 * 1.5 * 1.3 * bgScale;
+  const text2Left = bgOffsetX + (DESIGN_W - 950 * 1.5 * 1.3) / 2 * bgScale;
+  const text2Top = bgOffsetY + 300 * bgScale - 0.05 * screenH;
 
   // Choices A and B frames
-  const choiceW = 500 * 1.5 * bgScale;
-  const choiceH = 320 * 1.5 * bgScale;
-  const choiceTop = bgOffsetY + 550 * bgScale + 0.05 * screenH;
+  const choiceW = 500 * 1.5 * 1.5 * bgScale;
+  const choiceH = 320 * 1.5 * 1.5 * bgScale;
+  const choiceTop = (bgOffsetY + 550 * bgScale + 0.05 * screenH) * 0.9;
 
-  const choiceALeft = bgOffsetX + 200 * bgScale;
-  const choiceBLeft = bgOffsetX + 970 * bgScale;
+  const choiceALeft = (bgOffsetX + 200 * bgScale) * 0.9;
+  const choiceBLeft = (bgOffsetX + 970 * bgScale) * 0.9;
 
   // Wooden signpost Next & Back
-  const signLeft = bgOffsetX + 1660 * bgScale + 0.05 * screenW - 0.05 * screenW + 0.03 * screenW;
+  const signLeft = bgOffsetX + 1660 * bgScale + 0.05 * screenW - 0.05 * screenW + 0.05 * screenW - 0.03 * screenW;
   const signW = 210 * bgScale;
-  const nextTop = bgOffsetY + 630 * bgScale - 0.03 * screenH - 0.10 * screenH + 0.10 * screenH + 0.05 * screenH + 0.05 * screenH;
+  const nextTop = bgOffsetY + 630 * bgScale - 0.03 * screenH - 0.10 * screenH + 0.05 * screenH + 0.05 * screenH - 0.01 * screenH + 0.05 * screenH + 0.05 * screenH;
   const nextH = 92 * bgScale;
-  const backTop = bgOffsetY + 735 * bgScale - 0.02 * screenH - 0.10 * screenH + 0.10 * screenH + 0.05 * screenH + 0.05 * screenH;
+  const backTop = bgOffsetY + 735 * bgScale - 0.02 * screenH - 0.10 * screenH + 0.05 * screenH + 0.05 * screenH - 0.03 * screenH + 0.01 * screenH + 0.05 * screenH + 0.05 * screenH + 0.02 * screenH;
   const backSignH = 92 * bgScale;
 
   // Pulsing animation for feedback
@@ -152,13 +152,12 @@ export default function Antas2Level2Screen() {
       {/* Full-screen Question Background (antas2/background.png) */}
       <Image
         source={require("../../assets/images/antas2/background.png")}
-        resizeMode="contain"
-        style={{
-          position: "absolute",
-          left: bgOffsetX + (DESIGN_W * bgScale * 0.02) / 2 - 0.02 * screenW,
-          top: bgOffsetY + (DESIGN_H * bgScale * 0.02) / 2,
-          width: DESIGN_W * bgScale * 0.98,
-          height: DESIGN_H * bgScale * 0.98,
+          style={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            width: "100%",
+            height: "100%",
         }}
       />
 
@@ -351,10 +350,10 @@ export default function Antas2Level2Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft - 0.03 * screenW - 0.01 * screenW,
-            top: nextTop,
-            width: signW,
-            height: nextH,
+            left: signLeft - 0.03 * screenW + signW * 1.56,
+            top: nextTop * 1.1025,
+            width: signW * 1.2,
+            height: nextH * 1.2,
             zIndex: 25,
           }}
         >
@@ -375,10 +374,10 @@ export default function Antas2Level2Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft - 0.03 * screenW - 0.02 * screenW + 0.01 * screenW,
-            top: backTop - 0.01 * screenH,
-            width: signW * 0.95,
-            height: backSignH * 0.95,
+            left: signLeft - 0.03 * screenW + signW * 1.56,
+            top: backTop * 1.1025,
+            width: signW * 0.95 * 1.2,
+            height: backSignH * 0.95 * 1.2,
             zIndex: 25,
           }}
         >

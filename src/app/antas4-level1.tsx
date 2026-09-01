@@ -211,7 +211,7 @@ export default function Antas4Level1Screen() {
   const TEXT1_CROP_H = 129;
   const text1W = Math.min(screenW * 0.74, 860 * bgScale) * 1.68;
   const text1H = text1W * (TEXT1_CROP_H / TEXT1_CROP_W);
-  const text1Left = (screenW - text1W) / 2 + 0.20 * screenW;
+  const text1Left = (screenW - text1W) / 2 + 0.10 * screenW;
   const text1Top = Math.max(insets.top + 8, bgOffsetY + 28 * bgScale);
 
   // NPC character (npc.png)

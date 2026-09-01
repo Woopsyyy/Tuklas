@@ -44,7 +44,7 @@ export default function Antas4Screen() {
 const text2W = 1280 * 1.5 * 1.2 * 1.2 * 1.3 * bgScale;
   const text2H = 340 * 1.5 * 1.2 * 1.2 * 1.3 * bgScale;
   const text2Left = (screenW - text2W) / 2;
-  const text2Top = bgOffsetY + 270 * bgScale + 0.05 * screenH;
+  const text2Top = (bgOffsetY + 270 * bgScale + 0.05 * screenH) * 0.8;
 
   // Action Button: "Ayusin ang mga Salita" (button.png)
 const buttonW = 420 * 2 * 1.5 * 1.2 * bgScale;

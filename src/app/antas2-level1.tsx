@@ -63,7 +63,7 @@ const text1W = 1200 * 1.6 * 1.4 * 1.3 * bgScale;
   const text2W = 950 * 1.5 * 1.3 * bgScale;
   const text2H = 210 * 1.5 * 1.3 * bgScale;
   const text2Left = bgOffsetX + (DESIGN_W - 950 * 1.5 * 1.3) / 2 * bgScale;
-  const text2Top = bgOffsetY + 300 * bgScale - 0.1 * screenH;
+  const text2Top = bgOffsetY + 300 * bgScale - 0.05 * screenH;
 
   // Choices A and B frames (increased by 50%)
 const choiceW = 500 * 1.5 * 1.5 * bgScale;

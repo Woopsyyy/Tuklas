@@ -39,16 +39,16 @@ export default function Slide2Screen() {
   const settingsH = iconBase;
 
   // Girl NPC (exact 1680x945 design: left = 246, top = 200, w = 354, h = 723)
-  const npcW = 354 * bgScale;
-  const npcH = 723 * bgScale;
+  const npcW = 354 * bgScale * 1.1;
+  const npcH = 723 * bgScale * 1.1;
   const npcLeft = bgOffsetX + 246 * bgScale;
   const npcTop = bgOffsetY + 200 * bgScale;
 
   // Story Scroll (exact 1680x945 design: left = 555, top = 130, w = 843, h = 591)
-  const scrollW = 843 * bgScale * 0.95;
-  const scrollH = 591 * bgScale * 0.95;
+  const scrollW = 843 * bgScale * 0.95 * 1.2;
+  const scrollH = 591 * bgScale * 0.95 * 1.2;
   const scrollLeft = bgOffsetX + 555 * bgScale;
-  const scrollTop = bgOffsetY + 130 * bgScale + 0.05 * screenH + 0.1 * screenH;
+  const scrollTop = bgOffsetY + 130 * bgScale + 0.05 * screenH + 0.1 * screenH * 0.28;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
@@ -175,7 +175,7 @@ export default function Slide2Screen() {
             left: npcLeft,
             width: npcW,
             height: npcH,
-            zIndex: 15,
+            zIndex: 25,
           }}
           pointerEvents="none"
         >

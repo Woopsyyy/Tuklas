@@ -53,7 +53,7 @@ export default function Antas3Level1Screen() {
 const text1W = Math.min(screenW * 0.84, 1080 * bgScale) * 1.95;
   const text1H = text1W * (520 / 1440);
   const text1Left = bgOffsetX + 30 * bgScale - 0.05 * screenW;
-  const text1Top = (bgOffsetY + 20 * bgScale + 0.10 * screenH + 0.03 * screenH) * -1;
+  const text1Top = (bgOffsetY + 20 * bgScale + 0.10 * screenH + 0.03 * screenH) * -0.95;
 
   // Choice images â€” side by side in the middle (rescaled so A's drawn illustration matches B's exact size)
   const choiceW = screenW * 0.38;

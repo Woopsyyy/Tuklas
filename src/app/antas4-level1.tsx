@@ -465,7 +465,7 @@ export default function Antas4Level1Screen() {
   }));
 
   // Increased size for answer words placed above the line
-  const placedWordH = Math.min(46 * bgScale, (lineW * 0.90) / 16.6);
+  const placedWordH = Math.min(46 * bgScale, (lineW * 0.90) / 16.6) * 1.2;
   const placedGap = 4 * bgScale;
   const placedTotalW =
     placedWords.reduce((acc, id) => {

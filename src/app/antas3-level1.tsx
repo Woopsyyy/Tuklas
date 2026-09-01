@@ -81,7 +81,7 @@ const text1W = Math.min(screenW * 0.84, 1080 * bgScale) * 1.95;
   const redBtnTop = choiceTop + (choiceH - redBtnH) / 2 + 0.05 * choiceH + 0.03 * choiceH + 0.01 * choiceH - 0.03 * choiceH;
 
   // Text 2 â€” question bar at the bottom
-const text2W = Math.min(screenW * 0.88, 1280 * bgScale) * 1.5;
+const text2W = Math.min(screenW * 0.88, 1280 * bgScale) * 2.25;
   const text2H = text2W * (340 / 1280);
   const text2Left = bgOffsetX + (DESIGN_W - (text2W / bgScale)) / 2 * bgScale;
   const text2Top = bgOffsetY + 860 * bgScale - 0.10 * screenH - 0.10 * screenH + 0.20 * screenH;

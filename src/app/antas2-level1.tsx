@@ -53,17 +53,17 @@ export default function Antas2Level1Screen() {
   const settingsW = iconBase;
   const settingsH = iconBase;
 
-  // Text 1 (Situation prompt): "Kahit malakas ang ulan..." (moved up by another 10%)
+  // Text 1 (Situation prompt): "Kahit malakas ang ulan..."
 const text1W = 1200 * 1.6 * 1.4 * 1.3 * bgScale;
   const text1H = 220 * 1.6 * 1.4 * 1.3 * bgScale;
   const text1Left = bgOffsetX + (DESIGN_W - 1200 * 1.6 * 1.4 * 1.3) / 2 * bgScale;
-  const text1Top = (bgOffsetY + 70 * bgScale + 0.05 * screenH) * -0.1875 - 0.5 * screenH;
+  const text1Top = (bgOffsetY + 70 * bgScale + 0.05 * screenH) * -0.06 - 0.1 * screenH;
 
   // Text 2 (Question box): "Aling larawan ang pinakamahusay..." (increased by 50%, moved down 10%)
-  const text2W = 950 * 1.5 * bgScale;
-  const text2H = 210 * 1.5 * bgScale;
-  const text2Left = bgOffsetX + (DESIGN_W - 950 * 1.5) / 2 * bgScale;
-  const text2Top = bgOffsetY + 300 * bgScale + 0.1 * screenH;
+  const text2W = 950 * 1.5 * 1.3 * bgScale;
+  const text2H = 210 * 1.5 * 1.3 * bgScale;
+  const text2Left = bgOffsetX + (DESIGN_W - 950 * 1.5 * 1.3) / 2 * bgScale;
+  const text2Top = bgOffsetY + 300 * bgScale - 0.1 * screenH;
 
   // Choices A and B frames (increased by 50%)
 const choiceW = 500 * 1.5 * 1.5 * bgScale;

@@ -473,7 +473,7 @@ export default function Antas4Level1Screen() {
       return acc + (item ? placedWordH * item.aspect : 0);
     }, 0) + Math.max(0, placedWords.length - 1) * placedGap;
   const placedStartLeft = lineLeft + (lineW - placedTotalW) / 2;
-  const placedTop = lineTop - placedWordH - 4 * bgScale;
+  const placedTop = (lineTop - placedWordH - 4 * bgScale) * 0.97;
 
   // Helper to compute position for row 1 words on the board
   let currentR1Left = row1StartLeft;

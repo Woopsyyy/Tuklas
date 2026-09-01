@@ -17,3 +17,7 @@ git push origin master
 ```
 
 Do not wait for the user to ask. If a commit or push fails, fix the issue and retry.
+
+## Position (mandatory)
+
+when adjusting the components all components must use absolute position and not relative so that when adjusting one component it wont disturb other components while adjusting the size and position of that certain component

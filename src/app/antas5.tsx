@@ -42,7 +42,7 @@ export default function Antas5Screen() {
   const titleW = 900 * bgScale * 1.5 * 1.4 * 1.4;
   const titleH = 220 * bgScale * 1.5 * 1.4 * 1.4;
   const titleLeft = (screenW - titleW) / 2;
-  const titleTop = bgOffsetY + 10 * bgScale - 0.05 * screenH - 0.10 * screenH + 0.40 * screenH - 0.05 * screenH - 0.10 * screenH + 0.03 * screenH;
+  const titleTop = (bgOffsetY + 10 * bgScale - 0.05 * screenH - 0.10 * screenH + 0.40 * screenH - 0.05 * screenH - 0.10 * screenH + 0.03 * screenH) * 0.6;
 
   // NPC (npc.png) — girl on the left side
   // Source PNG is wide (1456x816) but character occupies right half

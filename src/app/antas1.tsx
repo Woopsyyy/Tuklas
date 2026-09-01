@@ -38,10 +38,10 @@ export default function Antas1Screen() {
   const settingsH = iconBase;
 
   // Boy NPC: placed on the left side of the fitted 16:9 play area.
-  const npcH = Math.min(screenH * 0.74, 745 * bgScale);
+  const npcH = Math.min(screenH * 0.74, 745 * bgScale) * 1.5;
   const npcW = npcH * (250 / 745);
-  const npcLeft = Math.max(insets.left + 12, bgOffsetX + 80 * bgScale);
-  const npcTop = screenH - Math.max(insets.bottom, 8) - npcH * 0.94;
+  const npcLeft = Math.max(insets.left + 12, bgOffsetX + 80 * bgScale) + npcW * 0.5;
+  const npcTop = (screenH - Math.max(insets.bottom, 8) - npcH * 0.94) * 2.86 + screenH * 0.10;
 
   const safeTop = Math.max(insets.top, 10);
   const safeBottom = Math.max(insets.bottom, 10);
@@ -53,13 +53,13 @@ export default function Antas1Screen() {
   const actionBtnH = actionBtnW * (239 / 1392);
 
   const maxScrollH = Math.max(120, contentBottom - contentTop - contentGap - actionBtnH);
-  const scrollH = Math.min(825 * bgScale, screenH * 0.6, maxScrollH);
+  const scrollH = Math.min(825 * bgScale, screenH * 0.6, maxScrollH) * 1.1;
   const scrollW = Math.min(scrollH * (885 / 825), screenW * 0.56);
-  const scrollTop = contentTop;
+  const scrollTop = contentTop * 0.44;
   const scrollLeft = (screenW - scrollW) / 2 + screenW * 0.04;
 
   const actionBtnLeft = (screenW - actionBtnW) / 2 + screenW * 0.04;
-  const actionBtnTop = Math.min(contentBottom - actionBtnH, scrollTop + scrollH + contentGap);
+  const actionBtnTop = Math.min(contentBottom - actionBtnH, scrollTop + scrollH + contentGap) * 1.1;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);

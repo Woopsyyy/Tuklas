@@ -744,7 +744,7 @@ export default function Antas4Level1Screen() {
           style={{
             position: "absolute",
             left: signLeft - 0.05 * screenW + 0.02 * screenW + signW * 1.58,
-            top: nextTop,
+            top: nextTop * 1.03,
             width: signW,
             height: nextH,
             zIndex: 35,
@@ -769,7 +769,7 @@ export default function Antas4Level1Screen() {
           style={{
             position: "absolute",
             left: signLeft - 0.03 * screenW + 0.01 * screenW + signW * 1.58,
-            top: backTop,
+            top: backTop * 1.03,
             width: signW * 0.95,
             height: backSignH * 0.95,
             zIndex: 35,

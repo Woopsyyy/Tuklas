@@ -233,17 +233,17 @@ export default function Antas4Level2Screen() {
   const TEXT1_CROP_Y = 369;
   const TEXT1_CROP_W = 1791;
   const TEXT1_CROP_H = 129;
-  const text1W = Math.min(screenW * 0.74, 860 * bgScale);
+  const text1W = Math.min(screenW * 0.74, 860 * bgScale) * 1.68;
   const text1H = text1W * (TEXT1_CROP_H / TEXT1_CROP_W);
-  const text1Left = (screenW - text1W) / 2;
-  const text1Top = Math.max(insets.top + 8, bgOffsetY + 28 * bgScale);
+  const text1Left = (screenW - text1W) / 2 + 0.05 * screenW;
+  const text1Top = Math.max(insets.top + 8, bgOffsetY + 28 * bgScale) * 1.2 * 1.6 * 1.6 * 2.2;
 
   // NPC character (npc.png)
   const NPC_CONTENT_X = 822;
   const NPC_CONTENT_Y = 49;
   const NPC_CONTENT_W = 296;
   const NPC_CONTENT_H = 993;
-  const npcDesiredH = screenH * 0.72;
+  const npcDesiredH = screenH * 0.72 * 1.2;
   const npcClipW = npcDesiredH * (NPC_CONTENT_W / NPC_CONTENT_H);
   const npcClipH = npcDesiredH;
   const npcLeft = Math.max(insets.left + 4, bgOffsetX + 16 * bgScale);
@@ -252,9 +252,9 @@ export default function Antas4Level2Screen() {
   // Signpost (right side)
   const signLeft = bgOffsetX + 1680 * bgScale;
   const signW = 210 * bgScale;
-  const nextTop = bgOffsetY + 700 * bgScale + 0.05 * screenH;
+  const nextTop = bgOffsetY + 700 * bgScale + 0.03 * screenH + 0.02 * screenH;
   const nextH = 92 * bgScale;
-  const backTop = bgOffsetY + 800 * bgScale + 0.03 * screenH + 0.03 * screenH;
+  const backTop = bgOffsetY + 800 * bgScale + 0.05 * screenH + 0.01 * screenH;
   const backSignH = 92 * bgScale;
 
   // Wooden Board (board.png)
@@ -263,7 +263,7 @@ export default function Antas4Level2Screen() {
   const BOARD_CROP_W = 1870;
   const BOARD_CROP_H = 413;
   const BOARD_ASPECT = BOARD_CROP_W / BOARD_CROP_H;
-  const boardH = Math.min(screenH * 0.31, 165 * bgScale * 1.4);
+  const boardH = Math.min(screenH * 0.31, 165 * bgScale * 1.4) * 1.44;
   const boardW = boardH * BOARD_ASPECT;
   const availableLeft = npcLeft + npcClipW + 12 * bgScale;
   const availableRight = screenW - (screenW * 0.12);
@@ -272,7 +272,7 @@ export default function Antas4Level2Screen() {
 
   // Words inside the board
   const wordH = boardH * 0.38;
-  const gap = 8 * bgScale;
+  const gap = 12 * bgScale;
 
   // Row 1: word1 (sa), word2 (si), word3 (dahil), word4 (maagang), word5 (pagsusulit)
   const row1Words = [ALL_WORDS[0], ALL_WORDS[1], ALL_WORDS[2], ALL_WORDS[3], ALL_WORDS[4]];
@@ -291,8 +291,8 @@ export default function Antas4Level2Screen() {
   const LINE_CROP_Y = 578;
   const LINE_CROP_W = 1308;
   const LINE_CROP_H = 17;
-  const lineW = Math.min(screenW * 0.75, 820 * bgScale);
-  const lineH = 14 * bgScale;
+  const lineW = Math.min(screenW * 0.75, 820 * bgScale) * 1.96;
+  const lineH = 14 * bgScale * 1.96;
   const lineLeft = boardLeft + (boardW - lineW) / 2;
   const lineTop = boardTop - 20 * bgScale;
 
@@ -499,15 +499,15 @@ export default function Antas4Level2Screen() {
   }));
 
   // Placed words layout strictly ABOVE the line (fits within lineW with bullets visible on both ends)
-  const placedWordH = Math.min(38 * bgScale, (lineW * 0.90) / 19.6);
-  const placedGap = 3 * bgScale;
+  const placedWordH = Math.min(46 * bgScale, (lineW * 0.90) / 16.6) * 1.68;
+  const placedGap = 4 * bgScale;
   const placedTotalW =
     placedWords.reduce((acc, id) => {
       const item = ALL_WORDS.find((w) => w.id === id);
       return acc + (item ? placedWordH * item.aspect : 0);
     }, 0) + Math.max(0, placedWords.length - 1) * placedGap;
   const placedStartLeft = lineLeft + (lineW - placedTotalW) / 2;
-  const placedTop = lineTop - placedWordH - 4 * bgScale;
+  const placedTop = (lineTop - placedWordH - 4 * bgScale) * 0.97;
 
   // Helper to compute position for row 1 words on the board
   let currentR1Left = row1StartLeft;
@@ -777,8 +777,8 @@ export default function Antas4Level2Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft - 0.02 * screenW,
-            top: nextTop,
+            left: signLeft - 0.05 * screenW + 0.02 * screenW + signW * 1.83,
+            top: nextTop * 1.03,
             width: signW,
             height: nextH,
             zIndex: 35,
@@ -802,8 +802,8 @@ export default function Antas4Level2Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft - 0.03 * screenW + 0.01 * screenW,
-            top: backTop,
+            left: signLeft - 0.03 * screenW + 0.01 * screenW + signW * 1.73,
+            top: backTop * 1.03 * 1.05 * 0.97 * 1.02,
             width: signW * 0.95,
             height: backSignH * 0.95,
             zIndex: 35,

@@ -743,7 +743,7 @@ export default function Antas4Level1Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft - 0.05 * screenW + 0.02 * screenW + signW * 1.68,
+            left: signLeft - 0.05 * screenW + 0.02 * screenW + signW * 1.83,
             top: nextTop * 1.03,
             width: signW,
             height: nextH,

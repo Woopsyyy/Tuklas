@@ -267,8 +267,8 @@ export default function Antas4Level1Screen() {
   const LINE_CROP_Y = 578;
   const LINE_CROP_W = 1308;
   const LINE_CROP_H = 17;
-  const lineW = Math.min(screenW * 0.75, 820 * bgScale) * 1.4;
-  const lineH = 14 * bgScale * 1.4;
+  const lineW = Math.min(screenW * 0.75, 820 * bgScale) * 1.96;
+  const lineH = 14 * bgScale * 1.96;
   const lineLeft = boardLeft + (boardW - lineW) / 2;
   const lineTop = boardTop - 20 * bgScale;
 

@@ -41,9 +41,9 @@ export default function Antas3Screen() {
   const titleTop = Math.max(insets.top - 20, bgOffsetY - 10 * bgScale) - 0.05 * screenH;
 
   // Dialogue box (text2.png)
-  const text2W = 1200 * 2.2 * 2.16 * bgScale;
-  const text2H = 310 * 2.2 * 2.16 * bgScale;
-  const text2Left = bgOffsetX + (DESIGN_W - 1200 * 2.2 * 2.16) / 2 * bgScale + 120 * bgScale - 0.05 * screenW;
+  const text2W = 1200 * 2.2 * 1.44 * bgScale;
+  const text2H = 310 * 2.2 * 1.44 * bgScale;
+  const text2Left = bgOffsetX + (DESIGN_W - 1200 * 2.2 * 1.44) / 2 * bgScale + 120 * bgScale - 0.05 * screenW;
   const text2Top = (bgOffsetY + 450 * bgScale - 0.10 * screenH) * 0.2016;
 
   // Action button (button.png)

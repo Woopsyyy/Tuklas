@@ -55,7 +55,7 @@ export default function Antas2Screen() {
   const titleLeft = (screenW - titleW) / 2 + screenW * 0.05;
   const titleTop = Math.max(insets.top + 4, bgOffsetY + 36 * bgScale);
 
-  const text2W = Math.min(screenW * 0.66, 1120 * bgScale);
+const text2W = Math.min(screenW * 0.66, 1120 * bgScale) * 1.5;
   const text2H = text2W * (storyCrop.height / storyCrop.width);
   const text2Left = (screenW - text2W) / 2 + screenW * 0.05;
   const text2Top = Math.max(titleTop + titleH + Math.max(8, 16 * bgScale), screenH * 0.35);
@@ -63,10 +63,7 @@ export default function Antas2Screen() {
   const buttonW = Math.min(screenW * 0.32, Math.max(220, 560 * bgScale));
   const buttonH = buttonW * (buttonCrop.height / buttonCrop.width);
   const buttonLeft = (screenW - buttonW) / 2 + screenW * 0.05;
-  const buttonTop = Math.min(
-    screenH - Math.max(insets.bottom, 10) - buttonH - 10,
-    text2Top + text2H + Math.max(12, 24 * bgScale)
-  );
+const buttonTop = bgOffsetY + 855 * bgScale;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);

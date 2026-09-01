@@ -41,15 +41,15 @@ export default function Antas3Screen() {
   const titleTop = Math.max(insets.top - 20, bgOffsetY - 10 * bgScale) - 0.05 * screenH;
 
   // Dialogue box (text2.png)
-  const text2W = 1200 * 2.2 * bgScale;
-  const text2H = 310 * 2.2 * bgScale;
-  const text2Left = bgOffsetX + (DESIGN_W - 1200 * 2.2) / 2 * bgScale + 120 * bgScale - 0.05 * screenW;
-  const text2Top = bgOffsetY + 450 * bgScale - 0.10 * screenH;
+  const text2W = 1200 * 2.2 * 1.44 * bgScale;
+  const text2H = 310 * 2.2 * 1.44 * bgScale;
+  const text2Left = bgOffsetX + (DESIGN_W - 1200 * 2.2 * 1.44) / 2 * bgScale + 120 * bgScale - 0.05 * screenW;
+  const text2Top = (bgOffsetY + 450 * bgScale - 0.10 * screenH) * 0.2016;
 
   // Action button (button.png)
-  const buttonW = 460 * 1.375 * 1.3 * 1.2 * bgScale;
-  const buttonH = 100 * 1.375 * 1.3 * 1.2 * bgScale;
-  const buttonLeft = bgOffsetX + (DESIGN_W - 460 * 1.375 * 1.3 * 1.2) / 2 * bgScale - 30 * bgScale + 0.08 * screenW - 0.05 * screenW;
+  const buttonW = 460 * 1.375 * 1.3 * 1.2 * 1.29 * bgScale;
+  const buttonH = 100 * 1.375 * 1.3 * 1.2 * 1.29 * bgScale;
+  const buttonLeft = bgOffsetX + (DESIGN_W - 460 * 1.375 * 1.3 * 1.2 * 1.29) / 2 * bgScale - 30 * bgScale + 0.08 * screenW - 0.05 * screenW;
   const buttonTop = bgOffsetY + 870 * bgScale;
 
   useEffect(() => {

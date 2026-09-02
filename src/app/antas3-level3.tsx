@@ -58,8 +58,8 @@ export default function Antas3Level3Screen() {
   // Choice images â€” side by side in the middle (matching level 1 layout and padding alignment)
   const choiceW = screenW * 0.38;
   const choiceH = choiceW * (1080 / 1920);
-const choiceAW = choiceW * (1592 / 1359) * 0.8;
-  const choiceAH = choiceH * (916 / 771) * 0.8;
+const choiceAW = choiceW * (1592 / 1359) * 0.8 * 1.1;
+  const choiceAH = choiceH * (916 / 771) * 0.8 * 1.1;
   const choiceGap = 20 * bgScale;
   const totalChoicesW = choiceW * 2 + choiceGap;
   const choiceTop = (bgOffsetY + 310 * bgScale + 0.05 * screenH + 0.10 * screenH + 0.10 * screenH) * 0.76;

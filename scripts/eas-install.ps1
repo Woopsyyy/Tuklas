@@ -1,6 +1,7 @@
 param(
     [ValidateSet("production", "preview")]
-    [string]$Profile = "production"
+    [string]$Profile = "production",
+    [string]$OutDir = "dist"
 )
 
 $ErrorActionPreference = "Stop"
@@ -23,35 +24,49 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-Write-Host "Fetching latest build info..."
-$buildJson = npx eas-cli build:list -p android --limit 1 --json --non-interactive 2>$null
+Write-Host "Locating the newest finished $Profile build for this project..."
+$buildJson = npx eas-cli build:list -p android --build-profile $Profile --limit 1 --json --non-interactive 2>$null
 if ($LASTEXITCODE -ne 0 -or -not $buildJson) {
-    Write-Host "Could not fetch build info, but the build succeeded. Check the EAS build page manually." -ForegroundColor Yellow
+    Write-Host "Could not fetch build info. The build likely succeeded - check the EAS dashboard." -ForegroundColor Yellow
     exit 0
 }
 
 $build = ($buildJson | ConvertFrom-Json) | Select-Object -First 1
-if (-not $build) {
-    Write-Host "No build record found." -ForegroundColor Yellow
-    exit 0
+if (-not $build -or $build.status -ne "FINISHED" -or -not $build.artifacts.buildUrl) {
+    Write-Host "Could not find a finished $Profile build with an APK." -ForegroundColor Red
+    exit 1
 }
 
+Write-Host "Build found:"
+Write-Host "  Profile:    $($build.buildProfile)"
+Write-Host "  Status:     $($build.status)"
+Write-Host "  Artifact:   $($build.artifacts.buildUrl)"
+Write-Host ""
+
+if ($build.buildProfile -eq "development") {
+    Write-Host "ERROR: this is a development build (needs a Metro server)." -ForegroundColor Red
+    Write-Host "Re-run with a release profile: npm run dev:install -- --Profile production" -ForegroundColor Yellow
+    exit 1
+}
+
+New-Item -ItemType Directory -Path $OutDir -Force | Out-Null
+$apkPath = Join-Path $OutDir "tuklas-$Profile-$($build.id.Substring(0, 8)).apk"
+Write-Host "Downloading APK to $apkPath ..."
+Invoke-WebRequest -Uri $build.artifacts.buildUrl -OutFile $apkPath
+if (-not (Test-Path $apkPath)) {
+    Write-Host "Download failed." -ForegroundColor Red
+    exit 1
+}
+
+$sizeMb = [math]::Round((Get-Item $apkPath).Length / 1MB, 1)
 Write-Host ""
 Write-Host "============================================" -ForegroundColor Green
-Write-Host "BUILD COMPLETE" -ForegroundColor Green
-Write-Host "Status:      $($build.status)"
-Write-Host "Platform:    $($build.platform)"
+Write-Host "PRODUCTION BUILD READY" -ForegroundColor Green
+Write-Host "  Local APK : $apkPath ($sizeMb MB)"
 Write-Host ""
-Write-Host "SHAREABLE INSTALL PAGE (no Expo account needed):" -ForegroundColor Cyan
-Write-Host "  $($build.url)" -ForegroundColor Cyan
+Write-Host "Install link (send this to users, no Expo account needed):" -ForegroundColor Cyan
+Write-Host "  $($build.artifacts.buildUrl)" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "Direct APK download link:" -ForegroundColor Cyan
-if ($build.artifactUrl) {
-    Write-Host "  $($build.artifactUrl)" -ForegroundColor Cyan
-} else {
-    Write-Host "  (temporary; open the install page above instead)" -ForegroundColor DarkCyan
-}
-Write-Host ""
-Write-Host "The install page works for anyone with the link - they open it," -ForegroundColor Yellow
-Write-Host "tap Install/Download, and the APK installs without an Expo account." -ForegroundColor Yellow
+Write-Host "This is a release build: the JS bundle is embedded." -ForegroundColor Yellow
+Write-Host "Users install the APK and it runs standalone with no server." -ForegroundColor Yellow
 Write-Host "============================================" -ForegroundColor Green

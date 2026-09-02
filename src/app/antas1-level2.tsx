@@ -52,8 +52,8 @@ export default function Antas1Level2Screen() {
   const settingsH = iconBase;
 
   // Choice A and B frame coordinates in 1920x1080 design
-  const choiceW = 480 * bgScale * 1.44;
-  const choiceH = 335 * bgScale * 1.44;
+  const choiceW = 480 * bgScale * 1.44 * 0.8;
+  const choiceH = 335 * bgScale * 1.44 * 0.8;
   const choiceTop = bgOffsetY + 625 * bgScale;
 
   const choiceALeft = (bgOffsetX + 430 * bgScale) * 0.76;
@@ -254,8 +254,8 @@ export default function Antas1Level2Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft - 0.05 * screenW + 0.02 * screenW + 0.01 * screenW + 0.05 * screenW - 0.05 * screenW + signW * 1.8,
-            top: (nextTop + 0.005 * screenH + 0.02 * screenH - 0.01 * screenH) * 0.97335,
+            left: signLeft - 0.05 * screenW + 0.02 * screenW + 0.01 * screenW + 0.05 * screenW - 0.05 * screenW + signW * 1.8 - 0.05 * screenW,
+            top: (nextTop + 0.005 * screenH + 0.02 * screenH - 0.01 * screenH) * 0.97335 - 0.05 * screenH,
             width: signW * 1.2,
             height: nextH * 1.2,
             zIndex: 25,
@@ -279,8 +279,8 @@ export default function Antas1Level2Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft - 0.05 * screenW + 0.02 * screenW + 0.01 * screenW + 0.05 * screenW - 0.05 * screenW + signW * 1.8,
-            top: backTop + 0.01 * screenH + 0.02 * screenH - 0.01 * screenH,
+            left: signLeft - 0.05 * screenW + 0.02 * screenW + 0.01 * screenW + 0.05 * screenW - 0.05 * screenW + signW * 1.8 - 0.05 * screenW,
+            top: backTop + 0.01 * screenH + 0.02 * screenH - 0.01 * screenH - 0.05 * screenH,
             width: signW * 0.98 * 0.98 * 0.98 * 1.2,
             height: backH2 * 0.98 * 0.98 * 0.98 * 1.2,
             zIndex: 25,
@@ -305,10 +305,10 @@ export default function Antas1Level2Screen() {
           disabled={selectedChoice !== null}
           style={{
             position: "absolute",
-            left: screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW,
+            left: screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW + 0.1 * screenW - 0.03 * screenW - 0.03 * screenW,
             top: (screenH * 0.25 + 0.4 * screenH - 0.1 * screenH + 0.02 * screenH + 0.01 * screenH) * 0.9,
-            width: screenW * 0.5,
-            height: screenH * 0.5,
+            width: screenW * 0.5 * 0.8,
+            height: screenH * 0.5 * 0.8,
             zIndex: 40,
           }}
           className="active:opacity-70"
@@ -328,10 +328,10 @@ export default function Antas1Level2Screen() {
           disabled={selectedChoice !== null}
           style={{
             position: "absolute",
-            left: screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW + screenW * 0.5 + 0.2 * screenW - 0.4 * screenW - 0.1 * screenW + 0.05 * screenW + 0.03 * screenW,
+            left: screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW + screenW * 0.5 + 0.2 * screenW - 0.4 * screenW - 0.1 * screenW + 0.05 * screenW + 0.03 * screenW + 0.1 * screenW - 0.03 * screenW,
             top: (screenH * 0.25 + 0.4 * screenH - 0.1 * screenH + 0.02 * screenH + 0.01 * screenH) * 0.9,
-            width: screenW * 0.5,
-            height: screenH * 0.5,
+            width: screenW * 0.5 * 0.8,
+            height: screenH * 0.5 * 0.8,
             zIndex: 40,
           }}
           className="active:opacity-70"

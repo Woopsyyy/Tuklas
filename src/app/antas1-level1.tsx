@@ -61,7 +61,7 @@ export default function Antas1Level1Screen() {
 
   // Feedback border box — 50% of the choice box, centered over the art
   const fbW = choiceW * 0.5;
-  const fbH = choiceH * 0.5 * 1.4;
+  const fbH = choiceH * 0.5 * 1.4 * 1.1;
   const fbALeft = choiceALeft + (choiceW - fbW) / 2;
   const fbBLeft = choiceBLeft + (choiceW - fbW) / 2;
   const fbTop = choiceTop + (choiceH - fbH) / 2;

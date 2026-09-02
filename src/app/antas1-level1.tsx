@@ -203,7 +203,7 @@ export default function Antas1Level1Screen() {
               width: "100%",
               height: "100%",
               borderRadius: 16 * bgScale,
-              borderWidth: selectedChoice === "A" ? 5 : selectedChoice !== null ? 2 : 0,
+              borderWidth: selectedChoice === "A" ? 2.5 : selectedChoice !== null ? 1 : 0,
               borderColor: selectedChoice === "A" ? "#ef4444" : "transparent",
               backgroundColor:
                 selectedChoice === "A"
@@ -237,7 +237,7 @@ export default function Antas1Level1Screen() {
               width: "100%",
               height: "100%",
               borderRadius: 16 * bgScale,
-              borderWidth: selectedChoice !== null ? 6 : 0,
+              borderWidth: selectedChoice !== null ? 3 : 0,
               borderColor: selectedChoice !== null ? "#22c55e" : "transparent",
               backgroundColor:
                 selectedChoice !== null

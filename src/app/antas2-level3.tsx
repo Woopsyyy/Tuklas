@@ -353,8 +353,8 @@ useEffect(() => {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft - 0.03 * screenW + signW * 1.56,
-            top: nextTop * 1.1025,
+            left: signLeft - 0.06 * screenW + signW * 1.56,
+            top: nextTop * 1.1025 - 0.04 * screenH,
             width: signW * 1.2,
             height: nextH * 1.2,
             zIndex: 25,
@@ -377,8 +377,8 @@ useEffect(() => {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft - 0.03 * screenW + signW * 1.56,
-            top: backTop * 1.1025,
+            left: signLeft - 0.06 * screenW + signW * 1.56,
+            top: backTop * 1.1025 - 0.04 * screenH,
             width: signW * 0.95 * 1.2,
             height: backSignH * 0.95 * 1.2,
             zIndex: 25,

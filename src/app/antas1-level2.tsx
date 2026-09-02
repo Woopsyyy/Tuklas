@@ -51,13 +51,21 @@ export default function Antas1Level2Screen() {
   const settingsW = iconBase;
   const settingsH = iconBase;
 
-  // Choice A and B frame coordinates in 1920x1080 design
-  const choiceW = 480 * bgScale * 1.44 * 0.8;
-  const choiceH = 335 * bgScale * 1.44 * 0.8;
-  const choiceTop = bgOffsetY + 625 * bgScale;
+  // Choice A and B share one absolute box so feedback borders match the art.
+  const choiceW = screenW * 0.5 * 0.8;
+  const choiceH = screenH * 0.5 * 0.8;
+  const choiceTop = (screenH * 0.25 + 0.4 * screenH - 0.1 * screenH + 0.02 * screenH + 0.01 * screenH) * 0.9;
 
-  const choiceALeft = (bgOffsetX + 430 * bgScale) * 0.76;
-  const choiceBLeft = bgOffsetX + 985 * bgScale;
+  const choiceALeft = screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW + 0.1 * screenW - 0.03 * screenW - 0.03 * screenW;
+  const choiceBLeft = screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW + screenW * 0.5 + 0.2 * screenW - 0.4 * screenW - 0.1 * screenW + 0.05 * screenW + 0.03 * screenW + 0.1 * screenW - 0.03 * screenW;
+
+  // Feedback border box — 50% of the choice box, centered over the art
+  const fbW = choiceW * 0.5 * 1.01;
+  const fbH = choiceH * 0.5 * 1.4 * 1.1 * 1.01;
+  const fbALeft = choiceALeft + (choiceW - fbW) / 2;
+  const fbBLeft = choiceBLeft + (choiceW - fbW) / 2 + 0.02 * screenW;
+  const fbBTop = choiceTop + (choiceH - fbH) / 2 - (fbH * 0.01);
+  const fbTop = choiceTop + (choiceH - fbH) / 2;
 
   // Wooden signpost Next & Back
   const signLeft = bgOffsetX + 1670 * bgScale;
@@ -187,10 +195,10 @@ export default function Antas1Level2Screen() {
           style={[
             {
               position: "absolute",
-              left: choiceALeft,
-              top: choiceTop,
-              width: choiceW,
-              height: choiceH,
+              left: fbALeft,
+              top: fbTop,
+              width: fbW,
+              height: fbH,
               zIndex: 50,
             },
             (selectedChoice === "A" || selectedChoice === "B") && animatedPulseStyle,
@@ -202,7 +210,7 @@ export default function Antas1Level2Screen() {
             style={{
               width: "100%",
               height: "100%",
-              borderRadius: 16 * bgScale,
+              borderRadius: 8 * bgScale,
               borderWidth: selectedChoice !== null ? 6 : 0,
               borderColor: selectedChoice !== null ? "#22c55e" : "transparent",
               backgroundColor:
@@ -221,10 +229,10 @@ export default function Antas1Level2Screen() {
           style={[
             {
               position: "absolute",
-              left: choiceBLeft,
-              top: choiceTop,
-              width: choiceW,
-              height: choiceH,
+              left: fbBLeft,
+              top: fbBTop,
+              width: fbW,
+              height: fbH * 1.02,
               zIndex: 50,
             },
             selectedChoice === "B" && animatedPulseStyle,
@@ -236,7 +244,7 @@ export default function Antas1Level2Screen() {
             style={{
               width: "100%",
               height: "100%",
-              borderRadius: 16 * bgScale,
+              borderRadius: 8 * bgScale,
               borderWidth: selectedChoice === "B" ? 5 : selectedChoice !== null ? 2 : 0,
               borderColor: selectedChoice === "B" ? "#ef4444" : "transparent",
               backgroundColor:

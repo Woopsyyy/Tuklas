@@ -60,10 +60,11 @@ export default function Antas1Level1Screen() {
   const choiceBLeft = screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW + screenW * 0.5 + 0.2 * screenW - 0.4 * screenW - 0.1 * screenW + 0.05 * screenW + 0.03 * screenW + 0.1 * screenW - 0.03 * screenW;
 
   // Feedback border box — 50% of the choice box, centered over the art
-  const fbW = choiceW * 0.5;
-  const fbH = choiceH * 0.5 * 1.4 * 1.1;
+  const fbW = choiceW * 0.5 * 1.01;
+  const fbH = choiceH * 0.5 * 1.4 * 1.1 * 1.01;
   const fbALeft = choiceALeft + (choiceW - fbW) / 2;
-  const fbBLeft = choiceBLeft + (choiceW - fbW) / 2;
+  const fbBLeft = choiceBLeft + (choiceW - fbW) / 2 + 0.02 * screenW;
+  const fbBTop = choiceTop + (choiceH - fbH) / 2 - (fbH * 0.01);
   const fbTop = choiceTop + (choiceH - fbH) / 2;
 
   // Wooden signpost Next & Back
@@ -229,9 +230,9 @@ export default function Antas1Level1Screen() {
             {
               position: "absolute",
               left: fbBLeft,
-              top: fbTop,
+              top: fbBTop,
               width: fbW,
-              height: fbH,
+              height: fbH * 1.02,
               zIndex: 50,
             },
             (selectedChoice === "B" || selectedChoice === "A") && animatedPulseStyle,

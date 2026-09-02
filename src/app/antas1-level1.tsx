@@ -51,13 +51,13 @@ export default function Antas1Level1Screen() {
   const settingsW = iconBase;
   const settingsH = iconBase;
 
-  // Choice A and B frame coordinates in 1920x1080 design
-  const choiceW = 480 * bgScale * 1.44 * 0.8;
-  const choiceH = 335 * bgScale * 1.44 * 0.8;
-  const choiceTop = bgOffsetY + 625 * bgScale;
+  // Choice A and B share one absolute box so feedback borders match the art.
+  const choiceW = screenW * 0.5 * 0.8;
+  const choiceH = screenH * 0.5 * 0.8;
+  const choiceTop = (screenH * 0.25 + 0.4 * screenH - 0.1 * screenH + 0.02 * screenH + 0.01 * screenH) * 0.9;
 
-  const choiceALeft = (bgOffsetX + 430 * bgScale) * 0.76;
-  const choiceBLeft = bgOffsetX + 985 * bgScale;
+  const choiceALeft = screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW + 0.1 * screenW - 0.03 * screenW - 0.03 * screenW;
+  const choiceBLeft = screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW + screenW * 0.5 + 0.2 * screenW - 0.4 * screenW - 0.1 * screenW + 0.05 * screenW + 0.03 * screenW + 0.1 * screenW - 0.03 * screenW;
 
   // Wooden signpost Next & Back
   const signLeft = bgOffsetX + 1670 * bgScale;
@@ -305,10 +305,10 @@ export default function Antas1Level1Screen() {
           disabled={selectedChoice !== null}
           style={{
             position: "absolute",
-            left: screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW + 0.1 * screenW - 0.03 * screenW - 0.03 * screenW,
-            top: (screenH * 0.25 + 0.4 * screenH - 0.1 * screenH + 0.02 * screenH + 0.01 * screenH) * 0.9,
-            width: screenW * 0.5 * 0.8,
-            height: screenH * 0.5 * 0.8,
+            left: choiceALeft,
+            top: choiceTop,
+            width: choiceW,
+            height: choiceH,
             zIndex: 40,
           }}
           className="active:opacity-70"
@@ -328,10 +328,10 @@ export default function Antas1Level1Screen() {
           disabled={selectedChoice !== null}
           style={{
             position: "absolute",
-            left: screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW + screenW * 0.5 + 0.2 * screenW - 0.4 * screenW - 0.1 * screenW + 0.05 * screenW + 0.03 * screenW + 0.1 * screenW - 0.03 * screenW,
-            top: (screenH * 0.25 + 0.4 * screenH - 0.1 * screenH + 0.02 * screenH + 0.01 * screenH) * 0.9,
-            width: screenW * 0.5 * 0.8,
-            height: screenH * 0.5 * 0.8,
+            left: choiceBLeft,
+            top: choiceTop,
+            width: choiceW,
+            height: choiceH,
             zIndex: 40,
           }}
           className="active:opacity-70"

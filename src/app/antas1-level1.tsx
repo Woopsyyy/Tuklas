@@ -305,7 +305,7 @@ export default function Antas1Level1Screen() {
           disabled={selectedChoice !== null}
           style={{
             position: "absolute",
-            left: screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW,
+            left: screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW + 0.1 * screenW,
             top: (screenH * 0.25 + 0.4 * screenH - 0.1 * screenH + 0.02 * screenH + 0.01 * screenH) * 0.9,
             width: screenW * 0.5 * 0.8,
             height: screenH * 0.5 * 0.8,
@@ -328,7 +328,7 @@ export default function Antas1Level1Screen() {
           disabled={selectedChoice !== null}
           style={{
             position: "absolute",
-            left: screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW + screenW * 0.5 + 0.2 * screenW - 0.4 * screenW - 0.1 * screenW + 0.05 * screenW + 0.03 * screenW,
+            left: screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW + screenW * 0.5 + 0.2 * screenW - 0.4 * screenW - 0.1 * screenW + 0.05 * screenW + 0.03 * screenW + 0.1 * screenW,
             top: (screenH * 0.25 + 0.4 * screenH - 0.1 * screenH + 0.02 * screenH + 0.01 * screenH) * 0.9,
             width: screenW * 0.5 * 0.8,
             height: screenH * 0.5 * 0.8,

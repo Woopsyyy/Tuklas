@@ -799,8 +799,8 @@ export default function Antas4Level2Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft - 0.05 * screenW + 0.02 * screenW + signW * 1.83,
-            top: nextTop * 1.03,
+            left: signLeft - 0.05 * screenW + 0.02 * screenW + signW * 1.90 - 0.05 * screenW,
+            top: nextTop * 1.03 - 0.04 * screenH,
             width: signW,
             height: nextH,
             zIndex: 35,
@@ -824,8 +824,8 @@ export default function Antas4Level2Screen() {
           entering={FadeIn.duration(600)}
           style={{
             position: "absolute",
-            left: signLeft - 0.03 * screenW + 0.01 * screenW + signW * 1.73,
-            top: backTop * 1.03 * 1.05 * 0.97 * 1.02,
+            left: signLeft - 0.03 * screenW + 0.01 * screenW + signW * 1.81 - 0.05 * screenW,
+            top: backTop * 1.03 * 1.05 * 0.97 * 1.02 * 0.98 - 0.04 * screenH,
             width: signW * 0.95,
             height: backSignH * 0.95,
             zIndex: 35,

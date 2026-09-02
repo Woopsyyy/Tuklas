@@ -226,14 +226,14 @@ useCallback(() => {
         </Animated.View>
 
         {/* Signpost Next */}
-        <Animated.View entering={FadeIn.duration(600)} style={{ position: "absolute", left: signLeft - 0.03 * screenW + signW * 1.54, top: nextTop * 0.98, width: signW, height: nextH, zIndex: 25 }}>
+        <Animated.View entering={FadeIn.duration(600)} style={{ position: "absolute", left: signLeft - 0.03 * screenW + signW * 1.19, top: nextTop * 0.98 * 0.9 * 1.03 * 1.02 * 0.99, width: signW, height: nextH, zIndex: 25 }}>
           <Pressable onPress={handleNext} hitSlop={8} className="w-full h-full active:scale-95 active:opacity-80">
             <RNImage source={require("../../assets/images/ui/next.png")} style={{ width: "100%", height: "100%" }} resizeMode="contain" />
           </Pressable>
         </Animated.View>
 
         {/* Signpost Back */}
-        <Animated.View entering={FadeIn.duration(600)} style={{ position: "absolute", left: signLeft - 0.03 * screenW + signW * 1.52, top: backTop * 1.02, width: signW * 0.95, height: backSignH * 0.95, zIndex: 25 }}>
+        <Animated.View entering={FadeIn.duration(600)} style={{ position: "absolute", left: signLeft - 0.03 * screenW + signW * 1.26, top: backTop * 1.02 * 0.9 * 1.03 * 1.01, width: signW * 0.95, height: backSignH * 0.95, zIndex: 25 }}>
           <Pressable onPress={handleBack} hitSlop={8} className="w-full h-full active:scale-95 active:opacity-80">
             <RNImage source={require("../../assets/images/ui/back-green.png")} style={{ width: "100%", height: "100%" }} resizeMode="contain" />
           </Pressable>

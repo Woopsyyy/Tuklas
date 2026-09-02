@@ -255,7 +255,7 @@ export default function Antas1Level1Screen() {
           style={{
             position: "absolute",
             left: signLeft - 0.05 * screenW + 0.02 * screenW + 0.01 * screenW + 0.05 * screenW - 0.05 * screenW + signW * 1.8 - 0.05 * screenW,
-            top: (nextTop + 0.005 * screenH + 0.02 * screenH - 0.01 * screenH) * 0.97335,
+            top: (nextTop + 0.005 * screenH + 0.02 * screenH - 0.01 * screenH) * 0.97335 - 0.05 * screenH,
             width: signW * 1.2,
             height: nextH * 1.2,
             zIndex: 25,
@@ -280,7 +280,7 @@ export default function Antas1Level1Screen() {
           style={{
             position: "absolute",
             left: signLeft - 0.05 * screenW + 0.02 * screenW + 0.01 * screenW + 0.05 * screenW - 0.05 * screenW + signW * 1.8 - 0.05 * screenW,
-            top: backTop + 0.01 * screenH + 0.02 * screenH - 0.01 * screenH,
+            top: backTop + 0.01 * screenH + 0.02 * screenH - 0.01 * screenH - 0.05 * screenH,
             width: signW * 0.98 * 0.98 * 0.98 * 1.2,
             height: backH2 * 0.98 * 0.98 * 0.98 * 1.2,
             zIndex: 25,

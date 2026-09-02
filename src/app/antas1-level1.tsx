@@ -59,6 +59,13 @@ export default function Antas1Level1Screen() {
   const choiceALeft = screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW + 0.1 * screenW - 0.03 * screenW - 0.03 * screenW;
   const choiceBLeft = screenW * 0.25 - 0.4 * screenW + 0.2 * screenW + 0.05 * screenW + screenW * 0.5 + 0.2 * screenW - 0.4 * screenW - 0.1 * screenW + 0.05 * screenW + 0.03 * screenW + 0.1 * screenW - 0.03 * screenW;
 
+  // Feedback border box — 50% of the choice box, centered over the art
+  const fbW = choiceW * 0.5;
+  const fbH = choiceH * 0.5 * 1.4;
+  const fbALeft = choiceALeft + (choiceW - fbW) / 2;
+  const fbBLeft = choiceBLeft + (choiceW - fbW) / 2;
+  const fbTop = choiceTop + (choiceH - fbH) / 2;
+
   // Wooden signpost Next & Back
   const signLeft = bgOffsetX + 1670 * bgScale;
   const signW = 200 * bgScale;
@@ -187,10 +194,10 @@ export default function Antas1Level1Screen() {
           style={[
             {
               position: "absolute",
-              left: choiceALeft,
-              top: choiceTop,
-              width: choiceW,
-              height: choiceH,
+              left: fbALeft,
+              top: fbTop,
+              width: fbW,
+              height: fbH,
               zIndex: 50,
             },
             selectedChoice === "A" && animatedPulseStyle,
@@ -202,7 +209,7 @@ export default function Antas1Level1Screen() {
             style={{
               width: "100%",
               height: "100%",
-              borderRadius: 16 * bgScale,
+              borderRadius: 8 * bgScale,
               borderWidth: selectedChoice === "A" ? 1.25 : selectedChoice !== null ? 0.5 : 0,
               borderColor: selectedChoice === "A" ? "#ef4444" : "transparent",
               backgroundColor:
@@ -221,10 +228,10 @@ export default function Antas1Level1Screen() {
           style={[
             {
               position: "absolute",
-              left: choiceBLeft,
-              top: choiceTop,
-              width: choiceW,
-              height: choiceH,
+              left: fbBLeft,
+              top: fbTop,
+              width: fbW,
+              height: fbH,
               zIndex: 50,
             },
             (selectedChoice === "B" || selectedChoice === "A") && animatedPulseStyle,
@@ -236,7 +243,7 @@ export default function Antas1Level1Screen() {
             style={{
               width: "100%",
               height: "100%",
-              borderRadius: 16 * bgScale,
+              borderRadius: 8 * bgScale,
               borderWidth: selectedChoice !== null ? 1.5 : 0,
               borderColor: selectedChoice !== null ? "#22c55e" : "transparent",
               backgroundColor:

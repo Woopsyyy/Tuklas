@@ -52,8 +52,8 @@ export default function Antas1Level1Screen() {
   const settingsH = iconBase;
 
   // Choice A and B frame coordinates in 1920x1080 design
-  const choiceW = 480 * bgScale * 1.44;
-  const choiceH = 335 * bgScale * 1.44;
+  const choiceW = 480 * bgScale * 1.44 * 0.8;
+  const choiceH = 335 * bgScale * 1.44 * 0.8;
   const choiceTop = bgOffsetY + 625 * bgScale;
 
   const choiceALeft = (bgOffsetX + 430 * bgScale) * 0.76;

@@ -226,7 +226,7 @@ useFocusEffect(
         </Animated.View>
 
         {/* Signpost Next */}
-        <Animated.View entering={FadeIn.duration(600)} style={{ position: "absolute", left: signLeft - 0.03 * screenW + signW * 1.19, top: nextTop * 0.98 * 0.9 * 1.03 * 1.02, width: signW, height: nextH, zIndex: 25 }}>
+        <Animated.View entering={FadeIn.duration(600)} style={{ position: "absolute", left: signLeft - 0.03 * screenW + signW * 1.19, top: nextTop * 0.98 * 0.9 * 1.03 * 1.02 * 0.99, width: signW, height: nextH, zIndex: 25 }}>
           <Pressable onPress={handleNext} hitSlop={8} className="w-full h-full active:scale-95 active:opacity-80">
             <RNImage source={require("../../assets/images/ui/next.png")} style={{ width: "100%", height: "100%" }} resizeMode="contain" />
           </Pressable>

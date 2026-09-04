@@ -54,13 +54,13 @@ export default function Antas5Level1Screen() {
   const settingsH = iconBase;
 
   // Signboard (sign.png: 624 x 521) — hangs from ceiling at top center
-  const signW = Math.min(screenW * 0.38, 680 * bgScale) * 0.6 * 1.4 * 0.9 * 0.95 * 0.9;
+  const signW = Math.min(screenW * 0.38, 680 * bgScale) * 0.6 * 1.4 * 0.9 * 0.95 * 0.9 * 1.1 * 1.2;
   const signH = signW * (521 / 624);
   const signLeft = (screenW - signW) / 2;
-  const signTop = Math.min(0, bgOffsetY) + 0.10 * screenH + 0.40 * screenH - 0.10 * screenH - 0.20 * screenH + 0.10 * screenH + 0.05 * screenH - 0.02 * screenH;
+  const signTop = Math.min(0, bgOffsetY) + 0.10 * screenH + 0.40 * screenH - 0.10 * screenH - 0.20 * screenH + 0.10 * screenH + 0.05 * screenH - 0.02 * screenH - 0.20 * screenH - 0.10 * screenH - 0.03 * screenH;
 
   // Choice cards (A: 757x133, B/C/D: 757x142)
-  const choiceW = Math.min(screenW * 0.41, 760 * bgScale) * 0.9 * 0.9;
+  const choiceW = Math.min(screenW * 0.41, 760 * bgScale) * 0.9 * 0.9 * 1.2;
   const choiceH = choiceW * (142 / 757);
   const choiceAH = choiceW * (133 / 757);
 
@@ -69,14 +69,14 @@ export default function Antas5Level1Screen() {
   const col1Left = marginX;
   const col2Left = screenW - marginX - choiceW;
 
-  const row1Top = bgOffsetY + 530 * bgScale + 0.05 * screenH + 0.05 * screenH + 0.05 * screenH;
+  const row1Top = bgOffsetY + 530 * bgScale + 0.05 * screenH + 0.05 * screenH + 0.05 * screenH - 0.10 * screenH;
   const row2Top = row1Top + choiceH + 34 * bgScale;
 
   // Next button (antas5-next.png: 1920x1080 canvas / badge at bottom right)
   const nextW = 230 * bgScale;
   const nextH = nextW * (56 / 128) * 2.2;
-  const nextRight = Math.max(insets.right + 20, 30 * bgScale);
-  const nextBottom = Math.max(insets.bottom + 16, 20 * bgScale) - 0.10 * screenH - 0.10 * screenH + 0.03 * screenH;
+  const nextRight = Math.max(insets.right + 20, 30 * bgScale) + 0.02 * screenW;
+  const nextBottom = Math.max(insets.bottom + 16, 20 * bgScale) - 0.10 * screenH - 0.10 * screenH + 0.03 * screenH + 0.05 * screenH;
 
   // Pulse animation for selection
   const pulseScale = useSharedValue(1);

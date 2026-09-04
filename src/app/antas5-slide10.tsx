@@ -41,9 +41,9 @@ export default function Antas5Slide10Screen() {
   const settingsH = iconBase;
 
   // NPC Explorer Girl (npc.png: 417 x 977) — standing on the left
-  const npcH = Math.min(screenH * 0.88 * 1.4, 977 * bgScale * 0.95 * 1.4);
+  const npcH = Math.min(screenH * 0.88 * 1.4, 977 * bgScale * 0.95 * 1.4) * 0.9;
   const npcW = npcH * (417 / 977);
-  const npcLeft = Math.max(insets.left + 12, bgOffsetX + 60 * bgScale) + screenW * 0.05;
+  const npcLeft = Math.max(insets.left + 12, bgOffsetX + 60 * bgScale) + screenW * 0.05 - screenW * 0.05;
   const npcBottom = Math.max(insets.bottom + 4, 10 * bgScale) - screenH * 0.13;
 
   // Calculate scores
@@ -66,7 +66,7 @@ export default function Antas5Slide10Screen() {
   // Board layout sizing - centered in the middle
   const cardW = Math.min(screenW * 0.58, 760 * bgScale);
   const cardLeft = (screenW - cardW) / 2;
-  const cardTop = Math.max(insets.top + 8, screenH * 0.07);
+  const cardTop = Math.max(insets.top + 8, screenH * 0.07) + 0.10 * screenH;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
@@ -219,7 +219,7 @@ export default function Antas5Slide10Screen() {
           <View style={{ alignItems: "center", marginBottom: 6 * bgScale }}>
             <Text
               style={{
-                fontSize: Math.max(16, 22 * bgScale),
+                fontSize: Math.max(16, 22 * bgScale) * 1.1 * 1.2,
                 fontWeight: "900",
                 color: "#61360c",
                 letterSpacing: 1.2,

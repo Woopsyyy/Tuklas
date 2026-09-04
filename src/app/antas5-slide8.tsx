@@ -93,13 +93,19 @@ export default function Antas5Slide8Screen() {
     <View className="flex-1 bg-black">
       <StatusBar hidden={true} />
 
-      {/* Full-screen Background */}
-      <Image
-        source={require("../../assets/images/antas5/slide8/background.png")}
-        style={{ position: "absolute", width: "100%", height: "100%" }}
-        contentFit="cover"
-        transition={0}
-      />
+      {/* Full-screen Background — pressable to go to slide9 */}
+      <Pressable
+        onPress={handleContinue}
+        style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
+        className="active:opacity-95"
+      >
+        <Image
+          source={require("../../assets/images/antas5/slide8/background.png")}
+          style={{ width: "100%", height: "100%" }}
+          contentFit="cover"
+          transition={0}
+        />
+      </Pressable>
 
       <View className="flex-1">
         {/* Top Header Bar */}
@@ -143,32 +149,7 @@ export default function Antas5Slide8Screen() {
           </View>
         </View>
 
-        {/* Continue Button (button.png) */}
-        <Animated.View
-          entering={FadeInUp.duration(700).delay(350)}
-          style={{
-            position: "absolute",
-            bottom: buttonBottom,
-            left: buttonLeft,
-            width: buttonW,
-            height: buttonH,
-            zIndex: 25,
-          }}
-        >
-          <Pressable
-            onPress={handleContinue}
-            hitSlop={8}
-            className="w-full h-full active:scale-95 active:opacity-90"
-          >
-            <Image
-              source={require("../../assets/images/antas5/slide7/button.png")}
-              style={{ width: "100%", height: "100%" }}
-              contentFit="contain"
-              transition={0}
-            />
-          </Pressable>
-        </Animated.View>
+        </View>
       </View>
-    </View>
   );
 }

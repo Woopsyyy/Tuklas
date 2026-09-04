@@ -36,22 +36,22 @@ export default function Antas5Slide4Screen() {
   // Next button (antas5-next.png) â€” same as slide1
   const nextW = 420 * bgScale * 0.8;
   const nextH = nextW * (56 / 128);
-  const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW - 0.05 * screenW;
+  const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW - 0.05 * screenW + 0.03 * screenW;
   const nextTop = (screenH + 700 * bgScale * (56 / 128)) / 2 + 60 * bgScale + 0.20 * screenH - 0.05 * screenH;
 
   // Sign (sign.png) â€” centered in the middle, above text1
   // Source 214x103
-  const sign4W = 500 * bgScale * 1.5 * 1.5;
+  const sign4W = 700 * bgScale * 1.5 * 1.2 * 1.3 * 0.8 * 0.8 * 0.8 * 1.4;
   const sign4H = sign4W * (103 / 214);
   const sign4Left = (screenW - sign4W) / 2;
-  const sign4Top = (screenH - sign4H) / 2 - 60 * bgScale + 0.05 * screenH - 0.05 * screenH + 0.03 * screenH;
+  const sign4Top = (screenH - sign4H) / 2 - 0.20 * screenH + 0.03 * screenH;
 
   // Text1 (text1.png) â€” below sign, centered
   // Source 128x56
-  const text1W = 700 * bgScale * 1.3 * 1.5;
+  const text1W = 700 * bgScale * 1.3 * 1.5 * 1.2;
   const text1H = text1W * (56 / 128);
   const text1Left = (screenW - text1W) / 2;
-  const text1Top = screenH * 0.56;
+  const text1Top = screenH * 0.56 - 0.20 * screenH + 0.03 * screenH;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);

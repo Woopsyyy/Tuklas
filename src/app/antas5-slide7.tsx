@@ -44,16 +44,16 @@ export default function Antas5Slide7Screen() {
   const signTop = Math.max(insets.top + 8, bgOffsetY + 80 * bgScale + 0.04 * screenH);
 
   // NPC Explorers (npc.png: 387 x 726) — bottom left
-  const npcH = Math.min(screenH * 0.64, 726 * bgScale * 0.85) * 1.5 * 0.8;
+  const npcH = Math.min(screenH * 0.64, 726 * bgScale * 0.85) * 1.5 * 0.8 * 1.1 * 1.2;
   const npcW = npcH * (387 / 726);
-  const npcLeft = Math.max(insets.left + 16, bgOffsetX + 50 * bgScale + 0.02 * screenW) + 0.10 * screenW - 0.05 * screenW;
+  const npcLeft = Math.max(insets.left + 16, bgOffsetX + 50 * bgScale + 0.02 * screenW) + 0.10 * screenW - 0.05 * screenW - 0.10 * screenW;
   const npcBottom = Math.max(insets.bottom + 12, 20 * bgScale) - 0.10 * screenH - 0.05 * screenH;
 
   // Glowing Treasure Chest (chest.png: 406 x 341) — center clearing
   const chestW = Math.min(screenW * 0.24, 406 * bgScale * 1.05);
   const chestH = chestW * (341 / 406);
   const chestLeft = (screenW - chestW) / 2 + 0.03 * screenW;
-  const chestTop = signTop + signH + 0.02 * screenH - 0.10 * screenH;
+  const chestTop = signTop + signH + 0.02 * screenH - 0.10 * screenH + 0.05 * screenH + 0.10 * screenH;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);

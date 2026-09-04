@@ -39,22 +39,22 @@ export default function Antas5Slide6Screen() {
   // Next button (antas5-next.png) — same as slide1
   const nextW = 420 * bgScale * 0.8;
   const nextH = nextW * (56 / 128);
-  const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW - 0.05 * screenW;
+  const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW - 0.05 * screenW + 0.03 * screenW;
   const nextTop = (screenH + 700 * bgScale * (56 / 128)) / 2 + 60 * bgScale + 0.20 * screenH - 0.05 * screenH;
 
   // Text1 (text1.png) — centered in the middle at 80% size
   // Source 1544x607
-  const text1W = 700 * bgScale * 1.3 * 1.5 * 0.8 * 1.4 * 0.8;
+  const text1W = 700 * bgScale * 1.3 * 1.5 * 0.8 * 1.4 * 0.8 * 1.1;
   const text1H = text1W * (607 / 1544);
   const text1Left = (screenW - text1W) / 2;
   const text1Top = (screenH - text1H) / 2 + 0.10 * screenH;
 
   // NPC (npc.png) — girl on the left side at 50% size
   // Source 330x1033
-  const npcH = screenH * 0.80 * 1.5 * 0.5 * 1.5 * 1.4 * 0.9;
+  const npcH = screenH * 0.80 * 1.5 * 0.5 * 1.5 * 1.4 * 0.9 * 0.9;
   const npcW = npcH * (330 / 1033);
-  const npcLeft = bgOffsetX - npcW * 0.30 + 0.10 * screenW + 0.03 * screenW;
-  const npcTop = (screenH - npcH) / 2 + 0.05 * screenH + 0.05 * screenH;
+  const npcLeft = bgOffsetX - npcW * 0.30 + 0.10 * screenW + 0.03 * screenW - 0.10 * screenW;
+  const npcTop = (screenH - npcH) / 2 + 0.05 * screenH + 0.05 * screenH - 0.10 * screenH;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);

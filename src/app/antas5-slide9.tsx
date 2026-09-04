@@ -38,16 +38,16 @@ export default function Antas5Slide9Screen() {
   const settingsH = iconBase;
 
   // NPC Explorer Girl (npc.png: 417 x 977) — standing on the left
-  const npcH = Math.min(screenH * 0.88 * 1.4, 977 * bgScale * 0.95 * 1.4);
+  const npcH = Math.min(screenH * 0.88 * 1.4, 977 * bgScale * 0.95 * 1.4) * 0.8;
   const npcW = npcH * (417 / 977);
-  const npcLeft = Math.max(insets.left + 12, bgOffsetX + 60 * bgScale) + screenW * 0.05;
+  const npcLeft = Math.max(insets.left + 12, bgOffsetX + 60 * bgScale) + screenW * 0.05 - screenW * 0.05 - screenW * 0.05;
   const npcBottom = Math.max(insets.bottom + 4, 10 * bgScale) - screenH * 0.10 - screenH * 0.03;
 
   // Parchment Scroll / Sign (sign.png: 1066 x 746) — center-right, 20% larger, 10% left
   const signH = Math.min(screenH * 0.72 * 1.08, 746 * bgScale * 0.95 * 1.08);
   const signW = signH * (1066 / 746);
   const signLeft = (screenW - signW) / 2 + 0.08 * screenW - 0.10 * screenW;
-  const signTop = Math.max(insets.top + 8, screenH * 0.07);
+  const signTop = Math.max(insets.top + 8, screenH * 0.07) + 0.10 * screenH - 0.10 * screenH;
 
   // Button (button.png: 780 x 97) — "Tignan ang resulta", 40% larger, centered under the parchment
   const buttonW = Math.min(signW * 0.58 * 1.4, 780 * bgScale * 0.85 * 1.4);

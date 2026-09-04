@@ -36,3 +36,9 @@ Press `a` (Android), `i` (iOS), or `w` (web), or scan the QR code with Expo Go.
 App code lives in `src/`: routes in `src/app/`, components in `src/components/`,
 state in `src/store/`, pure helpers in `src/lib/`. The `@/*` import alias maps to
 `src/*`.
+
+
+
+## Installing the app
+
+eas build -p android --profile production

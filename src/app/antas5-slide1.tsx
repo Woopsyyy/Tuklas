@@ -35,7 +35,7 @@ export default function Antas5Slide1Screen() {
 
   // Sign (sign.png) â€” centered in the middle
   // Source 128x56
-  const signW = 700 * bgScale * 1.5 * 1.2;
+  const signW = 700 * bgScale * 1.5 * 1.2 * 1.3;
   const signH = signW * (56 / 128);
   const signLeft = (screenW - signW) / 2;
   const signTop = (screenH - signH) / 2;
@@ -45,7 +45,7 @@ export default function Antas5Slide1Screen() {
   // Source 128x56
   const nextW = 420 * bgScale * 0.8;
   const nextH = nextW * (56 / 128);
-  const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW - 0.05 * screenW;
+  const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW - 0.05 * screenW + 0.03 * screenW;
   const nextTop = (screenH + 700 * bgScale * (56 / 128)) / 2 + 60 * bgScale + 0.20 * screenH - 0.05 * screenH;
 
   useEffect(() => {

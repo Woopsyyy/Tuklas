@@ -39,38 +39,38 @@ export default function Antas5Screen() {
 
   // Title (text1.png) — "ANTAS 5 / AKLATAN NG KARUNUNGAN"
   // Source is 1456x559 approx — position top-center
-  const titleW = 900 * bgScale * 1.5 * 1.4 * 1.4;
-  const titleH = 220 * bgScale * 1.5 * 1.4 * 1.4;
+  const titleW = 900 * bgScale * 1.5 * 2 * 0.5;
+  const titleH = 220 * bgScale * 1.5 * 2 * 0.5;
   const titleLeft = (screenW - titleW) / 2;
-  const titleTop = (bgOffsetY + 10 * bgScale - 0.05 * screenH - 0.10 * screenH + 0.40 * screenH - 0.05 * screenH - 0.10 * screenH + 0.03 * screenH) * 0.6 * 0.9 * 0.9 * 0.6 * 0 * -1;
+  const titleTop = bgOffsetY - 0.02 * screenH * 0.5;
 
   // NPC (npc.png) — girl on the left side
   // Source PNG is wide (1456x816) but character occupies right half
   // We show a tall portrait on the left
-  const npcH = screenH * 0.80 * 1.5;
+  const npcH = screenH * 0.80 * 1.5 * 0.8;
   const npcW = npcH * (1456 / 816);
-  const npcLeft = bgOffsetX - npcW * 0.30;   // shift left so character visible in left area
-  const npcTop = screenH - npcH + 10 * bgScale + 0.25 * screenH;
+  const npcLeft = bgOffsetX - npcW * 0.30 - screenW * 0.20 + screenW * 0.03;   // shift left so character visible in left area
+  const npcTop = screenH - npcH + 10 * bgScale + 0.25 * screenH - 0.10 * screenH - 0.05 * screenH;
 
   // Dialogue card (text2.png) — center, below title
   // Source 1456x665 approx
-  const cardW = screenW * 0.52 * 1.3;
+  const cardW = screenW * 0.52 * 1.3 * 1.3;
   const cardH = cardW * (665 / 1456);
   const cardLeft = (screenW - cardW) / 2 + screenW * 0.03;
-  const cardTop = bgOffsetY + 155 * bgScale + 0.50 * screenH - 0.20 * screenH;
+  const cardTop = bgOffsetY + 155 * bgScale + 0.50 * screenH - 0.20 * screenH - 0.20 * screenH - 0.20 * screenH + 0.05 * screenH;
 
   // Button (button.png) — "Basahin ang Kuwento", centered at bottom
   // Source 1296x230 approx
-  const buttonW = 420 * bgScale * 1.4 * 1.5 * 1.3;
+  const buttonW = 420 * bgScale * 1.4 * 1.5 * 1.3 * 1.2 * 1.3 * 1.1;
   const buttonH = buttonW * (230 / 1296);
   const buttonLeft = (screenW - buttonW) / 2 + screenW * 0.03;
-  const buttonTop = bgOffsetY + 830 * bgScale;
+  const buttonTop = bgOffsetY + 830 * bgScale - 0.10 * screenH;
 
   // Book (book.png) — bottom-right corner decoration
   const bookH = screenH * 0.32;
   const bookW = bookH * (1456 / 816);
   const bookLeft = screenW - bookW * 0.75 - 0.05 * screenW;
-  const bookTop = screenH - bookH - 5 * bgScale + 0.10 * screenH + 0.05 * screenH;
+  const bookTop = screenH - bookH - 5 * bgScale + 0.10 * screenH + 0.05 * screenH - 0.03 * screenH - 0.02 * screenH;
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);

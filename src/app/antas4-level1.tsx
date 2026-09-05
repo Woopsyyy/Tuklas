@@ -35,11 +35,11 @@ const ALL_WORDS: WordItem[] = [
   {
     id: "word1",
     source: require("../../assets/images/antas4/question1/word1.png"),
-    cropX: 356,
-    cropY: 281,
-    cropW: 1278,
-    cropH: 447,
-    aspect: 1278 / 447,
+    cropX: 98,
+    cropY: 172,
+    cropW: 1739,
+    cropH: 683,
+    aspect: 1739 / 683,
     text: "nagdala",
   },
   {

@@ -13,11 +13,10 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
+import { useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 import { useScoreStore } from "@/store/use-score-store";
-
-setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
+import { pauseNarration, playNarration } from "@/lib/narration";
 
 export default function Antas1Level1Screen() {
   const router = useRouter();
@@ -88,29 +87,13 @@ export default function Antas1Level1Screen() {
   useFocusEffect(
     useCallback(() => {
       return () => {
-        try {
-          narration.pause();
-          narration.seekTo(0);
-        } catch (e) {
-          // ignore if already released
-        }
+        pauseNarration(narration);
       };
     }, [narration])
   );
 
-  const handlePlayNarration = async () => {
-    try {
-      await setAudioModeAsync({ playsInSilentMode: true });
-      narration.loop = false;
-      narration.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
-      narration.muted = false;
-      try {
-        narration.seekTo(0);
-      } catch (_) {}
-      narration.play();
-    } catch (e) {
-      console.warn("Antas1Level1 narration play error:", e);
-    }
+  const handlePlayNarration = () => {
+    playNarration(narration, narrationVolume);
   };
 
   const handleSelectChoice = (choice: "A" | "B") => {
@@ -126,19 +109,13 @@ export default function Antas1Level1Screen() {
   };
 
   const handleNext = () => {
-    try {
-      narration.pause();
-      narration.seekTo(0);
-    } catch (e) {}
+    pauseNarration(narration);
     if (timerRef.current) clearTimeout(timerRef.current);
     router.navigate("/antas1-level2");
   };
 
   const handleBack = () => {
-    try {
-      narration.pause();
-      narration.seekTo(0);
-    } catch (e) {}
+    pauseNarration(narration);
     if (timerRef.current) clearTimeout(timerRef.current);
     router.back();
   };

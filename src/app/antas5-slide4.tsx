@@ -6,8 +6,9 @@ import { Pressable, useWindowDimensions, View } from "react-native";
 import { Image } from "expo-image";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
+import { useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
+import { playNarration } from "@/lib/narration";
 
 export default function Antas5Slide4Screen() {
   const router = useRouter();
@@ -86,17 +87,8 @@ export default function Antas5Slide4Screen() {
     router.back();
   };
 
-  const handleReplayNarration = async () => {
-    try {
-      await setAudioModeAsync({ playsInSilentMode: true });
-      narration.loop = false;
-      narration.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
-      narration.muted = false;
-      narration.seekTo(0);
-      narration.play();
-    } catch (e) {
-      console.warn("Antas5Slide4 narration replay error:", e);
-    }
+  const handleReplayNarration = () => {
+    playNarration(narration, narrationVolume);
   };
 
   return (

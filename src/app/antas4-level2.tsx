@@ -14,14 +14,13 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { setAudioModeAsync, useAudioPlayer, type AudioStatus } from "expo-audio";
+import { useAudioPlayer, type AudioStatus } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 import { useScoreStore } from "@/store/use-score-store";
+import { pauseNarration, playNarration } from "@/lib/narration";
 
 // Initialize audio session at module load time so the Android MediaSession is
 // ready before any AudioPlayer instance is constructed (prevents NullPointerException).
-setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
-
 interface WordItem {
   id: string;
   source: any;
@@ -319,15 +318,9 @@ export default function Antas4Level2Screen() {
     }
     clearAnswerChain();
     Object.values(wordAudiosRef.current).forEach((p) => {
-      try {
-        p.pause();
-        p.seekTo(0);
-      } catch (e) {}
+      pauseNarration(p);
     });
-    try {
-      firstAnswerAudioRef.current.pause();
-      firstAnswerAudioRef.current.seekTo(0);
-    } catch (e) {}
+    pauseNarration(firstAnswerAudioRef.current);
   }, [clearAnswerChain]);
 
   useEffect(() => {
@@ -397,56 +390,31 @@ export default function Antas4Level2Screen() {
     }
   };
 
-  const playWordAudio = async (text: string) => {
+  const playWordAudio = (text: string) => {
     if (!isScreenActiveRef.current) return;
     const player = wordAudiosRef.current[text];
     if (!player) return;
-    try {
-      await setAudioModeAsync({ playsInSilentMode: true });
-      if (!isScreenActiveRef.current) return;
-      Object.values(wordAudiosRef.current).forEach((p) => {
-        if (p !== player) {
-          try { p.pause(); } catch (_) {}
-        }
-      });
-      try { firstAnswerAudioRef.current.pause(); } catch (_) {}
-      player.loop = false;
-      player.muted = false;
-      player.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
-      try {
-        player.seekTo(0);
-      } catch (_) {}
-      player.play();
-    } catch (e) {
-      console.warn("Antas4Level2 word audio play error:", e);
-    }
-  };
-
-  const playFirstAnswer = async () => {
     if (!isScreenActiveRef.current) return;
-    try {
-      await setAudioModeAsync({ playsInSilentMode: true });
-      if (!isScreenActiveRef.current) return;
-      Object.values(wordAudiosRef.current).forEach((p) => {
-        try {
-          p.pause();
-        } catch (e) {}
-      });
-      const player = firstAnswerAudioRef.current;
-      player.loop = false;
-      player.muted = false;
-      player.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
-      try {
-        player.seekTo(0);
-      } catch (_) {}
-      if (!isScreenActiveRef.current) return;
-      player.play();
-    } catch (e) {
-      console.warn("Antas4Level2 first answer audio play error:", e);
-    }
+    Object.values(wordAudiosRef.current).forEach((p) => {
+      if (p !== player) {
+        pauseNarration(p);
+      }
+    });
+    pauseNarration(firstAnswerAudioRef.current);
+    playNarration(player, narrationVolume);
   };
 
-  const handlePlayNarration = async () => {
+  const playFirstAnswer = () => {
+    if (!isScreenActiveRef.current) return;
+    Object.values(wordAudiosRef.current).forEach((p) => {
+      pauseNarration(p);
+    });
+    const player = firstAnswerAudioRef.current;
+    if (!isScreenActiveRef.current) return;
+    playNarration(player, narrationVolume);
+  };
+
+  const handlePlayNarration = () => {
     playFirstAnswer();
   };
 

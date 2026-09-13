@@ -64,6 +64,7 @@
     "typecheck": "tsc --noEmit",
     "dev": "powershell -ExecutionPolicy Bypass -File scripts/dev.ps1",
     "dev:install": "powershell -ExecutionPolicy Bypass -File scripts/eas-install.ps1",
+    "dev:rebuild": "powershell -ExecutionPolicy Bypass -File scripts/dev-rebuild.ps1",
     "dev:android": "powershell -ExecutionPolicy Bypass -File scripts/dev.ps1 -MetroOnly -Mode lan",
     "dev:android:tunnel": "powershell -ExecutionPolicy Bypass -File scripts/dev.ps1 -MetroOnly -Mode tunnel"
   },

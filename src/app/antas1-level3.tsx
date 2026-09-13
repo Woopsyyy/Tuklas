@@ -13,12 +13,10 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
+import { useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 import { useScoreStore } from "@/store/use-score-store";
-
-setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
-
+import { playNarration } from "@/lib/narration";
 export default function Antas1Level3Screen() {
   const router = useRouter();
   const narrationVolume = useSettingsStore((state) => state.narrationVolume);
@@ -98,19 +96,8 @@ export default function Antas1Level3Screen() {
     }, [narration])
   );
 
-  const handlePlayNarration = async () => {
-    try {
-      await setAudioModeAsync({ playsInSilentMode: true });
-      narration.loop = false;
-      narration.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
-      narration.muted = false;
-      try {
-        narration.seekTo(0);
-      } catch (_) {}
-      narration.play();
-    } catch (e) {
-      console.warn("Antas1Level3 narration play error:", e);
-    }
+  const handlePlayNarration = () => {
+    playNarration(narration, narrationVolume);
   };
 
   const handleSelectChoice = (choice: "A" | "B") => {

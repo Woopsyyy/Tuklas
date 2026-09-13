@@ -5,12 +5,10 @@ import { useCallback, useEffect } from "react";
 import { Image, Pressable, useWindowDimensions, View } from "react-native";
 import Animated, { FadeIn, FadeInLeft, FadeInUp } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
+import { useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
+import { playNarration } from "@/lib/narration";
 import { CroppedCanvasImage } from "@/components/cropped-canvas-image";
-
-setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
-
 export default function Antas2Screen() {
   const router = useRouter();
   const narrationVolume = useSettingsStore((state) => state.narrationVolume);
@@ -82,19 +80,8 @@ const buttonTop = bgOffsetY + 855 * bgScale;
     }, [narration])
   );
 
-  const handlePlayNarration = async () => {
-    try {
-      await setAudioModeAsync({ playsInSilentMode: true });
-      narration.loop = false;
-      narration.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
-      narration.muted = false;
-      try {
-        narration.seekTo(0);
-      } catch (_) {}
-      narration.play();
-    } catch (e) {
-      console.warn("Antas2 narration play error:", e);
-    }
+  const handlePlayNarration = () => {
+    playNarration(narration, narrationVolume);
   };
 
   const handleStartMission = () => {

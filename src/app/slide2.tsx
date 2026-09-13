@@ -5,10 +5,9 @@ import { useCallback, useEffect } from "react";
 import { Image, Pressable, useWindowDimensions, View } from "react-native";
 import Animated, { FadeInLeft, FadeInRight } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
+import { useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
-
-setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
+import { pauseNarration, playNarration } from "@/lib/narration";
 
 export default function Slide2Screen() {
   const router = useRouter();
@@ -57,45 +56,23 @@ export default function Slide2Screen() {
   useFocusEffect(
     useCallback(() => {
       return () => {
-        try {
-          narration.pause();
-          narration.seekTo(0);
-        } catch (e) {
-          // ignore if already released
-        }
+        pauseNarration(narration);
       };
     }, [narration])
   );
 
   const handleProceed = () => {
-    try {
-      narration.pause();
-      narration.seekTo(0);
-    } catch (e) {}
+    pauseNarration(narration);
     router.navigate("/slide3");
   };
 
   const handleBack = () => {
-    try {
-      narration.pause();
-      narration.seekTo(0);
-    } catch (e) {}
+    pauseNarration(narration);
     router.back();
   };
 
-  const handleReplayNarration = async () => {
-    try {
-      await setAudioModeAsync({ playsInSilentMode: true });
-      narration.loop = false;
-      narration.muted = false;
-      narration.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
-      try {
-        narration.seekTo(0);
-      } catch (_) {}
-      narration.play();
-    } catch (e) {
-      console.warn("Slide2 narration replay error:", e);
-    }
+  const handleReplayNarration = () => {
+    playNarration(narration, narrationVolume);
   };
 
   return (

@@ -5,11 +5,9 @@ import { useCallback, useEffect } from "react";
 import { Image, Pressable, useWindowDimensions, View } from "react-native";
 import Animated, { FadeIn, FadeInLeft, FadeInUp } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
+import { useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
-
-setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
-
+import { playNarration } from "@/lib/narration";
 export default function Antas1Screen() {
   const router = useRouter();
   const narrationVolume = useSettingsStore((state) => state.narrationVolume);
@@ -78,19 +76,8 @@ export default function Antas1Screen() {
     }, [narration])
   );
 
-  const handlePlayNarration = async () => {
-    try {
-      await setAudioModeAsync({ playsInSilentMode: true });
-      narration.loop = false;
-      narration.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
-      narration.muted = false;
-      try {
-        narration.seekTo(0);
-      } catch (_) {}
-      narration.play();
-    } catch (e) {
-      console.warn("Antas1 narration play error:", e);
-    }
+  const handlePlayNarration = () => {
+    playNarration(narration, narrationVolume);
   };
 
   const handleStartMission = () => {

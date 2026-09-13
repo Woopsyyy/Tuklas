@@ -14,12 +14,10 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
+import { useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 import { useScoreStore } from "@/store/use-score-store";
-
-setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
-
+import { playNarration } from "@/lib/narration";
 type ChoiceType = "A" | "B" | "C" | "D";
 
 const CORRECT_CHOICE: ChoiceType = "C";
@@ -101,19 +99,8 @@ export default function Antas5Level2Screen() {
     }, [narration])
   );
 
-  const handlePlayNarration = async () => {
-    try {
-      await setAudioModeAsync({ playsInSilentMode: true });
-      narration.loop = false;
-      narration.volume = Number.isFinite(narrationVolume) && narrationVolume > 0 ? narrationVolume : 1.0;
-      narration.muted = false;
-      try {
-        narration.seekTo(0);
-      } catch (_) {}
-      narration.play();
-    } catch (e) {
-      console.warn("Antas5Level2 narration play error:", e);
-    }
+  const handlePlayNarration = () => {
+    playNarration(narration, narrationVolume);
   };
 
   const handleSelectChoice = (choice: ChoiceType) => {

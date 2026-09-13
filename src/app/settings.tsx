@@ -52,7 +52,11 @@ export default function SettingsScreen() {
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-    setAudioModeAsync({ playsInSilentMode: true });
+    setAudioModeAsync({
+      playsInSilentMode: true,
+      shouldPlayInBackground: false,
+      interruptionModeAndroid: "mixWithOthers",
+    });
 
     return () => {
       try {

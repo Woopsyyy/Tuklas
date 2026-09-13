@@ -1,5 +1,4 @@
 import {
-  setAudioModeAsync,
   useAudioPlayer,
   useAudioPlayerStatus,
 } from "expo-audio";
@@ -15,10 +14,6 @@ export default function AudioScreen() {
   const status = useAudioPlayerStatus(player);
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
   const toggleSound = useSettingsStore((state) => state.toggleSound);
-
-  useEffect(() => {
-    setAudioModeAsync({ playsInSilentMode: true });
-  }, []);
 
   useEffect(() => {
     return () => {

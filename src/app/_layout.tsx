@@ -23,7 +23,15 @@ function BackgroundMusicPlayer() {
 
   useEffect(() => {
     try {
-      setAudioModeAsync({ playsInSilentMode: true });
+      setAudioModeAsync({
+        playsInSilentMode: true,
+        shouldPlayInBackground: false,
+        // Let background music and narration play on top of each other
+        // without fighting over Android audio focus. Transsion devices
+        // (Tecno/Infinix/itel) can silence a player that loses the focus
+        // fight, which looked like "music plays, narration is silent".
+        interruptionModeAndroid: "mixWithOthers",
+      });
       player.loop = true;
       player.play();
     } catch (e) {

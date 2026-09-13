@@ -728,11 +728,7 @@ export default function Antas4Level1Screen() {
         })}
 
         {/* Wooden Signpost Next Button */}
-        <Animated.View
-          entering={FadeIn.duration(600)}
-          style={{
-            position: "absolute",
-            left: signLeft - 0.05 * screenW + 0.02 * screenW + signW * 1.90 - 0.05 * screenW,
+        <Animated.View style={{ position: "absolute", left: signLeft - 0.05 * screenW + 0.02 * screenW + signW * 1.90 - 0.05 * screenW,
             top: nextTop * 1.03 - 0.04 * screenH,
             width: signW,
             height: nextH,
@@ -745,7 +741,7 @@ export default function Antas4Level1Screen() {
             className="w-full h-full active:scale-95 active:opacity-80"
           >
             <RNImage
-              source={require("../../assets/images/ui/next.png")}
+              source={require("../../assets/images/ui/next.png")} fadeDuration={0}
               style={{ width: "100%", height: "100%" }}
               resizeMode="contain"
             />
@@ -753,11 +749,7 @@ export default function Antas4Level1Screen() {
         </Animated.View>
 
         {/* Wooden Signpost Back Button */}
-        <Animated.View
-          entering={FadeIn.duration(600)}
-          style={{
-            position: "absolute",
-            left: signLeft - 0.03 * screenW + 0.01 * screenW + signW * 1.81 - 0.05 * screenW,
+        <Animated.View style={{ position: "absolute", left: signLeft - 0.03 * screenW + 0.01 * screenW + signW * 1.81 - 0.05 * screenW,
             top: backTop * 1.03 * 1.05 * 0.97 * 1.02 * 0.98 - 0.04 * screenH,
             width: signW * 0.95,
             height: backSignH * 0.95,
@@ -770,7 +762,7 @@ export default function Antas4Level1Screen() {
             className="w-full h-full active:scale-95 active:opacity-80"
           >
             <RNImage
-              source={require("../../assets/images/ui/back-green.png")}
+              source={require("../../assets/images/ui/back-green.png")} fadeDuration={0}
               style={{ width: "100%", height: "100%" }}
               resizeMode="contain"
             />

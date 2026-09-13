@@ -344,11 +344,7 @@ const choiceALeft = (bgOffsetX + 200 * bgScale) * 0.9;
         </Animated.View>
 
         {/* Wooden Signpost Next Button */}
-        <Animated.View
-          entering={FadeIn.duration(600)}
-          style={{
-position: "absolute",
-            left: signLeft - 0.06 * screenW + signW * 1.56,
+        <Animated.View style={{ position: "absolute", left: signLeft - 0.06 * screenW + signW * 1.56,
             top: nextTop * 1.1025 - 0.04 * screenH,
             width: signW * 1.2,
             height: nextH * 1.2,
@@ -360,7 +356,7 @@ position: "absolute",
             hitSlop={8}
             className="w-full h-full active:scale-95 active:opacity-80"
           >
-            <RNImage source={require("../../assets/images/ui/next.png")}
+            <RNImage source={require("../../assets/images/ui/next.png")} fadeDuration={0}
               style={{ width: "100%", height: "100%" }}
               resizeMode="contain"
             />
@@ -368,11 +364,7 @@ position: "absolute",
         </Animated.View>
 
         {/* Wooden Signpost Back Button */}
-        <Animated.View
-          entering={FadeIn.duration(600)}
-          style={{
-position: "absolute",
-            left: signLeft - 0.06 * screenW + signW * 1.56,
+        <Animated.View style={{ position: "absolute", left: signLeft - 0.06 * screenW + signW * 1.56,
             top: backTop * 1.1025 - 0.04 * screenH,
             width: signW * 0.95 * 1.2,
             height: backSignH * 0.95 * 1.2,
@@ -384,7 +376,7 @@ position: "absolute",
             hitSlop={8}
             className="w-full h-full active:scale-95 active:opacity-80"
           >
-            <RNImage source={require("../../assets/images/ui/back-green.png")}
+            <RNImage source={require("../../assets/images/ui/back-green.png")} fadeDuration={0}
               style={{ width: "100%", height: "100%" }}
               resizeMode="contain"
             />

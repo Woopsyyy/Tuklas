@@ -245,11 +245,7 @@ export default function Antas1Level2Screen() {
         </Animated.View>
 
         {/* Wooden Signpost Next Button */}
-        <Animated.View
-          entering={FadeIn.duration(600)}
-          style={{
-            position: "absolute",
-            left: signLeft - 0.05 * screenW + 0.02 * screenW + 0.01 * screenW + 0.05 * screenW - 0.05 * screenW + signW * 1.8 - 0.05 * screenW,
+        <Animated.View style={{ position: "absolute", left: signLeft - 0.05 * screenW + 0.02 * screenW + 0.01 * screenW + 0.05 * screenW - 0.05 * screenW + signW * 1.8 - 0.05 * screenW,
             top: (nextTop + 0.005 * screenH + 0.02 * screenH - 0.01 * screenH) * 0.97335 - 0.05 * screenH,
             width: signW * 1.2,
             height: nextH * 1.2,
@@ -262,7 +258,7 @@ export default function Antas1Level2Screen() {
             className="w-full h-full active:scale-95 active:opacity-80"
           >
             <RNImage
-              source={require("../../assets/images/ui/next.png")}
+              source={require("../../assets/images/ui/next.png")} fadeDuration={0}
               style={{ width: "100%", height: "100%" }}
               resizeMode="contain"
             />
@@ -270,11 +266,7 @@ export default function Antas1Level2Screen() {
         </Animated.View>
 
         {/* Wooden Signpost Back Button */}
-        <Animated.View
-          entering={FadeIn.duration(600)}
-          style={{
-            position: "absolute",
-            left: signLeft - 0.05 * screenW + 0.02 * screenW + 0.01 * screenW + 0.05 * screenW - 0.05 * screenW + signW * 1.8 - 0.05 * screenW,
+        <Animated.View style={{ position: "absolute", left: signLeft - 0.05 * screenW + 0.02 * screenW + 0.01 * screenW + 0.05 * screenW - 0.05 * screenW + signW * 1.8 - 0.05 * screenW,
             top: backTop + 0.01 * screenH + 0.02 * screenH - 0.01 * screenH - 0.05 * screenH,
             width: signW * 0.98 * 0.98 * 0.98 * 1.2,
             height: backH2 * 0.98 * 0.98 * 0.98 * 1.2,
@@ -287,7 +279,7 @@ export default function Antas1Level2Screen() {
             className="w-full h-full active:scale-95 active:opacity-80"
           >
             <RNImage
-              source={require("../../assets/images/ui/back-green.png")}
+              source={require("../../assets/images/ui/back-green.png")} fadeDuration={0}
               style={{ width: "100%", height: "100%" }}
               resizeMode="contain"
             />

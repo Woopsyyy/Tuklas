@@ -17,7 +17,8 @@
       "statusBar": {
         "hidden": true,
         "translucent": true
-      }
+      },
+      "versionCode": 10000
     },
     "web": {
       "output": "static",

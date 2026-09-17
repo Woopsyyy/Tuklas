@@ -4,6 +4,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+$ProgressPreference = "SilentlyContinue"
 
 # ---------------------------------------------------------------
 # 1. Determine repo owner/name from the git remote
@@ -47,10 +48,10 @@ $headers = @{ Authorization = "Bearer $token"; Accept = "application/vnd.github+
 # 3. Find the highest existing release version (releases only, not tags)
 # ---------------------------------------------------------------
 function Get-ReleasesPage([string]$Url) {
-    $r = Invoke-RestMethod -Method Get -Uri $Url -Headers $headers
+    $resp = Invoke-WebRequest -UseBasicParsing -Method Get -Uri $Url -Headers $headers
+    $r = $resp.Content | ConvertFrom-Json
     $link = $null
     try {
-        $resp = Invoke-WebRequest -Method Get -Uri $Url -Headers $headers
         $linkHeader = $resp.Headers["Link"]
         if ($linkHeader -match 'rel="next".*<(.*?)>') { $link = $Matches[1] }
     } catch { }
@@ -107,11 +108,27 @@ $app.expo.android | Add-Member -NotePropertyName versionCode -NotePropertyValue 
 Write-Host "app.json updated: version=$($app.expo.version) versionCode=$versionCode"
 
 # ---------------------------------------------------------------
+# Runs a native command without $ErrorActionPreference="Stop" killing it when
+# the tool writes to stderr (e.g. eas-cli's "update available" banner).
+function Run-Native([scriptblock]$Script) {
+    $prev = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    try {
+        $output = & $Script
+        $script:NativeExit = $LASTEXITCODE
+        return ($output | Out-String).Trim()
+    } finally {
+        $ErrorActionPreference = $prev
+    }
+}
+
+# ---------------------------------------------------------------
 # 6. Expo login check
 # ---------------------------------------------------------------
 Write-Host "Checking Expo login..."
-$whoami = npx eas-cli whoami 2>&1
-if ($LASTEXITCODE -ne 0 -or "$whoami".Trim() -eq "" -or "$whoami" -match "You are not logged in") {
+$env:NO_UPDATE_NOTIFIER = "1"
+$whoami = Run-Native { npx eas-cli whoami --non-interactive 2>$null }
+if ($script:NativeExit -ne 0 -or "$whoami".Trim() -eq "" -or "$whoami" -match "You are not logged in") {
     Write-Host "You need to log in to Expo first." -ForegroundColor Yellow
     npx eas-cli login
     if ($LASTEXITCODE -ne 0) {
@@ -121,40 +138,78 @@ if ($LASTEXITCODE -ne 0 -or "$whoami".Trim() -eq "" -or "$whoami" -match "You ar
 }
 
 # ---------------------------------------------------------------
-# 7. Build + download helper
+# 7. Build APKs locally with Gradle (no EAS cloud, no quota)
+#    - production  -> :app:assembleRelease  (embedded JS, standalone)
+#    - development -> :app:assembleDebug    (dev client, needs Metro)
 # ---------------------------------------------------------------
 function Build-AndDownload {
     param([string]$Profile, [string]$OutName)
 
+    $variant = if ($Profile -eq "production") { "release" } else { "debug" }
+    $root = Get-Location
+
     Write-Host ""
-    Write-Host ">>> Building $Profile APK (profile: $Profile) ..."
-    npx eas-cli build -p android --profile $Profile --non-interactive
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "$Profile EAS build failed." -ForegroundColor Red
-        exit 1
+    Write-Host ">>> Building $Profile APK locally (gradle $variant) ..."
+
+    # Regenerate android/ so the bumped versionCode/versionName from app.json
+    # land in the APK. android/ is git-ignored (CNG), so this is safe. Runs once.
+    if (-not $script:PrebuiltAndroid) {
+        Run-Native { npx expo prebuild --platform android --no-install } | Out-Null
+        if ($script:NativeExit -ne 0) {
+            Write-Host "expo prebuild failed." -ForegroundColor Red
+            exit 1
+        }
+        $script:PrebuiltAndroid = $true
     }
 
-    Write-Host "Locating the newest finished $Profile build..."
-    $buildJson = npx eas-cli build:list -p android --build-profile $Profile --limit 1 --json --non-interactive 2>$null
-    if ($LASTEXITCODE -ne 0 -or -not $buildJson) {
-        Write-Host "Could not fetch $Profile build info. Check the EAS dashboard." -ForegroundColor Yellow
-        exit 1
+    # prebuild regenerates android/ and wipes local.properties + the JDK pin
+    # in gradle.properties. Restore both so Gradle can find SDK and JDK.
+    $sdkRoot = $env:ANDROID_HOME
+    if (-not $sdkRoot) { $sdkRoot = $env:ANDROID_SDK_ROOT }
+    if (-not $sdkRoot -and $env:LOCALAPPDATA) { $sdkRoot = Join-Path $env:LOCALAPPDATA "Android\Sdk" }
+    if (($sdkRoot -is [string]) -and (Test-Path $sdkRoot)) {
+        $sdkDir = ($sdkRoot -replace '\\', '/').TrimEnd('/')
+        [System.IO.File]::WriteAllText((Join-Path $root "android\local.properties"), "sdk.dir=$sdkDir`n")
     }
 
-    $build = ($buildJson | ConvertFrom-Json) | Select-Object -First 1
-    if (-not $build -or $build.status -ne "FINISHED" -or -not $build.artifacts.buildUrl) {
-        Write-Host "Could not find a finished $Profile build with an APK." -ForegroundColor Red
+    $gradleProps = Join-Path $root "android\gradle.properties"
+    $candidates = @(
+        "C:\Program Files\Microsoft\jdk-21.0.2.13-hotspot",
+        "C:\Program Files\Microsoft\jdk-21.0.1.12-hotspot",
+        "C:\Program Files\Eclipse Adoptium\jdk-21.0.2.13-hotspot"
+    )
+    $jdkHome = $null
+    foreach ($cand in $candidates) {
+        if (Test-Path $cand) { $jdkHome = $cand; break }
+    }
+    if ($jdkHome) {
+        $props = [System.IO.File]::ReadAllText($gradleProps)
+        if ($props -notmatch "org\.gradle\.java\.home") {
+            $jdkLine = "org.gradle.java.home=$($jdkHome -replace '\\','/')"
+            [System.IO.File]::AppendAllText($gradleProps, "`n$jdkLine`n")
+        }
+    }
+
+    Push-Location (Join-Path $root "android")
+    try {
+        Run-Native { .\gradlew.bat ":app:assemble$variant" --console=plain -q } | Out-Null
+        if ($script:NativeExit -ne 0) {
+            Write-Host "$Profile local build failed (gradle exit $($script:NativeExit))." -ForegroundColor Red
+            exit 1
+        }
+    } finally {
+        Pop-Location
+    }
+
+    $apkSource = Join-Path $root "android\app\build\outputs\apk\$variant\app-$variant.apk"
+    if (-not (Test-Path $apkSource)) {
+        Write-Host "Local build finished but no APK found at $apkSource" -ForegroundColor Red
         exit 1
     }
 
     New-Item -ItemType Directory -Path $OutDir -Force | Out-Null
     $apkPath = Join-Path (Join-Path (Get-Location) $OutDir) $OutName
-    Write-Host "Downloading $Profile APK to $apkPath ..."
-    Invoke-WebRequest -Uri $build.artifacts.buildUrl -OutFile $apkPath
-    if (-not (Test-Path $apkPath)) {
-        Write-Host "$Profile APK download failed." -ForegroundColor Red
-        exit 1
-    }
+    Copy-Item -LiteralPath $apkSource -Destination $apkPath -Force
 
     $sizeMb = [math]::Round((Get-Item $apkPath).Length / 1MB, 1)
     Write-Host "$Profile APK ready: $apkPath ($sizeMb MB)"

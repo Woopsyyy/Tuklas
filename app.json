@@ -2,7 +2,7 @@
   "expo": {
     "name": "Tuklas-Basa",
     "slug": "tuklas",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "landscape",
     "icon": "./assets/images/icon.png",
     "scheme": "tuklas",
@@ -18,7 +18,7 @@
         "hidden": true,
         "translucent": true
       },
-      "versionCode": 10000
+      "versionCode": 10001
     },
     "web": {
       "output": "static",

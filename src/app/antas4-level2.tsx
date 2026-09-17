@@ -262,6 +262,9 @@ export default function Antas4Level2Screen() {
   const backTop = bgOffsetY + 800 * bgScale + 0.05 * screenH + 0.01 * screenH;
   const backSignH = 92 * bgScale;
 
+  const nextSignLeft = Math.min(signLeft - 0.05 * screenW + 0.02 * screenW + signW * 1.90 - 0.05 * screenW, screenW - signW - 24 * bgScale);
+  const backSignLeft = Math.min(signLeft - 0.03 * screenW + 0.01 * screenW + signW * 1.81 - 0.05 * screenW, screenW - signW * 0.95 - 24 * bgScale);
+
   // Wooden Board (board.png)
   const BOARD_CROP_X = 25;
   const BOARD_CROP_Y = 294;
@@ -763,7 +766,7 @@ export default function Antas4Level2Screen() {
         })}
 
         {/* Wooden Signpost Next Button */}
-        <Animated.View style={{ position: "absolute", left: signLeft - 0.05 * screenW + 0.02 * screenW + signW * 1.90 - 0.05 * screenW,
+        <Animated.View style={{ position: "absolute", left: nextSignLeft,
             top: nextTop * 1.03 - 0.04 * screenH,
             width: signW,
             height: nextH,
@@ -784,7 +787,7 @@ export default function Antas4Level2Screen() {
         </Animated.View>
 
         {/* Wooden Signpost Back Button */}
-        <Animated.View style={{ position: "absolute", left: signLeft - 0.03 * screenW + 0.01 * screenW + signW * 1.81 - 0.05 * screenW,
+        <Animated.View style={{ position: "absolute", left: backSignLeft,
             top: backTop * 1.03 * 1.05 * 0.97 * 1.02 * 0.98 - 0.04 * screenH,
             width: signW * 0.95,
             height: backSignH * 0.95,

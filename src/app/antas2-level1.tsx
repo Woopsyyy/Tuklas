@@ -79,6 +79,9 @@ const choiceALeft = (bgOffsetX + 200 * bgScale) * 0.9;
   const backTop = bgOffsetY + 735 * bgScale - 0.02 * screenH - 0.10 * screenH + 0.05 * screenH + 0.05 * screenH - 0.03 * screenH + 0.01 * screenH + 0.05 * screenH + 0.05 * screenH + 0.02 * screenH;
   const backSignH = 92 * bgScale;
 
+  const nextSignLeft = Math.min(signLeft - 0.06 * screenW + signW * 1.56, screenW - signW * 1.2 - 24 * bgScale);
+  const backSignLeft = Math.min(signLeft - 0.06 * screenW + signW * 1.56, screenW - signW * 0.95 * 1.2 - 24 * bgScale);
+
   // Pulsing animation for feedback
   const pulseScale = useSharedValue(1);
 
@@ -344,7 +347,7 @@ const choiceALeft = (bgOffsetX + 200 * bgScale) * 0.9;
         </Animated.View>
 
         {/* Wooden Signpost Next Button */}
-        <Animated.View style={{ position: "absolute", left: signLeft - 0.06 * screenW + signW * 1.56,
+        <Animated.View style={{ position: "absolute", left: nextSignLeft,
             top: nextTop * 1.1025 - 0.04 * screenH,
             width: signW * 1.2,
             height: nextH * 1.2,
@@ -364,7 +367,7 @@ const choiceALeft = (bgOffsetX + 200 * bgScale) * 0.9;
         </Animated.View>
 
         {/* Wooden Signpost Back Button */}
-        <Animated.View style={{ position: "absolute", left: signLeft - 0.06 * screenW + signW * 1.56,
+        <Animated.View style={{ position: "absolute", left: backSignLeft,
             top: backTop * 1.1025 - 0.04 * screenH,
             width: signW * 0.95 * 1.2,
             height: backSignH * 0.95 * 1.2,

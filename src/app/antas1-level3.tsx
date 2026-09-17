@@ -73,6 +73,15 @@ export default function Antas1Level3Screen() {
   const backTop = bgOffsetY + 735 * bgScale + 0.05 * screenH + 0.05 * screenH + 0.05 * screenH;
   const backH2 = 88 * bgScale;
 
+  const nextSignLeft = Math.min(
+    signLeft - 0.05 * screenW + 0.02 * screenW + 0.01 * screenW + 0.05 * screenW - 0.05 * screenW + signW * 1.8 - 0.05 * screenW,
+    screenW - signW * 1.2 - 24 * bgScale
+  );
+  const backSignLeft = Math.min(
+    signLeft - 0.05 * screenW + 0.02 * screenW + 0.01 * screenW + 0.05 * screenW - 0.05 * screenW + signW * 1.8 - 0.05 * screenW,
+    screenW - signW * 0.98 * 0.98 * 0.98 * 1.2 - 24 * bgScale
+  );
+
   // Pulsing animation for correct answer
   const pulseScale = useSharedValue(1);
 
@@ -245,7 +254,7 @@ export default function Antas1Level3Screen() {
         </Animated.View>
 
         {/* Wooden Signpost Next Button */}
-        <Animated.View style={{ position: "absolute", left: signLeft - 0.05 * screenW + 0.02 * screenW + 0.01 * screenW + 0.05 * screenW - 0.05 * screenW + signW * 1.8 - 0.05 * screenW,
+        <Animated.View style={{ position: "absolute", left: nextSignLeft,
             top: (nextTop + 0.005 * screenH + 0.02 * screenH - 0.01 * screenH) * 0.97335 - 0.05 * screenH,
             width: signW * 1.2,
             height: nextH * 1.2,
@@ -266,7 +275,7 @@ export default function Antas1Level3Screen() {
         </Animated.View>
 
         {/* Wooden Signpost Back Button */}
-        <Animated.View style={{ position: "absolute", left: signLeft - 0.05 * screenW + 0.02 * screenW + 0.01 * screenW + 0.05 * screenW - 0.05 * screenW + signW * 1.8 - 0.05 * screenW,
+        <Animated.View style={{ position: "absolute", left: backSignLeft,
             top: backTop + 0.01 * screenH + 0.02 * screenH - 0.01 * screenH - 0.05 * screenH,
             width: signW * 0.98 * 0.98 * 0.98 * 1.2,
             height: backH2 * 0.98 * 0.98 * 0.98 * 1.2,

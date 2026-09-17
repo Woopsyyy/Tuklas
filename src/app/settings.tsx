@@ -57,15 +57,7 @@ export default function SettingsScreen() {
       shouldPlayInBackground: false,
       interruptionModeAndroid: "mixWithOthers",
     });
-
-    return () => {
-      try {
-        testAudioPlayer.release();
-      } catch (e) {
-        console.warn("Error releasing test audio player:", e);
-      }
-    };
-  }, [testAudioPlayer]);
+  }, []);
 
   // Update test tone volume dynamically
   useEffect(() => {

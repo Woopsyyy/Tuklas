@@ -26,7 +26,7 @@ export const useSettingsStore = create<SettingsState>()(
       theme: "system",
       soundEnabled: true,
       narrationVolume: 1.0,
-      musicVolume: 0.7,
+      musicVolume: 0.2,
       musicMuted: false,
       setTheme: (theme) => set({ theme }),
       toggleSound: () =>
@@ -40,13 +40,29 @@ export const useSettingsStore = create<SettingsState>()(
           theme: "system",
           soundEnabled: true,
           narrationVolume: 1.0,
-          musicVolume: 0.7,
+          musicVolume: 0.2,
           musicMuted: false,
         }),
     }),
     {
       name: SETTINGS_STORAGE_KEY,
       storage: createJSONStorage(() => AsyncStorage),
+      // musicVolume always resets to the 20% default on each app launch so
+      // background music never drowns out narration. In-session changes still
+      // apply (the user can raise it up to 100%), but they are not persisted.
+      partialize: (state) => ({
+        theme: state.theme,
+        soundEnabled: state.soundEnabled,
+        narrationVolume: state.narrationVolume,
+        musicMuted: state.musicMuted,
+      }),
+      merge: (persistedState, currentState) => {
+        const {
+          musicVolume: _ignored,
+          ...rest
+        } = (persistedState ?? {}) as Partial<SettingsState>;
+        return { ...currentState, ...rest, musicVolume: 0.2 };
+      },
     }
   )
 );

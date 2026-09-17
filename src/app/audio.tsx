@@ -2,7 +2,6 @@ import {
   useAudioPlayer,
   useAudioPlayerStatus,
 } from "expo-audio";
-import { useEffect } from "react";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -14,12 +13,6 @@ export default function AudioScreen() {
   const status = useAudioPlayerStatus(player);
   const soundEnabled = useSettingsStore((state) => state.soundEnabled);
   const toggleSound = useSettingsStore((state) => state.toggleSound);
-
-  useEffect(() => {
-    return () => {
-      player.release();
-    };
-  }, [player]);
 
   const playing = status.playing;
 

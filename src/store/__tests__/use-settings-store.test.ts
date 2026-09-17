@@ -59,6 +59,17 @@ describe("useSettingsStore", () => {
     expect(state.musicMuted).toBe(true);
   });
 
+  it("applies in-session music volume but does not persist it", async () => {
+    act(() => {
+      useSettingsStore.getState().setMusicVolume(1.0);
+    });
+    expect(useSettingsStore.getState().musicVolume).toBe(1.0);
+
+    const raw = await AsyncStorage.getItem(SETTINGS_STORAGE_KEY);
+    const persisted = JSON.parse(raw ?? "");
+    expect(persisted.state).not.toHaveProperty("musicVolume");
+  });
+
   it("resetToDefaults restores initial settings", () => {
     act(() => {
       useSettingsStore.getState().setTheme("dark");
@@ -73,7 +84,7 @@ describe("useSettingsStore", () => {
     expect(state.theme).toBe("system");
     expect(state.soundEnabled).toBe(true);
     expect(state.narrationVolume).toBe(1.0);
-    expect(state.musicVolume).toBe(0.7);
+    expect(state.musicVolume).toBe(0.2);
     expect(state.musicMuted).toBe(false);
   });
 });

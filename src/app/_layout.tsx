@@ -44,7 +44,7 @@ function BackgroundMusicPlayer() {
       if (!player || musicMuted) return;
       const safeVolume = Number.isFinite(musicVolume)
         ? Math.max(0, Math.min(1, musicVolume))
-        : 0.7;
+        : 0.2;
       player.volume = safeVolume;
     } catch (e) {
       console.warn("BackgroundMusicPlayer volume update error:", e);

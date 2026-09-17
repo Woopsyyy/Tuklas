@@ -1,8 +1,6 @@
 import type { AudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
 
-const DUCK_VOLUME = 0.05;
-
 /**
  * Clamp a stored volume into a usable 0..1 range.
  * Falls back to `fallback` for NaN / infinity / zero so narration is never
@@ -15,10 +13,6 @@ export function safeVolume(
   return Number.isFinite(volume) && (volume as number) > 0
     ? Math.min(1, volume as number)
     : fallback;
-}
-
-export function getDuckedMusicVolume(base: number): number {
-  return base * DUCK_VOLUME;
 }
 
 /**
@@ -63,10 +57,6 @@ export function playNarration(
   }
 }
 
-/**
- * Pause a narration player and rewind it to the start.
- * Safe to call for already-released players.
- */
 export function pauseNarration(
   player: AudioPlayer | null | undefined
 ): void {

@@ -11,7 +11,6 @@ import { useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useSettingsStore } from "@/store/use-settings-store";
-import { getDuckedMusicVolume } from "@/lib/narration";
 
 import "../global.css";
 
@@ -47,11 +46,24 @@ function BackgroundMusicPlayer() {
       const safeVolume = Number.isFinite(musicVolume)
         ? Math.max(0, Math.min(1, musicVolume))
         : 0.2;
-      player.volume = narrationPlaying ? getDuckedMusicVolume(safeVolume) : safeVolume;
+      player.volume = safeVolume;
     } catch (e) {
       console.warn("BackgroundMusicPlayer volume update error:", e);
     }
-  }, [musicVolume, player, narrationPlaying]);
+  }, [musicVolume, player]);
+
+  useEffect(() => {
+    try {
+      if (!player) return;
+      if (narrationPlaying) {
+        player.pause();
+      } else {
+        player.play();
+      }
+    } catch (e) {
+      console.warn("BackgroundMusicPlayer pause/resume error:", e);
+    }
+  }, [narrationPlaying, player]);
 
   useEffect(() => {
     try {

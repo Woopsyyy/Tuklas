@@ -1,4 +1,7 @@
 import type { AudioPlayer } from "expo-audio";
+import { useSettingsStore } from "@/store/use-settings-store";
+
+const DUCK_VOLUME = 0.05;
 
 /**
  * Clamp a stored volume into a usable 0..1 range.
@@ -12,6 +15,10 @@ export function safeVolume(
   return Number.isFinite(volume) && (volume as number) > 0
     ? Math.min(1, volume as number)
     : fallback;
+}
+
+export function getDuckedMusicVolume(base: number): number {
+  return base * DUCK_VOLUME;
 }
 
 /**
@@ -28,10 +35,12 @@ export function playNarration(
   volume: number | undefined,
   loop = false
 ): void {
+  const setNarrationPlaying = useSettingsStore.getState().setNarrationPlaying;
   try {
     player.loop = loop;
     player.muted = false;
     player.volume = safeVolume(volume);
+    setNarrationPlaying(true);
     try {
       player.pause();
     } catch {}
@@ -39,6 +48,16 @@ export function playNarration(
       player.seekTo(0);
     } catch {}
     player.play();
+    if (!loop) {
+      try {
+        const sub = player.addListener("playbackStatusUpdate", (status) => {
+          if (status.didJustFinish) {
+            setNarrationPlaying(false);
+            try { sub?.remove(); } catch {}
+          }
+        });
+      } catch {}
+    }
   } catch (e) {
     console.warn("playNarration error:", e);
   }
@@ -51,9 +70,14 @@ export function playNarration(
 export function pauseNarration(
   player: AudioPlayer | null | undefined
 ): void {
-  if (!player) return;
+  const setNarrationPlaying = useSettingsStore.getState().setNarrationPlaying;
+  if (!player) {
+    setNarrationPlaying(false);
+    return;
+  }
   try {
     player.pause();
     player.seekTo(0);
+    setNarrationPlaying(false);
   } catch {}
 }

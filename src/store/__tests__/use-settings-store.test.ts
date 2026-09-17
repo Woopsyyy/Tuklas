@@ -77,6 +77,7 @@ describe("useSettingsStore", () => {
       useSettingsStore.getState().setMusicVolume(0.1);
       useSettingsStore.getState().toggleSound();
       useSettingsStore.getState().toggleMusicMute();
+      useSettingsStore.getState().setNarrationPlaying(true);
       useSettingsStore.getState().resetToDefaults();
     });
 
@@ -86,5 +87,13 @@ describe("useSettingsStore", () => {
     expect(state.narrationVolume).toBe(1.0);
     expect(state.musicVolume).toBe(0.2);
     expect(state.musicMuted).toBe(false);
+    expect(state.narrationPlaying).toBe(false);
+  });
+
+  it("setNarrationPlaying flags active narration", () => {
+    act(() => {
+      useSettingsStore.getState().setNarrationPlaying(true);
+    });
+    expect(useSettingsStore.getState().narrationPlaying).toBe(true);
   });
 });

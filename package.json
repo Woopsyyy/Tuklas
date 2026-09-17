@@ -68,7 +68,8 @@
     "dev:install": "powershell -ExecutionPolicy Bypass -File scripts/eas-install.ps1",
     "dev:rebuild": "powershell -ExecutionPolicy Bypass -File scripts/dev-rebuild.ps1",
     "dev:android": "powershell -ExecutionPolicy Bypass -File scripts/dev.ps1 -MetroOnly -Mode lan",
-    "dev:android:tunnel": "powershell -ExecutionPolicy Bypass -File scripts/dev.ps1 -MetroOnly -Mode tunnel"
+    "dev:android:tunnel": "powershell -ExecutionPolicy Bypass -File scripts/dev.ps1 -MetroOnly -Mode tunnel",
+    "start:metro": "npx expo start"
   },
   "jest": {
     "preset": "jest-expo",

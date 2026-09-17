@@ -10,11 +10,13 @@ interface SettingsState {
   narrationVolume: number;
   musicVolume: number;
   musicMuted: boolean;
+  narrationPlaying: boolean;
   setTheme: (theme: ThemePreference) => void;
   toggleSound: () => void;
   setNarrationVolume: (volume: number) => void;
   setMusicVolume: (volume: number) => void;
   toggleMusicMute: () => void;
+  setNarrationPlaying: (playing: boolean) => void;
   resetToDefaults: () => void;
 }
 
@@ -28,6 +30,7 @@ export const useSettingsStore = create<SettingsState>()(
       narrationVolume: 1.0,
       musicVolume: 0.2,
       musicMuted: false,
+      narrationPlaying: false,
       setTheme: (theme) => set({ theme }),
       toggleSound: () =>
         set((state) => ({ soundEnabled: !state.soundEnabled })),
@@ -35,6 +38,7 @@ export const useSettingsStore = create<SettingsState>()(
       setMusicVolume: (musicVolume) => set({ musicVolume }),
       toggleMusicMute: () =>
         set((state) => ({ musicMuted: !state.musicMuted })),
+      setNarrationPlaying: (playing) => set({ narrationPlaying: playing }),
       resetToDefaults: () =>
         set({
           theme: "system",
@@ -42,6 +46,7 @@ export const useSettingsStore = create<SettingsState>()(
           narrationVolume: 1.0,
           musicVolume: 0.2,
           musicMuted: false,
+          narrationPlaying: false,
         }),
     }),
     {

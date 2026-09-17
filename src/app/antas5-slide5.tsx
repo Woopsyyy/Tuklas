@@ -37,8 +37,8 @@ export default function Antas5Slide5Screen() {
   // Next button (antas5-next.png) â€” same as slide1
   const nextW = 420 * bgScale * 0.8;
   const nextH = nextW * (56 / 128);
-  const nextLeft = (screenW - nextW) / 2 + 0.50 * screenW - 0.10 * screenW - 0.05 * screenW + 0.03 * screenW;
-  const nextTop = (screenH + 700 * bgScale * (56 / 128)) / 2 + 60 * bgScale + 0.20 * screenH - 0.05 * screenH;
+  const nextLeft = Math.min((screenW - nextW) / 2 + 0.38 * screenW, screenW - nextW - Math.max(insets.right + 16, 20 * bgScale));
+  const nextTop = Math.min((screenH + 700 * bgScale * (56 / 128)) / 2 + 60 * bgScale + 0.15 * screenH, screenH - nextH - Math.max(insets.bottom + 12, 16 * bgScale));
 
   // Sign (sign.png) â€” centered in the middle, above text1
   // Source 206x93

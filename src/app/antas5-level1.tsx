@@ -73,8 +73,8 @@ export default function Antas5Level1Screen() {
   // Next button (antas5-next.png: 1920x1080 canvas / badge at bottom right)
   const nextW = 230 * bgScale;
   const nextH = nextW * (56 / 128) * 2.2;
-  const nextRight = Math.max(insets.right + 20, 30 * bgScale) + 0.02 * screenW;
-  const nextBottom = Math.max(insets.bottom + 16, 20 * bgScale) - 0.10 * screenH - 0.10 * screenH + 0.03 * screenH + 0.05 * screenH;
+  const nextRight = Math.max(insets.right + 20, 30 * bgScale);
+  const nextBottom = Math.max(insets.bottom + 16, 20 * bgScale);
 
   // Pulse animation for selection
   const pulseScale = useSharedValue(1);

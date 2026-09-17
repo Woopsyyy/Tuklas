@@ -39,7 +39,7 @@ export default function Antas5Slide8Screen() {
   const buttonW = Math.min(screenW * 0.40, 780 * bgScale * 0.85);
   const buttonH = buttonW * (97 / 780);
   const buttonLeft = (screenW - buttonW) / 2 + 0.03 * screenW;
-  const buttonBottom = Math.max(insets.bottom + 18, 25 * bgScale) - 0.03 * screenH - 0.05 * screenH;
+  const buttonBottom = Math.max(insets.bottom + 18, 25 * bgScale);
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
@@ -136,7 +136,32 @@ export default function Antas5Slide8Screen() {
           </View>
         </View>
 
-        </View>
+        {/* Action Button (button.png) — Continue / Magpatuloy */}
+        <Animated.View
+          entering={FadeInUp.duration(700).delay(250)}
+          style={{
+            position: "absolute",
+            bottom: buttonBottom,
+            left: buttonLeft,
+            width: buttonW,
+            height: buttonH,
+            zIndex: 25,
+          }}
+        >
+          <Pressable
+            onPress={handleContinue}
+            hitSlop={8}
+            className="w-full h-full active:scale-95 active:opacity-90"
+          >
+            <Image
+              source={require("../../assets/images/antas5/slide7/button.png")}
+              style={{ width: "100%", height: "100%" }}
+              contentFit="contain"
+              transition={0}
+            />
+          </Pressable>
+        </Animated.View>
       </View>
+    </View>
   );
 }
